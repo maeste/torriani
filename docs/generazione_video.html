@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creare con l'IA: Video — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#generazione_video">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 2</div>
+    <h1>Creare con l&rsquo;IA: I Video</h1>
+<h2>Dall&rsquo;immagine al movimento — come l&rsquo;intelligenza artificiale ha imparato a girare film</h2>
+<p>Immagina di sfogliare un blocchetto di post-it: su ciascuno c&rsquo;e un disegno leggermente diverso dal precedente. Se li fai scorrere velocemente sotto il pollice, i disegni sembrano muoversi. Congratulazioni, hai appena inventato il cinema. Un video, in fondo, non e altro che questo: una sequenza di immagini — chiamate <em>frame</em> — mostrate una dopo l&rsquo;altra a grande velocita, tipicamente 24 o 30 al secondo.</p>
+<p>Nella lezione precedente abbiamo visto come l&rsquo;intelligenza artificiale sia capace di generare immagini singole a partire da una descrizione testuale. La domanda successiva e quasi inevitabile: se sa creare un&rsquo;immagine, puo crearne trenta al secondo e trasformarle in un video? La risposta e si, ma il salto di difficolta e enorme, e capire perche e la parte interessante della storia.</p>
+<h3>La sfida della coerenza temporale</h3>
+<p>Il problema fondamentale si chiama <strong>coerenza temporale</strong>. Quando l&rsquo;IA genera un&rsquo;immagine isolata, deve solo preoccuparsi che quell&rsquo;immagine abbia senso al suo interno: il cielo in alto, l&rsquo;erba in basso, un gatto che sembra un gatto. Ma quando genera un video, ogni singolo frame deve essere coerente non solo con se stesso, ma anche con tutti quelli che lo precedono e lo seguono.</p>
+<p>Pensa a un gatto che cammina verso sinistra. Nel frame 1 il gatto e a destra dell&rsquo;inquadratura. Nel frame 2 si e spostato leggermente a sinistra. Nel frame 3 ancora un po&rsquo; piu a sinistra. Se nel frame 4 il gatto si teletrasportasse dall&rsquo;altra parte dello schermo, o improvvisamente avesse cinque zampe, il video sembrerebbe un incubo. L&rsquo;IA deve tenere traccia di ogni oggetto, della luce, delle ombre, della prospettiva — frame dopo frame, senza errori.</p>
+<h3>Come funziona (davvero) la generazione video</h3>
+<p>I modelli piu avanzati per la generazione video usano un&rsquo;architettura chiamata <strong>Diffusion Transformer</strong> (DiT). Il nome sembra complicato, ma l&rsquo;idea di base e elegante. Ricordi come funzionano i modelli di diffusione per le immagini? Si parte da puro rumore — come la neve sulla TV — e lo si &ldquo;ripulisce&rdquo; progressivamente fino a ottenere un&rsquo;immagine sensata. Per i video, il processo e lo stesso, ma in tre dimensioni: larghezza, altezza e <em>tempo</em>.</p>
+<p>Il trucco geniale e che il transformer — la stessa architettura che sta dietro a ChatGPT — viene usato per gestire le relazioni tra i vari frame. Ogni pezzo del video &ldquo;guarda&rdquo; i pezzi vicini, sia nello spazio che nel tempo, per assicurarsi che tutto sia coerente. E un po&rsquo; come scrivere un romanzo dove ogni frase deve avere senso con tutte le altre: il transformer e il revisore che controlla che la trama non abbia buchi.</p>
+<h3>Gli strumenti di oggi</h3>
+<p>Il panorama degli strumenti per generare video con l&rsquo;IA e in piena esplosione. <strong>Sora</strong>, sviluppato da OpenAI, ha fatto scalpore quando e stato presentato: video fotorealistici fino a un minuto, con una comprensione sorprendente della fisica. <strong>Runway Gen-3</strong> e diventato lo standard dell&rsquo;industria cinematografica e pubblicitaria — e stato usato in produzioni professionali vere e proprie. <strong>Kling</strong>, sviluppato dalla cinese Kuaishou, ha sorpreso tutti con la qualita dei suoi movimenti realistici e la capacita di generare video lunghi. <strong>Veo 2</strong> di Google DeepMind si distingue per la comprensione della fisica: gli oggetti cadono come dovrebbero, l&rsquo;acqua scorre in modo naturale, la luce si comporta correttamente. E poi c&rsquo;e <strong>Pika</strong>, il piu accessibile: facile da usare, perfetto per clip brevi e contenuti social, con un piano gratuito che permette a chiunque di sperimentare.</p>
+<h3>Le potenzialita sono enormi</h3>
+<p>Fermati un momento a pensare a cosa significa tutto questo. Un regista indipendente, senza budget, puo creare scene che prima richiedevano milioni di euro in effetti speciali. Un insegnante puo produrre video didattici su misura per la propria classe: visualizzare un evento storico, simulare un esperimento di chimica troppo pericoloso da fare in laboratorio, mostrare come funziona il sistema solare. Uno studente puo trasformare la propria presentazione scolastica in qualcosa di cinematografico. Il mondo della pubblicita puo generare centinaia di varianti di uno spot, personalizzate per ogni mercato. E chiunque abbia un telefono puo diventare un creator di contenuti video senza possedere una telecamera.</p>
+<h3>I rischi amplificati</h3>
+<p>Ma — e questo &ldquo;ma&rdquo; e importante — tutto cio che abbiamo detto sui rischi delle immagini generate dall&rsquo;IA vale anche per i video, e in modo amplificato. Il motivo e semplice: il nostro cervello si fida dei video molto piu delle fotografie. Un&rsquo;immagine manipolata puo farci sorgere il dubbio; un video falso ben fatto puo convincerci completamente.</p>
+<p>I <strong>deepfake video</strong> sono gia una realta: video di politici che dicono cose mai dette, di celebrita in situazioni inventate, persino di persone comuni messe in contesti imbarazzanti o compromettenti. Le <strong>fake news</strong> in formato video sono particolarmente insidiose perche il video e tradizionalmente considerato una &ldquo;prova&rdquo; di un evento. E poi ci sono le implicazioni per il mondo del lavoro: attori, doppiatori, animatori, videomaker — molte professioni creative stanno venendo ridefinite dall&rsquo;arrivo di questi strumenti.</p>
+<h3>Come riconoscere un video generato dall&rsquo;IA</h3>
+<p>Per fortuna, almeno per ora, i video generati dall&rsquo;IA lasciano tracce. Le <strong>mani e le dita</strong> sono il tallone d&rsquo;Achille: spesso hanno numeri sbagliati di dita, o le dita si fondono tra loro. Il <strong>testo</strong> nei video (cartelli, scritte, titoli) tende a essere illeggibile o a cambiare tra un frame e l&rsquo;altro. La <strong>fisica</strong> a volte non funziona: liquidi che si muovono in modo strano, oggetti che galleggiano senza motivo. C&rsquo;e lo <strong>sfarfallio temporale</strong>: dettagli che cambiano inspiegabilmente, come un orecchino che appare e scompare. I <strong>volti e i denti</strong> possono deformarsi leggermente durante il movimento. E certi movimenti si ripetono in modo troppo identico, come un robot.</p>
+<p>Attenzione pero: questi artefatti diminuiscono ogni mese. Per questo si stanno sviluppando soluzioni piu strutturali, come lo standard <strong>C2PA</strong> (Coalition for Content Provenance and Authenticity), supportato da Google, Adobe, Microsoft e molti altri. L&rsquo;idea e semplice: ogni contenuto digitale — foto o video — viene accompagnato da una specie di &ldquo;certificato di nascita&rdquo; digitale che ne certifica l&rsquo;origine e la storia. E come un marchio di autenticita, invisibile ma verificabile.</p>
+<p>In definitiva, il miglior strumento contro la disinformazione resta il pensiero critico. Se un video sembra troppo perfetto, troppo scioccante, o troppo conveniente per essere vero, vale sempre la pena fermarsi e verificarlo.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li>
+<p><strong>Un video e una sequenza di immagini</strong>: tipicamente 24-30 frame al secondo. Generare video e molto piu difficile che generare immagini singole perche ogni frame deve essere coerente con i precedenti e i successivi (coerenza temporale).</p>
+</li>
+<li>
+<p><strong>I Diffusion Transformer combinano due tecnologie</strong>: i modelli di diffusione (che partono dal rumore per creare immagini) e i transformer (che gestiscono le relazioni tra frame). Questo permette di generare video con coerenza spaziale e temporale.</p>
+</li>
+<li>
+<p><strong>Esistono gia strumenti potenti e accessibili</strong>: Sora, Runway, Kling, Veo 2 e Pika permettono a chiunque di creare video con l&rsquo;IA, con applicazioni che vanno dal cinema all&rsquo;educazione ai social media.</p>
+</li>
+<li>
+<p><strong>I rischi sono amplificati rispetto alle immagini</strong>: il nostro cervello si fida dei video piu delle foto, rendendo i deepfake video particolarmente pericolosi per la disinformazione.</p>
+</li>
+<li>
+<p><strong>I video generati dall&rsquo;IA lasciano ancora tracce riconoscibili</strong>: mani anomale, testo illeggibile, fisica innaturale, sfarfallio temporale. Ma questi artefatti stanno diminuendo, e servono soluzioni strutturali come lo standard C2PA.</p>
+</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Sperimenta in prima persona</strong>: crea un account gratuito su Pika (pika.art) e prova a generare un breve video da un prompt testuale. Osserva con attenzione il risultato: riesci a individuare artefatti nelle mani, nel testo o nella fisica degli oggetti?</p>
+</li>
+<li>
+<p><strong>Diventa un detective dei deepfake</strong>: la prossima volta che vedi un video virale sui social, prima di condividerlo fermati 30 secondi. Guarda le mani, il testo, i movimenti ripetuti, i dettagli dei volti. Prova anche a usare il sito TrueMedia.org per verificare se un video e autentico.</p>
+</li>
+<li>
+<p><strong>Esplora le applicazioni creative</strong>: pensa a un progetto scolastico — una presentazione di storia, scienze o letteratura — e immagina come potresti arricchirlo con un breve video generato dall&rsquo;IA. Scrivi il prompt che useresti e, se hai accesso a uno strumento, prova a realizzarlo.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Qual e la differenza tra generare un&rsquo;immagine e generare un video con l&rsquo;IA?</strong>
+Un&rsquo;immagine e un singolo frame che deve essere coerente solo con se stesso. Un video e una sequenza di frame (24-30 al secondo) dove ogni frame deve essere coerente con tutti gli altri nel tempo: oggetti, luci, ombre, movimenti devono evolvere in modo fluido e naturale. Questo rende la generazione video enormemente piu complessa.</p>
+<p><strong>Sora puo creare video di qualsiasi cosa?</strong>
+In teoria si, ma in pratica ha molte restrizioni. OpenAI blocca la generazione di volti di persone reali, contenuti violenti e materiale inappropriato. Tuttavia, essendo una tecnologia in rapida evoluzione, altri strumenti meno regolamentati potrebbero non avere le stesse limitazioni.</p>
+<p><strong>Quanto costa generare un video con l&rsquo;IA?</strong>
+Dipende dallo strumento. Pika offre un piano gratuito con limiti, Runway parte da circa 12 dollari al mese, e ci sono piani professionali piu costosi. I costi computazionali dietro le quinte sono elevati: generare un minuto di video puo richiedere diversi minuti di calcolo su hardware molto costoso (GPU specializzate).</p>
+<p><strong>I film del futuro saranno fatti interamente dall&rsquo;IA?</strong>
+Probabilmente no, almeno non nel prossimo futuro. E piu realistico pensare all&rsquo;IA come a uno strumento nelle mani dei creativi: per la pre-visualizzazione delle scene, gli effetti speciali, le colonne sonore, lo storyboarding. Il regista e la visione creativa umana restano fondamentali.</p>
+<p><strong>Come posso capire se un video che vedo online e stato generato dall&rsquo;IA?</strong>
+Oggi puoi cercare artefatti visivi: mani con dita strane, testo illeggibile, fisica che non torna, dettagli che cambiano tra un frame e l&rsquo;altro. Puoi anche usare strumenti di rilevamento come TrueMedia.org e verificare la fonte del video. In futuro, standard come C2PA integreranno metadati verificabili nei contenuti autentici.</p>
+<p><strong>Cosa sono i &ldquo;world model&rdquo; e perche sono importanti?</strong>
+I modelli piu avanzati, come Veo 2 di Google, non si limitano a generare pixel: cercano di costruire una rappresentazione interna del mondo fisico. Capiscono (almeno in parte) la gravita, le ombre, i riflessi, la prospettiva. Non &ldquo;capiscono&rdquo; davvero la fisica come un essere umano, ma producono risultati sempre piu realistici. E un passo verso un&rsquo;IA che modella il mondo, non solo lo imita.</p>
+<p><strong>Il deepfake e illegale?</strong>
+La legislazione e ancora in evoluzione. In molti paesi e illegale creare deepfake per diffamazione, frode o molestie. L&rsquo;Unione Europea, con l&rsquo;AI Act, sta introducendo regole che richiedono di dichiarare quando un contenuto e generato dall&rsquo;IA. Tuttavia, l&rsquo;applicazione di queste leggi e ancora una sfida.</p>
+<p><strong>Cosa significa C2PA e come funziona?</strong>
+C2PA sta per Coalition for Content Provenance and Authenticity. E uno standard aperto, supportato da Adobe, Microsoft, Google, BBC e altri, che permette di incorporare in ogni contenuto digitale dei metadati verificabili: chi lo ha creato, quando, con quale strumento, se e stato modificato. Pensalo come un certificato di nascita digitale che accompagna foto e video dalla creazione alla condivisione.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Perche generare un video con l'IA e molto piu difficile che generare una singola immagine?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche i video richiedono piu colori delle immagini</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche ogni frame deve essere coerente con tutti gli altri nel tempo (coerenza temporale)</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perche i video sono sempre in alta definizione</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche i video richiedono una connessione internet piu veloce</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Cosa fa il transformer nell'architettura Diffusion Transformer (DiT) usata per generare video?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Aggiunge il sonoro al video</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Comprime il video per ridurne le dimensioni</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Gestisce le relazioni tra i frame, assicurando coerenza spaziale e temporale</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Converte il video da 2D a 3D</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Quale di questi NON e un artefatto tipico dei video generati dall'IA?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Mani con un numero sbagliato di dita</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Testo illeggibile che cambia tra un frame e l'altro</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Video sempre in bianco e nero</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Fisica innaturale, come oggetti che galleggiano senza motivo</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Perche i deepfake video sono considerati piu pericolosi delle immagini false?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche i video occupano piu spazio sul telefono</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche il nostro cervello si fida dei video molto piu delle fotografie</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perche i video si possono condividere solo sui social media</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche i video non possono essere verificati in nessun modo</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Cos'e il C2PA e a cosa serve?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Un programma per creare deepfake piu realistici</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Un social network dedicato ai video generati dall'IA</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Uno standard aperto che incorpora metadati verificabili nei contenuti digitali per certificarne l'origine</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Un filtro di Instagram per riconoscere i volti falsi</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Un video richiede che ogni singolo frame (24-30 al secondo) sia coerente con i precedenti e i successivi: oggetti, luci, ombre e movimenti devono evolvere in modo fluido."}, "2": {"correct": "c", "explanation": "Il transformer controlla che ogni pezzo del video sia coerente con i pezzi vicini sia nello spazio che nel tempo, come un revisore che verifica che la trama non abbia buchi."}, "3": {"correct": "c", "explanation": "I video generati dall'IA sono a colori; gli artefatti tipici sono mani anomale, testo illeggibile, fisica innaturale e sfarfallio temporale, non la mancanza di colore."}, "4": {"correct": "b", "explanation": "Il video e tradizionalmente considerato una \"prova\" affidabile di un evento; un video falso ben fatto puo convincere in modo molto piu efficace di un'immagine manipolata."}, "5": {"correct": "c", "explanation": "C2PA (Coalition for Content Provenance and Authenticity) e come un \"certificato di nascita\" digitale che accompagna foto e video, certificandone l'origine e la storia."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

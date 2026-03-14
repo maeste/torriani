@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Come Impara una Macchina — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#02_come_impara_una_macchina">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 1</div>
+    <h1>Come impara una macchina: Regressione Lineare e Gradient Descent</h1>
+<h2>Il segreto dietro l&rsquo;intelligenza artificiale</h2>
+<p>Hai mai pensato a come fa un computer a &ldquo;imparare&rdquo;? Non ha un cervello, non ha intuizioni, eppure riesce a fare cose incredibili: riconoscere volti nelle foto, tradurre lingue, scrivere testi. Il segreto, per quanto possa sembrare sorprendente, si riduce a un meccanismo semplicissimo: <strong>provare, sbagliare, correggere</strong>. Ripetuto un numero enorme di volte.</p>
+<p>Per capire come funziona, facciamo un gioco. Immagina di essere un agente immobiliare alle prime armi. Il tuo capo ti dà una lista di 30 case vendute di recente, con due informazioni per ciascuna: i metri quadrati e il prezzo di vendita. Poi ti dice: &ldquo;La prossima volta che arriva un cliente con una casa da 85 metri quadri, devi dirgli quanto vale.&rdquo; Come faresti?</p>
+<p>Probabilmente faresti quello che farebbe chiunque: guarderesti i dati, cercheresti un andamento, e proveresti a tracciare mentalmente una linea che &ldquo;segue&rdquo; i punti. Le case più grandi costano di più, quindi la linea sale. Ma quanto sale? E da dove parte? Ecco, queste due domande corrispondono esattamente a quello che in matematica si chiama <strong>pendenza</strong> e <strong>intercetta</strong> di una retta. E un computer fa esattamente lo stesso ragionamento &ndash; solo che lo fa in modo sistematico e preciso.</p>
+<h3>La retta e i suoi due &ldquo;pomelli&rdquo;</h3>
+<p>Una retta sul piano cartesiano si scrive come <strong>y = mx + b</strong>, dove <strong>m</strong> è la pendenza (quanto sale la retta per ogni passo in avanti) e <strong>b</strong> è l&rsquo;intercetta (dove la retta incrocia l&rsquo;asse verticale). Puoi pensare a m e b come a due manopole da girare: cambiando i loro valori, la retta si inclina e si sposta. Il compito della macchina è trovare la combinazione di m e b che fa passare la retta il più vicino possibile a tutti i 30 punti.</p>
+<p>Ma &ldquo;il più vicino possibile&rdquo; è un concetto vago. Ci serve un modo per misurare <em>quanto</em> la retta sbaglia. Qui entra in gioco l&rsquo;<strong>errore quadratico medio</strong>, che gli informatici chiamano MSE (Mean Squared Error). Funziona così: per ogni punto, calcoli la distanza verticale tra il punto vero e il punto sulla retta, la elevi al quadrato (così non importa se l&rsquo;errore è sopra o sotto, conta sempre), e poi fai la media di tutti questi errori. Il risultato è un singolo numero: più è basso, meglio la retta si adatta ai dati.</p>
+<h3>Provare a mano: più difficile di quanto sembri</h3>
+<p>Se provassi a girare le due manopole a mano, cercando di abbassare l&rsquo;errore, ti accorgeresti che è sorprendentemente difficile. Muovi la pendenza e l&rsquo;errore scende, ma poi muovi l&rsquo;intercetta e l&rsquo;errore risale. Trovi una buona combinazione, ma sei sicuro che sia la migliore? Magari c&rsquo;è un&rsquo;altra posizione della retta che funziona ancora meglio.</p>
+<p>Quando hai solo due manopole, con un po&rsquo; di pazienza ci si può arrivare. Ma ora pensa a questo: un modello come GPT-4 non ha 2 manopole, ne ha circa <strong>1.800 miliardi</strong> (1,8 trilioni). Impossibile regolarle a mano. Serve un metodo automatico.</p>
+<h3>Gradient descent: scendere dalla montagna nella nebbia</h3>
+<p>Ed eccoci al cuore del machine learning: il <strong>gradient descent</strong>, ovvero la &ldquo;discesa del gradiente&rdquo;. L&rsquo;idea è geniale nella sua semplicità.</p>
+<p>Immagina di essere in cima a una montagna, immerso nella nebbia. Non vedi la valle, non hai una mappa. L&rsquo;unica cosa che puoi fare è sentire con i piedi in che direzione il terreno scende e fare un piccolo passo in quella direzione. Poi ti fermi, senti di nuovo, fai un altro passo. Piano piano, passo dopo passo, arrivi a valle.</p>
+<p>Il computer fa esattamente questo con l&rsquo;errore. Per ogni manopola (parametro), calcola: &ldquo;Se giro questa manopola un pochino, l&rsquo;errore sale o scende?&rdquo; Questo calcolo si fa con le <strong>derivate</strong> &ndash; quel concetto di matematica che forse avete iniziato a vedere in classe. La derivata dell&rsquo;errore rispetto a un parametro dice precisamente quanto e in che direzione l&rsquo;errore cambia se quel parametro viene modificato. Il computer prende questa informazione e fa un piccolo aggiustamento nella direzione che riduce l&rsquo;errore.</p>
+<p>Quanto è grande il passo? Dipende da un valore chiamato <strong>learning rate</strong> (tasso di apprendimento). Se è troppo grande, il modello &ldquo;salta&rdquo; avanti e indietro come un escursionista che fa passi enormi e finisce per rimbalzare da un lato all&rsquo;altro della valle senza mai fermarsi. Se è troppo piccolo, il modello impiega un&rsquo;eternità a scendere. Trovare il learning rate giusto è una delle sfide pratiche di chi addestra modelli.</p>
+<h3>Il ciclo magico</h3>
+<p>Quello che succede durante il training di qualsiasi modello di machine learning è un ciclo che si ripete miliardi di volte:</p>
+<ol>
+<li><strong>Prova</strong>: il modello fa una previsione con i parametri attuali</li>
+<li><strong>Misura</strong>: si calcola quanto la previsione è lontana dalla realtà (l&rsquo;errore)</li>
+<li><strong>Correggi</strong>: si aggiustano i parametri nella direzione che riduce l&rsquo;errore</li>
+</ol>
+<p>Nel nostro esempio con la retta e le 30 case, questo ciclo si ripete 15 volte e in pochi secondi la retta si posiziona nel punto ottimale. All&rsquo;inizio l&rsquo;errore scende rapidamente, poi sempre più piano, finché il modello <strong>converge</strong>: ha trovato la migliore retta possibile e ulteriori aggiustamenti non portano miglioramenti significativi.</p>
+<h3>Dalla retta a GPT: cambia la scala, non il principio</h3>
+<p>Ecco la cosa straordinaria: il principio è <strong>identico</strong> sia per la nostra semplice retta sia per i modelli di linguaggio più potenti del mondo. Cambia solo la scala. La nostra retta aveva 2 parametri e 30 punti dati. GPT-4 ha circa 1,8 trilioni di parametri ed è stato addestrato su 13 trilioni di token (pezzi di testo). Il suo training è durato mesi su migliaia di GPU ed è costato circa 100 milioni di dollari. Ma ogni singolo passo del suo addestramento è stato esattamente quel ciclo: prova, misura, correggi.</p>
+<p>Non c&rsquo;è magia dentro un LLM. Non c&rsquo;è una scintilla di coscienza nascosta. C&rsquo;è matematica &ndash; tanta, tantissima matematica &ndash; che ripete lo stesso meccanismo che hai appena visto, solo più veloce e con molte più manopole da girare. Sapere questo ti dà un superpotere: puoi guardare a ChatGPT, a Claude, a qualsiasi modello, e capire che sotto il cofano non c&rsquo;è nulla di misterioso. Solo un metodo molto elegante per imparare dai dati.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>Il machine learning è un ciclo</strong>: provare, misurare l&rsquo;errore, correggere. Qualsiasi modello, dal più semplice al più complesso, funziona così.</li>
+<li><strong>I parametri sono le &ldquo;manopole&rdquo;</strong> che il modello regola per adattarsi ai dati. Una retta ne ha 2, GPT-4 ne ha 1,8 trilioni.</li>
+<li><strong>L&rsquo;errore (MSE) è il giudice</strong>: è un numero che dice quanto il modello sta sbagliando. L&rsquo;obiettivo del training è renderlo il più basso possibile.</li>
+<li><strong>Il gradient descent è la strategia</strong>: come scendere da una montagna nella nebbia, un piccolo passo alla volta nella direzione giusta, guidati dalle derivate.</li>
+<li><strong>La scala cambia, il principio no</strong>: la differenza tra il nostro esempio e GPT-4 è solo nel numero di parametri e nella quantità di dati, non nel meccanismo fondamentale.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Gioca con la simulazione interattiva</strong>: apri la slide JSX della lezione e prova a regolare gli slider a mano per trovare la retta migliore. Poi premi &ldquo;Addestra!&rdquo; e osserva come la macchina ci arriva da sola. Confronta il tuo risultato con quello del computer.</p>
+</li>
+<li>
+<p><strong>Sperimenta con un foglio di calcolo</strong>: prendi 10 coppie di dati inventati (ad esempio altezza e peso di 10 persone), mettili in un foglio Excel o Google Sheets, e usa la funzione &ldquo;linea di tendenza&rdquo; del grafico. Stai facendo regressione lineare senza scrivere una riga di codice.</p>
+</li>
+<li>
+<p><strong>Esplora Teachable Machine di Google</strong>: vai su <a href="https://teachablemachine.withgoogle.com">teachablemachine.withgoogle.com</a> e addestra un modello a riconoscere oggetti con la tua webcam. Vedrai lo stesso principio (prova, misura, correggi) applicato a immagini reali.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Come fa il computer a &ldquo;sentire&rdquo; in che direzione andare?</strong>
+Usa le derivate, cioè il gradiente. La derivata dell&rsquo;errore rispetto a ogni parametro indica esattamente in che direzione e di quanto l&rsquo;errore cambierebbe se quel parametro fosse modificato. Il computer calcola tutte le derivate e si muove nella direzione opposta al gradiente (dove l&rsquo;errore diminuisce).</p>
+<p><strong>Perché non si calcola direttamente la soluzione perfetta?</strong>
+Per una semplice retta in realtà si può fare, con una formula chiamata &ldquo;minimi quadrati&rdquo;. Ma per le reti neurali con miliardi di parametri non esiste una formula diretta. L&rsquo;unico modo è procedere per tentativi con il gradient descent, che per fortuna funziona sorprendentemente bene anche con trilioni di parametri.</p>
+<p><strong>Cosa succede se il learning rate è sbagliato?</strong>
+Se è troppo alto, il modello &ldquo;rimbalza&rdquo; senza mai trovare la soluzione, come chi fa salti troppo grandi scendendo da una montagna. Se è troppo basso, l&rsquo;addestramento diventa lentissimo. In pratica, trovare il learning rate giusto è una delle prime cose che un ingegnere di machine learning deve decidere.</p>
+<p><strong>Quanto tempo ci vuole per addestrare un modello grande come GPT-4?</strong>
+Settimane o mesi, usando migliaia di GPU in parallelo. Un singolo ciclo di addestramento di GPT-4 ha richiesto circa 25.000 GPU A100 per diversi mesi, con un costo stimato di circa 100 milioni di dollari, dominato da elettricità e hardware.</p>
+<p><strong>Cos&rsquo;è l&rsquo;R-squared che si vede nella simulazione?</strong>
+È un numero tra 0 e 1 che indica quanto bene la retta spiega i dati. R-squared = 1 significa che la retta passa perfettamente per tutti i punti. R-squared = 0 significa che la retta non spiega nulla. Un valore sopra 0,8 è generalmente considerato buono.</p>
+<p><strong>Ma se il principio è così semplice, perché i modelli di AI sembrano così &ldquo;intelligenti&rdquo;?</strong>
+Perché la scala fa la differenza. Quando hai miliardi di parametri e li addestri su una quantità enorme di testo, il modello riesce a catturare pattern incredibilmente sofisticati: grammatica, ragionamento, conoscenza del mondo. Il meccanismo è semplice, ma applicato a una scala immensa produce risultati che sembrano magici.</p>
+<p><strong>Perché l&rsquo;errore scende veloce all&rsquo;inizio e poi rallenta?</strong>
+All&rsquo;inizio il modello è molto lontano dalla soluzione, quindi anche piccoli aggiustamenti producono grandi miglioramenti. Man mano che si avvicina alla soluzione ottimale, i miglioramenti diventano sempre più piccoli. È come avvicinarsi alla cima di una collina: gli ultimi metri sono i più faticosi per il minor guadagno.</p>
+<p><strong>Il training si paga ogni volta che uso ChatGPT?</strong>
+No. Il costo del training si paga una volta sola: è l&rsquo;investimento iniziale per creare il modello. Quando usi ChatGPT o Claude, il costo per ogni domanda (chiamato &ldquo;inferenza&rdquo;) è molto più basso. È come costruire una fabbrica: costa molto all&rsquo;inizio, ma poi ogni prodotto costa relativamente poco.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Qual è il ciclo fondamentale del machine learning?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Leggere, memorizzare, ripetere</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Provare, misurare l'errore, correggere- C) Copiare, incollare, modificare</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Programmare, compilare, eseguire</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Nel gradient descent, cosa indica il gradiente?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">La velocità del computer</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Il numero totale di parametri</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">La direzione in cui l'errore cresce di più- D) Il costo dell'addestramento</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Cosa succede se il learning rate è troppo alto?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Il modello impara più velocemente e meglio</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Il modello rimbalza senza convergere alla soluzione- C) Il modello non si muove affatto</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Il modello cancella i dati di training</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Qual è la differenza fondamentale tra la nostra retta e GPT-4?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Usano algoritmi completamente diversi</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">GPT-4 ha coscienza, la retta no</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">La scala: GPT-4 ha trilioni di parametri invece di 2- D) La retta usa matematica, GPT-4 usa magia</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Perché l'MSE eleva al quadrato gli errori?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Per rendere i calcoli più difficili</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Per far sembrare l'errore più grande di quello che è</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Per rendere gli errori sempre positivi e penalizzare di più quelli grandi- D) Perché il computer può fare solo moltiplicazioni</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Ogni modello di ML funziona con questo ciclo: fa una previsione, misura quanto e lontana dalla realta (l'errore), e aggiusta i parametri per ridurre l'errore."}, "2": {"correct": "c", "explanation": "Il gradiente indica la direzione di massima crescita dell'errore; il modello si muove nella direzione opposta per ridurlo, come scendere da una montagna nella nebbia."}, "3": {"correct": "b", "explanation": "Con passi troppo grandi, il modello \"salta\" avanti e indietro senza mai stabilizzarsi sulla soluzione, come un escursionista che fa passi enormi e rimbalza da un lato all'altro della valle."}, "4": {"correct": "c", "explanation": "Il principio (provare, misurare, correggere) e identico; cambia solo la scala: 2 parametri per la retta contro circa 1.800 miliardi per GPT-4."}, "5": {"correct": "c", "explanation": "Elevando al quadrato si eliminano i segni negativi (cosi errori sopra e sotto contano uguale) e si penalizzano maggiormente gli errori grandi, che sono piu problematici."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

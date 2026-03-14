@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memoria e Contesto — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#attention_memory">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Deep Dive</div>
+    <h1>Memoria e Contesto nei Transformer: Perché Raddoppiare il Contesto Non Raddoppia la Memoria</h1>
+<h2>Il problema fondamentale</h2>
+<p>Immagina una riunione con dieci persone. Ogni partecipante deve prestare attenzione a tutti gli altri contemporaneamente: ci sono 100 interazioni da gestire. Ora immagina la stessa riunione con 100 persone: le interazioni diventano 10.000. Non è il doppio, non è il triplo — è cento volte di più. Questo è esattamente ciò che succede dentro un Transformer quando allunghi il contesto.</p>
+<p>Il meccanismo di attenzione, che è il cuore di ogni Large Language Model, funziona confrontando ogni token con tutti gli altri token nel contesto. Quando raddoppi il numero di token da elaborare, il numero di confronti non raddoppia: si <strong>quadruplica</strong>. Questa crescita quadratica — O(n²) — è il vincolo fondamentale che determina quanta memoria serve, quanto costa l&rsquo;inferenza, e perché i contesti lunghi sono così costosi.</p>
+<h3>La matrice di attenzione</h3>
+<p>Per ogni layer di un Transformer, il meccanismo di attenzione produce una matrice n×n, dove n è il numero di token nel contesto. Ogni cella di questa matrice contiene un valore che rappresenta quanta &ldquo;attenzione&rdquo; un token presta a un altro. Con 1.000 token, la matrice ha un milione di celle. Con 4.000 token, ne ha sedici milioni. Con 128.000 token — il contesto di un modello moderno — ne ha oltre sedici miliardi.</p>
+<p>Nei modelli decoder-only (GPT, Claude, Llama), la metà superiore della matrice è mascherata dalla <strong>causal mask</strong>: ogni token può guardare solo i token precedenti, mai quelli futuri. Questo crea un triangolo inferiore pieno e un triangolo superiore vuoto. Tuttavia, in molte implementazioni naive, la matrice viene comunque allocata interamente in memoria prima della mascheratura.</p>
+<h3>Tre componenti, tre regimi di crescita</h3>
+<p>Quando un modello è in esecuzione, la memoria GPU è occupata da tre cose distinte:</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Crescita</th>
+<th>Caratteristica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pesi del modello</strong></td>
+<td>O(1) — costante</td>
+<td>I miliardi di parametri vengono caricati una volta e non cambiano con il contesto</td>
+</tr>
+<tr>
+<td><strong>KV Cache</strong></td>
+<td>O(n) — lineare</td>
+<td>Cresce proporzionalmente al numero di token, ma con un coefficiente molto alto</td>
+</tr>
+<tr>
+<td><strong>Matrice di attenzione</strong></td>
+<td>O(n²) — quadratica</td>
+<td>Il collo di bottiglia computazionale</td>
+</tr>
+</tbody>
+</table>
+<p>I pesi di un modello come Llama-3 70B occupano circa 140 GB in fp16. Sono fissi: che tu dia al modello 10 token o 100.000, i pesi restano uguali. Il KV Cache, invece, cresce linearmente con il contesto, ma il coefficiente è enorme perché dipende dal numero di layer, dal numero di head e dalla dimensione di ogni head. La matrice di attenzione è la componente che cresce più rapidamente.</p>
+<h3>Il KV Cache: il vero costo in produzione</h3>
+<p>Un equivoco comune è pensare che la matrice di attenzione sia il problema principale. In realtà, durante l&rsquo;inferenza, il vero collo di bottiglia è spesso il <strong>KV Cache</strong> — la memoria che conserva i vettori Key e Value già calcolati per ogni token precedente.</p>
+<p>La formula del KV Cache è:</p>
+<pre><code>KV Cache = 2 × L × H × n × d_head × sizeof(dtype)
+</code></pre>
+<p>Dove L è il numero di layer, H il numero di head per Key/Value, n il numero di token, d_head la dimensione di ogni head, e sizeof(dtype) la dimensione in byte del tipo di dato (2 per fp16).</p>
+<p>Per Llama-3 70B (L=80, H=64, d_head=128), con 128K token di contesto, il solo KV Cache occupa circa <strong>160 GB di VRAM</strong> — più del doppio del modello stesso. Questo è il motivo per cui servire contesti lunghi con modelli open source richiede infrastrutture GPU importanti.</p>
+<h3>Le ottimizzazioni: come affrontare il problema</h3>
+<p>Il problema quadratico non è insormontabile. Esistono diverse strategie, ognuna con i propri trade-off:</p>
+<p><strong>FlashAttention</strong> non riduce il numero di operazioni matematiche (la complessità resta O(n²) in FLOPs), ma minimizza i trasferimenti tra la memoria principale della GPU (HBM) e la cache on-chip (SRAM). Risultato: stessa qualità, 3-8 volte più veloce, memoria praticamente lineare.</p>
+<p><strong>Grouped Query Attention (GQA)</strong>, usata in Llama-3, fa condividere le stesse Key e Value a più query head. Il KV Cache si riduce di 4-8 volte senza un degrado significativo della qualità.</p>
+<p><strong>Sliding Window Attention</strong>, usata in Mistral, limita ogni token a guardare solo i w token precedenti. Eccellente per compiti locali come la sintesi di paragrafi, meno efficace per ragionamenti che richiedono informazioni distanti nel contesto.</p>
+<p><strong>State Space Models (Mamba, RWKV)</strong> raggiungono una vera complessità O(n) e funzionano bene su contesti molto lunghi, ma il loro &ldquo;recall&rdquo; su informazioni lontane nel contesto è peggiore rispetto alla full attention.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>La crescita è quadratica, non lineare</strong>: raddoppiare il contesto quadruplica il costo della matrice di attenzione. Questa è una conseguenza matematica del confronto ogni-con-ogni tra token.</li>
+<li><strong>In produzione il KV Cache domina</strong>: i vettori Key e Value precalcolati occupano più memoria della matrice di attenzione stessa, soprattutto nei modelli con molti layer.</li>
+<li><strong>I pesi del modello sono fissi</strong>: non importa quanto è lungo il contesto, i miliardi di parametri del modello occupano sempre la stessa quantità di memoria.</li>
+<li><strong>FlashAttention non cambia la complessità algoritmica</strong>: riduce i trasferimenti di memoria, non il numero di operazioni. La complessità O(n²) resta, ma la velocità pratica migliora enormemente.</li>
+<li><strong>Non esiste una soluzione perfetta</strong>: ogni ottimizzazione (GQA, sliding window, SSM) guadagna efficienza rinunciando a qualcosa — generalità, recall a lunga distanza o qualità del ragionamento.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Calcola il KV Cache di un modello</strong>: prendi i parametri di un modello open source (layer, head, d_head) dalla sua model card su Hugging Face e usa la formula <code>2 × L × H × n × d_head × 2 byte</code> per calcolare quanta VRAM serve a diversi livelli di contesto (4K, 32K, 128K token).</p>
+</li>
+<li>
+<p><strong>Confronta i costi API per contesti diversi</strong>: vai sul pricing di OpenAI o Anthropic e calcola quanto costa elaborare 1.000, 10.000 e 100.000 token di input. Verifica se il prezzo cresce linearmente o più che linearmente con la lunghezza del contesto.</p>
+</li>
+<li>
+<p><strong>Sperimenta con la lunghezza del contesto</strong>: prendi un documento lungo e chiedi a un LLM domande su informazioni all&rsquo;inizio, nel mezzo e alla fine. Osserva se la qualità delle risposte degrada con la distanza. Questo ti dà un&rsquo;intuizione pratica sui limiti del meccanismo di attenzione.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Quanto conta davvero il contesto lungo in pratica?</strong>
+Dipende dal compito. Per sistemi RAG con chunk corti, contesti di 4K-8K token sono spesso sufficienti. Per l&rsquo;analisi di documenti lunghi, codebase intere o conversazioni di ore, contesti da 32K-200K token fanno una differenza significativa.</p>
+<p><strong>Claude e GPT-4 come gestiscono 100K+ token?</strong>
+Usano combinazioni di FlashAttention, GQA e ottimizzazioni proprietarie (batching, gestione del KV Cache). Il costo computazionale resta alto e si riflette nei prezzi API: i token di input in contesti molto lunghi possono costare di più.</p>
+<p><strong>Perché non si usano sempre i modelli SSM come Mamba?</strong>
+Il recall preciso su informazioni distanti nel contesto è ancora peggiore rispetto alla full attention. Per molti compiti di ragionamento complesso, questa differenza è significativa. I modelli ibridi (che combinano attention e SSM) sono un&rsquo;area di ricerca molto attiva.</p>
+<p><strong>Il KV Cache è condiviso tra utenti diversi?</strong>
+In alcuni sistemi sì. Il Prompt Caching di Anthropic e server come vLLM possono condividere il KV Cache del system prompt tra utenti diversi che usano lo stesso prompt. I messaggi utente restano sempre privati.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Se un modello ha un contesto di 8.000 token, quante celle ha la matrice di attenzione per un singolo layer e una singola head?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">8.000</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">16.000</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">64.000.000</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">8.000.000</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Quale componente della memoria GPU NON cresce con il numero di token nel contesto?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Il KV Cache</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">La matrice di attenzione</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">I pesi del modello</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Tutti crescono con il contesto</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. FlashAttention migliora le prestazioni principalmente perché:</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Riduce il numero di operazioni matematiche da O(n²) a O(n)</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Elimina la necessità del KV Cache</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Minimizza i trasferimenti di dati tra memoria principale (HBM) e cache on-chip (SRAM)</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Usa meno head di attenzione</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Perché il KV Cache di Llama-3 70B con 128K token occupa più memoria del modello stesso?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perché il KV Cache include anche i pesi del modello</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perché i vettori K e V devono essere memorizzati per ogni token, per ogni layer, per ogni head</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perché il KV Cache usa fp32 mentre il modello usa fp16</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perché il KV Cache cresce in modo quadratico</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Qual è il principale svantaggio della Sliding Window Attention?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Non è compatibile con i modelli decoder-only</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Richiede più memoria della full attention</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Ogni token può guardare solo un numero limitato di token precedenti, perdendo informazioni distanti</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Funziona solo durante il training, non durante l'inferenza</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "c", "explanation": "La matrice di attenzione è n×n. Con n=8.000, la matrice ha 8.000 × 8.000 = 64.000.000 celle. Questa crescita quadratica è il vincolo fondamentale dei Transformer."}, "2": {"correct": "c", "explanation": "I pesi del modello (i miliardi di parametri) vengono caricati una volta e restano fissi indipendentemente dalla lunghezza del contesto. Solo il KV Cache e la matrice di attenzione crescono con n."}, "3": {"correct": "c", "explanation": "FlashAttention non cambia la complessità algoritmica (resta O(n²) in FLOPs). Il suo contributo è processare la matrice a blocchi nella SRAM velocissima, evitando di materializzarla nella HBM molto più lenta."}, "4": {"correct": "b", "explanation": "Il KV Cache cresce linearmente con n (non quadraticamente), ma il coefficiente è enorme: 2 × 80 layer × 64 head × 128 d_head × 2 byte per ogni token. Con 128K token, il totale supera i 160 GB."}, "5": {"correct": "c", "explanation": "La Sliding Window limita l'attenzione ai w token precedenti. Questo la rende efficiente (O(n·w) invece di O(n²)) ma inadatta per compiti che richiedono ragionamento su informazioni distanti nel contesto."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

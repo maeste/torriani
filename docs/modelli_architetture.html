@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sotto il Cofano — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#modelli_architetture">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 2</div>
+    <h1>Sotto il Cofano — Modelli e Architetture</h1>
+<h2>Cosa c&rsquo;e dentro un modello di intelligenza artificiale?</h2>
+<p>Immagina di aprire il cofano di un&rsquo;automobile. Dentro trovi il motore, i cavi, i tubi, i serbatoi. Tutto ha una funzione precisa, e dalla dimensione del motore dipende quanta potenza puoi avere. Con i modelli di intelligenza artificiale funziona in modo sorprendentemente simile: sotto l&rsquo;interfaccia amichevole di ChatGPT o Claude si nascondono miliardi di numeri, hardware specializzato e scelte ingegneristiche affascinanti. Vediamo cosa si nasconde sotto il cofano.</p>
+<h3>I parametri: i mattoncini dell&rsquo;intelligenza</h3>
+<p>Quando senti dire &ldquo;un modello da 70 miliardi di parametri&rdquo;, cosa significa concretamente? Ogni parametro e un numero — un peso della rete neurale. Pensalo come una minuscola manopola che regola il comportamento del modello. Se il modello fosse un mixer musicale enorme, ogni parametro sarebbe una delle manopole: girandola un pochino cambia il suono finale. Moltiplica questa idea per 70 miliardi e hai un&rsquo;idea della complessita.</p>
+<p>I modelli di oggi si dividono grosso modo in tre famiglie di taglia. I <strong>modelli piccoli</strong>, da 1 a 7 miliardi di parametri, sono abbastanza leggeri da girare su un telefono o un portatile: pensa a Phi-3 di Microsoft o a Gemma di Google. Sono perfetti per chatbot personali, riassunti e classificazione di testi. Poi ci sono i <strong>modelli medi</strong>, da 7 a 70 miliardi di parametri, come Llama-3 70B o Mixtral: servono una o due GPU dedicate, ma possono fare cose notevoli come assistere nella programmazione, analizzare documenti lunghi o tradurre con qualita professionale. Infine ci sono i <strong>modelli grandi</strong>, da 70 miliardi fino a oltre mille miliardi di parametri: GPT-4, Claude, Gemini Ultra. Questi vivono nei data center e sono capaci di ragionamento complesso, creativita avanzata e agire come agenti autonomi.</p>
+<h3>L&rsquo;hardware: perche servono le GPU</h3>
+<p>Ma dove girano fisicamente tutti questi numeri? Sulle <strong>GPU</strong> — le schede grafiche. Nate per disegnare pixel nei videogiochi, le GPU sanno fare milioni di operazioni matematiche in parallelo. E le reti neurali hanno bisogno esattamente di questo: montagne di moltiplicazioni tra matrici, tutte insieme. Non e un caso che NVIDIA, il principale produttore di GPU, sia diventata una delle aziende piu preziose al mondo.</p>
+<p>Il collo di bottiglia e la <strong>VRAM</strong>, la memoria della scheda grafica. Tutti i parametri del modello devono stare in questa memoria durante l&rsquo;uso. La regola e semplice: un parametro in precisione standard (16-bit) occupa 2 byte. Quindi un modello da 70 miliardi di parametri richiede circa 140 GB di VRAM — quasi due GPU NVIDIA A100 da 80 GB l&rsquo;una, che costano circa 30.000 dollari ciascuna.</p>
+<h3>Quanto costa tutto questo?</h3>
+<p>La scala dei costi nell&rsquo;IA e vertiginosa. <strong>Usare</strong> un modello costa frazioni di centesimo per domanda — tra 0,001 e 0,05 dollari. E come pagare il pedaggio autostradale. Ma <strong>addestrare</strong> quel modello? Addestrare un modello piccolo costa tra 10.000 e 100.000 dollari. Addestrare qualcosa come GPT-4 supera i 100 milioni di dollari. E come la differenza tra guidare su un&rsquo;autostrada e costruirla da zero.</p>
+<h3>L&rsquo;IA sul tuo computer</h3>
+<p>Ed ecco la notizia bella: non serve per forza il cloud. Esistono strumenti gratuiti che ti permettono di far girare modelli di IA direttamente sul tuo computer, senza internet e senza che nessun dato esca dalla tua rete.</p>
+<p><strong>Ollama</strong> e il piu semplice: apri il terminale, scrivi <code>ollama run llama3</code> e in pochi secondi hai un modello che risponde alle tue domande. <strong>LM Studio</strong> offre un&rsquo;interfaccia grafica completa: scarichi il programma, scegli un modello, e cominci a chattare come faresti con ChatGPT, ma tutto in locale. Per chi vuole il massimo delle prestazioni c&rsquo;e <strong>llama.cpp</strong>, scritto in C++, il piu veloce e configurabile — ma richiede un po&rsquo; piu di esperienza tecnica.</p>
+<p>I vantaggi di usare modelli locali sono importanti: <strong>privacy totale</strong> (nessun dato viene inviato a server esterni), <strong>funzionamento offline</strong>, <strong>zero costi</strong> dopo il download iniziale, e soprattutto l&rsquo;opportunita di <strong>capire davvero come funziona</strong> l&rsquo;IA mettendoci le mani sopra.</p>
+<h3>Il grande compromesso</h3>
+<p>Non esiste il modello perfetto. Ogni scelta comporta un compromesso. I modelli cloud grandi come GPT-4 offrono la migliore qualita e velocita, ma costano e non garantiscono privacy. Un modello locale su GPU ti da privacy totale, possibilita di personalizzazione e funzionamento offline, ma la qualita sara inferiore a quella dei giganti del cloud. Un modello piccolo su CPU e il piu accessibile e privato, ma anche il meno potente.</p>
+<p>La scelta giusta dipende dall&rsquo;uso. Per un compito critico dove serve il massimo della qualita, il cloud e la risposta. Per sperimentare, imparare o gestire dati sensibili, i modelli locali sono fantastici.</p>
+<h3>Il rabbit hole: tecniche avanzate</h3>
+<p>Per i piu curiosi, ci sono alcune tecniche ingegnose che vale la pena conoscere. La <strong>quantizzazione</strong> permette di comprimere un modello riducendo la precisione dei numeri: invece di usare 32 bit per parametro (la massima precisione), si puo scendere a 16, 8 o persino 4 bit. A 4 bit la qualita resta buona per molti compiti, e un modello da 70 miliardi di parametri puo girare su una singola GPU da 24 GB. E come comprimere una foto: perde un po&rsquo; di dettaglio, ma resta perfettamente utilizzabile.</p>
+<p>Il <strong>Mixture of Experts (MoE)</strong> e un&rsquo;altra idea geniale. Invece di avere un unico modello monolitico, si creano tanti &ldquo;esperti&rdquo; specializzati — uno bravo in matematica, uno nel codice, uno nelle lingue — e un piccolo network &ldquo;router&rdquo; decide quali attivare per ogni domanda. Mixtral, ad esempio, ha 47 miliardi di parametri totali, ma ne usa solo 13 miliardi per ogni risposta. E come avere otto specialisti in una clinica e consultarne solo due o tre per ogni paziente: molto piu efficiente.</p>
+<p>Infine, la <strong>distillazione</strong> permette a un modello piccolo di imparare da uno grande. Il modello &ldquo;maestro&rdquo; genera milioni di esempi, e il modello &ldquo;allievo&rdquo; viene addestrato su quei dati, imparando a imitare le risposte del grande. Il risultato e un modello compatto ma sorprendentemente capace.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>I parametri sono i mattoncini</strong>: un modello da 70 miliardi di parametri contiene 70 miliardi di numeri che, insieme, producono le risposte. Piu parametri generalmente significa piu capacita, ma anche piu risorse necessarie.</li>
+<li><strong>Le GPU sono il motore dell&rsquo;IA</strong>: le schede grafiche, nate per i videogiochi, sono diventate essenziali per l&rsquo;intelligenza artificiale perche sanno fare milioni di calcoli in parallelo. La VRAM e il principale collo di bottiglia.</li>
+<li><strong>Usare l&rsquo;IA costa poco, addestrarla costa tantissimo</strong>: una singola domanda costa frazioni di centesimo, ma creare il modello da zero puo costare centinaia di milioni di dollari.</li>
+<li><strong>Puoi far girare l&rsquo;IA sul tuo computer</strong>: con strumenti come Ollama o LM Studio puoi usare modelli linguistici in locale, gratis, offline e con privacy totale.</li>
+<li><strong>Non esiste il modello perfetto</strong>: ogni scelta e un compromesso tra qualita, costo, velocita, privacy e personalizzazione. La scelta giusta dipende sempre dal contesto d&rsquo;uso.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Installa Ollama e prova un modello locale.</strong> Vai su <a href="https://ollama.com">ollama.com</a>, scarica il programma, apri il terminale e scrivi <code>ollama run llama3</code>. Fai qualche domanda e confronta le risposte con quelle di ChatGPT: noterai differenze interessanti tra un modello piccolo locale e uno grande nel cloud.</p>
+</li>
+<li>
+<p><strong>Calcola quanta VRAM servirebbe per un modello.</strong> Prendi un modello qualsiasi (es. 13 miliardi di parametri) e applica la formula: parametri x 2 byte (per FP16) = memoria necessaria. Poi prova a calcolare quanto si riduce con la quantizzazione a 4 bit (parametri x 0,5 byte). Confronta il risultato con la RAM del tuo computer o della tua scheda grafica.</p>
+</li>
+<li>
+<p><strong>Esplora la libreria di modelli su Hugging Face.</strong> Vai su <a href="https://huggingface.co/models">huggingface.co/models</a>, filtra per dimensione e tipo di compito, e scopri quanti modelli open source esistono. Leggi le schede dei modelli per capire per cosa sono ottimizzati e come sono stati addestrati.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Posso far girare ChatGPT sul mio portatile?</strong>
+Non ChatGPT specificamente, perche quello gira sui server di OpenAI. Ma puoi far girare modelli simili come Llama-3 8B. Con 16 GB di RAM puoi usare un modello da 7-8 miliardi di parametri. Non sara potente come GPT-4, ma funziona sorprendentemente bene per molti compiti quotidiani.</p>
+<p><strong>Cosa sono esattamente le GPU e perche sono cosi importanti per l&rsquo;IA?</strong>
+Le GPU (Graphics Processing Units) sono processori nati per i videogiochi, progettati per eseguire milioni di operazioni in parallelo. Le reti neurali richiedono esattamente questo tipo di calcolo massiccio e parallelo, motivo per cui le GPU sono diventate l&rsquo;hardware fondamentale dell&rsquo;intelligenza artificiale moderna.</p>
+<p><strong>Perche non si puo semplicemente rendere il modello piu piccolo senza perdere qualita?</strong>
+In parte si puo, grazie a tecniche come la quantizzazione (ridurre la precisione dei numeri) e la distillazione (far imparare un modello piccolo da uno grande). Ma c&rsquo;e un limite fisico: sotto una certa dimensione, il modello non riesce a catturare pattern sufficientemente complessi per dare risposte di qualita.</p>
+<p><strong>Cosa significa MoE (Mixture of Experts)?</strong>
+E un&rsquo;architettura in cui il modello contiene tanti &ldquo;esperti&rdquo; specializzati, ma ne attiva solo alcuni per ogni domanda. Mixtral, ad esempio, ha 47 miliardi di parametri totali ma ne usa solo 13 miliardi alla volta. Questo permette di avere le prestazioni di un modello grande con il costo computazionale di uno piu piccolo.</p>
+<p><strong>Quanto costa davvero usare un modello come GPT-4?</strong>
+Per l&rsquo;utente finale, ogni domanda costa tra 0,001 e 0,05 dollari — frazioni di centesimo. Il costo enorme e per chi crea il modello: addestrare GPT-4 e costato oltre 100 milioni di dollari. E la differenza tra costruire un&rsquo;autostrada e pagare il pedaggio per percorrerla.</p>
+<p><strong>Cosa vuol dire &ldquo;quantizzazione&rdquo; in parole semplici?</strong>
+E come scegliere quante cifre decimali usare. Se un parametro vale 3,14159265, a 32 bit lo memorizzi esattamente cosi. A 4 bit lo memorizzi come &ldquo;circa 3&rdquo;. Perdi un po&rsquo; di precisione, ma risparmi un sacco di memoria — e per molti compiti la differenza e trascurabile.</p>
+<p><strong>Esistono alternative ai Transformer?</strong>
+Si, la ricerca e molto attiva. Architetture come Mamba (basata su State Space Models) e RWKV offrono complessita lineare invece che quadratica, il che le rende potenzialmente molto piu veloci su testi lunghi. Esistono anche modelli ibridi come Jamba che combinano Transformer e nuove architetture. Pero, al momento, nessuna ha sostituito completamente i Transformer.</p>
+<p><strong>I modelli locali sono sicuri da usare?</strong>
+Si, anzi sono piu sicuri dal punto di vista della privacy rispetto ai servizi cloud. Tutti i dati restano sul tuo computer e nessuna informazione viene inviata a server esterni. Questo li rende ideali per lavorare con dati sensibili o personali.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Un modello da 7 miliardi di parametri in precisione FP16 (2 byte per parametro) occupa circa:</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">700 MB</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">7 GB</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">14 GB- D) 70 GB</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Quale vantaggio principale offre la tecnica Mixture of Experts (MoE)?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Riduce il numero totale di parametri del modello</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Permette di usare solo una parte dei parametri per ogni risposta, risparmiando calcolo- C) Elimina la necessita di GPU</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Rende il modello completamente gratuito da addestrare</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Se vuoi far girare un modello di IA sul tuo portatile con la massima semplicita, quale strumento sceglieresti?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">llama.cpp, perche e il piu veloce</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Un cluster di GPU nel cloud</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">LM Studio o Ollama, perche hanno interfacce semplici e gestiscono tutto automaticamente- D) Addestrare un modello da zero sul tuo computer</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Qual e la differenza principale tra il costo di addestramento e il costo di utilizzo di un modello come GPT-4?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Non c'e differenza, costano uguale</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">L'addestramento costa milioni di dollari, ma ogni singola domanda costa frazioni di centesimo- C) L'utilizzo costa di piu perche ci sono milioni di utenti</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">L'addestramento e gratuito, si paga solo l'utilizzo</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. La quantizzazione a 4 bit di un modello permette di:</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Quadruplicare il numero di parametri</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Ridurre la memoria necessaria a circa un ottavo dell'originale (32 bit), con una piccola perdita di qualita- C) Eliminare completamente la necessita di GPU</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Aumentare la qualita delle risposte rispetto alla precisione piena</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "c", "explanation": "7 miliardi di parametri x 2 byte ciascuno = 14 miliardi di byte = 14 GB. E un calcolo diretto che permette di stimare quanta VRAM serve."}, "2": {"correct": "b", "explanation": "MoE attiva solo alcuni \"esperti\" per ogni domanda: Mixtral ha 47 miliardi di parametri totali ma ne usa solo 13 miliardi alla volta, con prestazioni da modello grande e costi da modello piccolo."}, "3": {"correct": "c", "explanation": "Ollama e LM Studio sono progettati per l'utente finale: un'interfaccia semplice che gestisce download e configurazione automaticamente, senza competenze tecniche avanzate."}, "4": {"correct": "b", "explanation": "E come la differenza tra costruire un'autostrada (costo enorme, una tantum) e pagare il pedaggio (frazioni di centesimo per ogni passaggio)."}, "5": {"correct": "b", "explanation": "Passando da 32 bit a 4 bit per parametro, la memoria si riduce di 8 volte, rendendo possibile far girare modelli grandi su hardware piu accessibile con una perdita di qualita minima."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

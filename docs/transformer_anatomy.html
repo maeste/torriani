@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anatomia del Transformer — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#transformer_anatomy">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Deep Dive</div>
+    <h1>Anatomia del Transformer: Layers, Heads e d_head</h1>
+<h2>I tre parametri che definiscono un modello</h2>
+<p>Quando si parla di un Large Language Model, si sente spesso dire &ldquo;ha 8 miliardi di parametri&rdquo; o &ldquo;ne ha 70 miliardi&rdquo;. Ma cosa sono esattamente questi parametri, e come sono organizzati? La risposta sta in tre numeri fondamentali: il numero di <strong>layer</strong> (strati), il numero di <strong>head</strong> (teste di attenzione) e la dimensione <strong>d_head</strong> (la larghezza di ogni testa). Capire come interagiscono questi tre numeri significa capire perché un modello è grande, quanto costa farlo funzionare, e quali sono i suoi limiti.</p>
+<h3>d_model: il vettore di un token</h3>
+<p>Ogni token — ogni parola o sotto-parola che il modello elabora — viene rappresentato come un lungo vettore di numeri. La lunghezza di questo vettore si chiama <strong>d_model</strong>. In Llama-3 8B, d_model è 4096: ogni singolo token è un punto in uno spazio a 4.096 dimensioni. In modelli più grandi, d_model può arrivare a 8192 o 12288.</p>
+<p>Ma il modello non lavora su questo vettore come un blocco unico. Lo <strong>spezza</strong> in sottogruppi paralleli, uno per ogni head di attenzione. La relazione è semplice:</p>
+<pre><code>d_model = heads × d_head
+</code></pre>
+<p>Con d_model = 4096 e 32 head, ogni head lavora su un vettore di d_head = 128 dimensioni. Non è una scelta casuale: valori di d_head tra 64 e 128 si sono dimostrati empiricamente ottimali per la maggior parte delle architetture.</p>
+<p>L&rsquo;analogia più utile è quella di un team di analisti. Invece di far analizzare un intero documento a una sola persona, lo dividi in sezioni specializzate: un analista studia la grammatica, uno la semantica, uno le relazioni tra entità. Ogni analista lavora sulla sua porzione del vettore — la sua head — e poi i risultati vengono ricombinati.</p>
+<h3>Multi-Head Attention: il meccanismo passo per passo</h3>
+<p>Il cuore di ogni layer del Transformer è il meccanismo di Multi-Head Attention, che procede in cinque passi:</p>
+<p><strong>Passo 1 — Input</strong>: i token sono già stati convertiti in vettori numerici (embedding + positional encoding). Il modello non &ldquo;vede&rdquo; parole, vede sequenze di numeri.</p>
+<p><strong>Passo 2 — Proiezione Q, K, V</strong>: ogni head proietta l&rsquo;input in tre spazi diversi tramite matrici di proiezione apprese durante il training:
+- <strong>Query (Q)</strong>: &ldquo;cosa sto cercando?&rdquo;
+- <strong>Key (K)</strong>: &ldquo;cosa posso offrire agli altri token?&rdquo;
+- <strong>Value (V)</strong>: &ldquo;qual è il mio contenuto informativo?&rdquo;</p>
+<p>È come se ogni token indossasse tre cappelli contemporaneamente: interrogante, rispondente e portatore di informazione.</p>
+<p><strong>Passo 3 — Attention Scores</strong>: il prodotto scalare (dot product) tra Q e Kᵀ misura la &ldquo;compatibilità&rdquo; tra ogni coppia di token. Il risultato è la matrice n×n degli score di attenzione.</p>
+<p><strong>Passo 4 — Softmax + somma pesata</strong>: gli score diventano probabilità tramite la funzione softmax. Ogni token non riceve informazioni da un solo altro token, ma una <strong>media pesata</strong> delle informazioni di tutti i token precedenti.</p>
+<p><strong>Passo 5 — Concatenazione e proiezione finale</strong>: gli output di tutte le head vengono concatenati e proiettati nello spazio originale d_model. Ogni head ha catturato relazioni diverse e complementari — la fusione è ricca di informazioni.</p>
+<h3>Lo stack di layer: profondità = ragionamento</h3>
+<p>Un singolo strato di attention è potente ma limitato. Impilando 32, 48, 80 strati, ogni strato può raffinarsi su ciò che il precedente ha prodotto. La ricerca ha mostrato che:</p>
+<ul>
+<li>I <strong>layer bassi</strong> tendono a catturare relazioni <strong>sintattiche e locali</strong>: accordo soggetto-verbo, punteggiatura, struttura della frase.</li>
+<li>I <strong>layer intermedi</strong> catturano relazioni <strong>semantiche</strong>: significato delle parole nel contesto, riferimenti pronominali.</li>
+<li>I <strong>layer alti</strong> catturano <strong>ragionamento e contesto ampio</strong>: inferenze logiche, coerenza del discorso, comprensione globale.</li>
+</ul>
+<p>Ogni layer ha il suo blocco di attention completo, il che significa che il suo KV Cache è indipendente. Più layer → KV Cache proporzionalmente più grande. La formula:</p>
+<pre><code>KV Cache = 2 × L × H × n × d_head × sizeof(fp16)
+</code></pre>
+<p>Il fattore 2 viene dal fatto che si memorizzano sia K che V per ogni layer.</p>
+<h3>Numeri reali: dal piccolo al grande</h3>
+<table>
+<thead>
+<tr>
+<th>Modello</th>
+<th>Layer</th>
+<th>Head</th>
+<th>d_head</th>
+<th>d_model</th>
+<th>KV Cache @ 8K</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPT-2 small</td>
+<td>12</td>
+<td>12</td>
+<td>64</td>
+<td>768</td>
+<td>~0.1 GB</td>
+</tr>
+<tr>
+<td>Llama-3 8B</td>
+<td>32</td>
+<td>32</td>
+<td>128</td>
+<td>4096</td>
+<td>~2 GB</td>
+</tr>
+<tr>
+<td>Llama-3 70B</td>
+<td>80</td>
+<td>64</td>
+<td>128</td>
+<td>8192</td>
+<td>~20 GB</td>
+</tr>
+<tr>
+<td>Claude-style @ 100K</td>
+<td>48</td>
+<td>64</td>
+<td>128</td>
+<td>8192</td>
+<td>~75 GB</td>
+</tr>
+</tbody>
+</table>
+<p>Il dato che sorprende è sempre l&rsquo;ultimo: il KV Cache di un modello grande con contesto lungo può superare la dimensione del modello stesso. Se si vogliono servire 100 utenti in parallelo (batch size = 100), il KV Cache va moltiplicato per 100: 2 TB di VRAM solo per il cache. Questo spiega i costi dell&rsquo;inferenza distribuita.</p>
+<h3>Perché tante head e non una sola grande?</h3>
+<p>Una domanda naturale è: perché non usare una singola head grande con d_head = d_model, invece di tante head piccole? La risposta è che le multi-head attention imparano relazioni <strong>diverse e complementari</strong>. Ogni head si specializza: una può concentrarsi sulle relazioni grammaticali, un&rsquo;altra sul significato semantico, un&rsquo;altra ancora sulle dipendenze a lunga distanza. Non è ridondanza, è <strong>specializzazione parallela</strong>. Una singola head grande tenderebbe a dominare un unico tipo di relazione.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>d_model = heads × d_head</strong>: la dimensione del vettore di un token è il prodotto del numero di head per la dimensione di ogni head. Questa relazione è la base dell&rsquo;architettura Transformer.</li>
+<li><strong>Ogni head si specializza</strong>: le diverse head di attenzione catturano relazioni diverse — grammaticali, semantiche, logiche. Non è ridondanza ma specializzazione parallela.</li>
+<li><strong>La profondità (numero di layer) abilita il ragionamento</strong>: i layer bassi catturano pattern locali, quelli alti ragionamento complesso. Più layer significano capacità cognitive più sofisticate.</li>
+<li><strong>Il KV Cache scala con i layer</strong>: ogni layer ha il suo cache indipendente. Un modello con 80 layer ha un KV Cache 80 volte più grande di un modello con un solo layer, a parità di contesto.</li>
+<li><strong>I numeri reali sono enormi</strong>: il KV Cache di un modello da 70B parametri con 8K token di contesto occupa già 20 GB di VRAM. Con contesti lunghi e batch grandi, può superare la dimensione del modello stesso.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Esplora una model card su Hugging Face</strong>: cerca un modello come Llama-3 o Mistral, trova i valori di layer, head e d_head nella documentazione, e verifica che d_model = heads × d_head. Calcola il KV Cache per diversi contesti.</p>
+</li>
+<li>
+<p><strong>Visualizza le attention head</strong>: usa strumenti come BertViz o Ecco su un modello piccolo (GPT-2) per vedere cosa cattura ogni head di attenzione. Noterai che alcune head si specializzano in relazioni sintattiche, altre in semantiche.</p>
+</li>
+<li>
+<p><strong>Confronta modelli con lo stesso numero di parametri ma architetture diverse</strong>: cerca modelli che hanno parametri simili ma diverso rapporto layer/head (ad esempio un modello &ldquo;largo e poco profondo&rdquo; vs uno &ldquo;stretto e profondo&rdquo;) e confronta le loro performance su benchmark. Questo ti aiuterà a capire l&rsquo;impatto delle scelte architetturali.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Perché non usare una sola head grande invece di tante head piccole?</strong>
+Sperimentalmente, le multi-head attention imparano relazioni diverse e complementari. Una sola head grande tenderebbe a specializzarsi in un unico tipo di relazione, perdendo la ricchezza informativa che emerge dalla specializzazione parallela.</p>
+<p><strong>Il numero di head è sempre uguale in tutti i layer?</strong>
+Nelle architetture standard sì. Alcune architetture recenti sperimentano con configurazioni diverse per layer diversi, ma è relativamente raro nei modelli di produzione.</p>
+<p><strong>Cosa determina d_model in pratica?</strong>
+È una scelta di design che scala con la dimensione del modello. Più grande è d_model, più espressiva è la rappresentazione, ma più costosa è ogni operazione. Tipicamente scala come la radice quadrata del numero totale di parametri.</p>
+<p><strong>Perché i layer bassi catturano la grammatica e quelli alti il ragionamento?</strong>
+È una proprietà emergente del training, non una scelta progettuale. Si ipotizza che il modello impari prima le regolarità più semplici (sintassi) nei layer iniziali, e poi costruisca rappresentazioni sempre più astratte nei layer successivi — in modo simile a come le reti neurali convoluzionali imparano prima i bordi e poi le forme complesse.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Se un modello ha d_model = 8192 e 64 head di attenzione, qual è il valore di d_head?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">64</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">128</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">256</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">512</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Perché i Transformer usano molte head di attenzione invece di una sola?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Per risparmiare memoria durante l'inferenza</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perché ogni head si specializza nel catturare un tipo diverso di relazione tra token</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perché una sola head sarebbe troppo lenta da calcolare</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Per compatibilità con le GPU moderne</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Quale componente del Transformer è direttamente responsabile della crescita del KV Cache con il numero di layer?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Il positional encoding, che deve essere ricalcolato per ogni layer</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Il fatto che ogni layer ha il suo blocco di attention con K e V indipendenti</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">La funzione softmax, che richiede più memoria con più layer</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">La concatenazione finale delle head</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. In un Transformer, cosa catturano tipicamente i layer più profondi (alti)?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Le relazioni grammaticali tra parole adiacenti</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Il positional encoding dei token</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Il ragionamento complesso e le relazioni a lunga distanza nel contesto</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">La pronuncia e la fonetica delle parole</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Se il KV Cache di Llama-3 70B occupa 20 GB con 8K token, quanto occuperà approssimativamente con 32K token?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">40 GB</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">80 GB</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">160 GB</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">320 GB</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "d_model = heads × d_head, quindi d_head = d_model / heads = 8192 / 64 = 128. Questo è il valore tipico usato nei modelli moderni come Llama-3."}, "2": {"correct": "b", "explanation": "Le multi-head attention imparano relazioni diverse e complementari: una head può specializzarsi in relazioni grammaticali, un'altra in semantiche, un'altra in dipendenze a lunga distanza. Non è ridondanza, è specializzazione parallela."}, "3": {"correct": "b", "explanation": "Ogni layer ha il suo blocco di Multi-Head Attention con vettori K e V propri. Il KV Cache è la somma dei K e V di tutti i layer, quindi cresce proporzionalmente al numero di layer."}, "4": {"correct": "c", "explanation": "I layer bassi catturano pattern sintattici locali; i layer intermedi catturano semantica; i layer alti catturano ragionamento complesso e relazioni a lunga distanza. È una proprietà emergente del training."}, "5": {"correct": "b", "explanation": "Il KV Cache cresce linearmente con il numero di token. 32K è 4× rispetto a 8K, quindi il KV Cache sarà circa 4 × 20 GB = 80 GB."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

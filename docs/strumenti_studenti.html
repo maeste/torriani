@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>La Cassetta degli Attrezzi — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#strumenti_studenti">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 3</div>
+    <h1>La Cassetta degli Attrezzi dello Studente IA</h1>
+<h2>Come l&rsquo;intelligenza artificiale puo diventare la tua migliore alleata nello studio</h2>
+<p>Immagina di avere un compagno di studio instancabile, disponibile a qualsiasi ora, che conosce i tuoi appunti meglio di te e non si stanca mai di rispiegare le cose. Non e fantascienza: e quello che gli strumenti di intelligenza artificiale possono fare per te oggi. Ma attenzione, perche come ogni strumento potente, la differenza la fa chi lo usa e soprattutto <em>come</em> lo usa. Prendi un coltello da cucina: nelle mani di uno chef diventa arte, usato male puo fare danni. Con l&rsquo;IA e esattamente la stessa cosa.</p>
+<p>Partiamo dal primo strumento che dovresti conoscere: <strong>NotebookLM</strong>, sviluppato da Google. Funziona cosi: tu carichi i tuoi materiali di studio &mdash; appunti, PDF, slide del professore, pagine web &mdash; e l&rsquo;IA li analizza tutti. La magia sta nel fatto che quando gli fai una domanda, NotebookLM risponde usando <strong>esclusivamente</strong> quello che gli hai dato tu. Non inventa, non va a cercare su internet, non &ldquo;allucina&rdquo; (cioe non si inventa fatti inesistenti, un problema comune delle IA). Se il tuo professore ha spiegato la Rivoluzione Francese in un certo modo, il riassunto che ottieni riflette quella spiegazione, non una versione generica trovata chissa dove.</p>
+<p>Ma la cosa davvero geniale e cosa puo produrre: riassunti strutturati perfetti per il ripasso prima di un esame, quiz a scelta multipla per testarti, domande di comprensione profonda, e persino dei <strong>podcast</strong>. Si, hai letto bene: puo trasformare i tuoi appunti di storia in una conversazione tra due persone che discutono degli argomenti. Perfetto da ascoltare in autobus o mentre fai una passeggiata. Dietro le quinte, NotebookLM usa una tecnologia chiamata RAG (Retrieval Augmented Generation): i tuoi documenti vengono &ldquo;spezzettati&rdquo; in pezzi, trasformati in numeri che rappresentano il loro significato, e quando fai una domanda l&rsquo;IA cerca i pezzi piu rilevanti per costruire la risposta. Tutto questo in pochi secondi. Ed e gratuito con un account Google.</p>
+<p>Passiamo al secondo grande strumento: la <strong>modalita tutor</strong>. ChatGPT, Claude, Gemini &mdash; tutti i principali assistenti IA possono diventare tutor socratici straordinari. Il segreto sta nel modo in cui gli parli, cioe nel <strong>prompt</strong>. Se chiedi &ldquo;Qual e la capitale della Francia?&rdquo;, l&rsquo;IA ti rispondera &ldquo;Parigi&rdquo; e tu non avrai imparato nulla di nuovo. Ma se scrivi &ldquo;Non darmi la risposta, guidami passo per passo verso la soluzione&rdquo;, succede qualcosa di completamente diverso. L&rsquo;IA inizia a farti domande: &ldquo;Cosa sai gia della Francia? Quale citta e famosa per la Torre Eiffel? Quale citta francese e la sede del governo?&rdquo;. Ti guida verso la risposta, facendoti ragionare. E <em>quello</em> e apprendimento vero.</p>
+<p>Esistono prompt magici che dovresti salvare e usare regolarmente. Eccone alcuni: &ldquo;Spiegami questo concetto come se avessi 15 anni&rdquo; funziona benissimo quando un argomento sembra troppo complicato. &ldquo;Fammi domande per verificare se ho capito&rdquo; e perfetto dopo aver studiato un capitolo. &ldquo;Dammi un&rsquo;analogia dalla vita quotidiana&rdquo; rende concreti anche i concetti piu astratti. &ldquo;Quali errori fanno spesso gli studenti su questo argomento?&rdquo; ti mette in guardia prima ancora di cadere nelle trappole classiche. Il punto fondamentale e questo: la differenza tra usare l&rsquo;IA per <em>imparare</em> e usarla per <em>non imparare</em> sta tutta nel prompt che scrivi.</p>
+<p>Terzo capitolo: gli <strong>strumenti di ricerca potenziati dall&rsquo;IA</strong>. Oltre al classico Google, esistono piattaforme pensate specificamente per fare ricerche serie con le fonti. <strong>Perplexity</strong> e come un motore di ricerca che risponde alle tue domande citando sempre le fonti originali &mdash; ogni affermazione ha un link che puoi verificare. <strong>Consensus</strong> fa qualcosa di ancora piu specifico: cerca direttamente nei paper scientifici e ti dice se la comunita scientifica e d&rsquo;accordo o meno su un tema. Immagina di dover fare una tesina sul cambiamento climatico: Consensus ti mostra la percentuale di studi a favore di una certa tesi. <strong>Connected Papers</strong> ti permette di partire da un articolo scientifico e vedere una mappa visuale di tutti gli articoli collegati, come una rete di conoscenza. <strong>Elicit</strong> organizza i risultati della ricerca in tabelle comparative, estraendo automaticamente metodi, risultati e conclusioni. Questi strumenti sono particolarmente utili per tesine e ricerche scolastiche dove serve andare oltre Wikipedia.</p>
+<p>E ora arriviamo alla parte piu importante di tutto il discorso: l&rsquo;<strong>etica</strong>. C&rsquo;e una linea sottilissima tra usare l&rsquo;IA come tutor e usarla come ghostwriter, e quella linea fa tutta la differenza del mondo. Da un lato c&rsquo;e l&rsquo;uso corretto: chiedere spiegazioni, farsi guidare passo per passo, verificare la propria comprensione, riformulare con parole proprie, imparare un metodo di studio. Dall&rsquo;altro c&rsquo;e l&rsquo;uso scorretto: copiare risposte, farsi generare temi e saggi, far fare i compiti all&rsquo;IA, finendo con zero apprendimento reale e una dipendenza dallo strumento.</p>
+<p>Ti dico una cosa scomoda ma vera: copiare con l&rsquo;IA e <strong>peggio</strong> che copiare da un compagno. Quando copi dal compagno, almeno devi capire cosa stai copiando, rielaborare minimamente, adattare. Con l&rsquo;IA non serve nemmeno quello: fai copia-incolla e hai finito. Non impari nulla e, peggio ancora, crei una dipendenza. I professori, tra l&rsquo;altro, se ne accorgono eccome. I testi generati dall&rsquo;IA hanno pattern riconoscibili: un vocabolario troppo sofisticato per il tuo livello, una struttura troppo perfetta, l&rsquo;assenza di quei piccoli errori che rendono un testo umano. E poi esistono strumenti come Turnitin, GPTZero e Compilatio, usati nelle scuole e nelle universita per individuare i testi generati dall&rsquo;IA. Ma il test definitivo resta l&rsquo;interrogazione orale: se non sai spiegare quello che hai scritto, e evidente che non l&rsquo;hai scritto tu.</p>
+<p>Il messaggio finale e semplice: l&rsquo;IA migliore e quella che ti rende piu intelligente, non quella che pensa al posto tuo. Stai investendo nella persona che sarai tra cinque anni. Le competenze che costruisci adesso &mdash; pensiero critico, capacita di scrittura, problem solving &mdash; saranno il tuo vantaggio competitivo all&rsquo;universita e nel mondo del lavoro. L&rsquo;IA puo amplificarle enormemente, ma non puo sostituirle.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li>
+<p><strong>NotebookLM usa solo i tuoi materiali</strong>: a differenza di ChatGPT o altri assistenti generici, NotebookLM risponde basandosi esclusivamente sui documenti che gli carichi, riducendo quasi a zero il rischio di informazioni inventate.</p>
+</li>
+<li>
+<p><strong>Il prompt fa tutta la differenza</strong>: chiedere &ldquo;Qual e la risposta?&rdquo; e chiedere &ldquo;Guidami verso la risposta senza dirmela&rdquo; producono esperienze di apprendimento completamente diverse. Il modo in cui parli all&rsquo;IA determina se impari o no.</p>
+</li>
+<li>
+<p><strong>Esistono strumenti di ricerca IA che citano le fonti</strong>: Perplexity, Consensus, Connected Papers e Elicit sono piattaforme progettate per fare ricerche serie, con fonti verificabili e accesso diretto alla letteratura scientifica.</p>
+</li>
+<li>
+<p><strong>Tutor e ghostwriter non sono la stessa cosa</strong>: usare l&rsquo;IA per capire meglio un argomento e legittimo e intelligente; usarla per farsi fare i compiti e controproducente, riconoscibile e ti rende piu debole nel lungo periodo.</p>
+</li>
+<li>
+<p><strong>L&rsquo;AI literacy e una competenza fondamentale</strong>: saper usare l&rsquo;IA in modo critico e consapevole &mdash; capire cosa puo fare, cosa non puo fare, quando sbaglia &mdash; sara una delle competenze piu richieste nei prossimi anni, paragonabile a quello che era &ldquo;saper cercare su Google&rdquo; negli anni 2000.</p>
+</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Prova NotebookLM con i tuoi appunti</strong>: vai su notebooklm.google.com, crea un notebook, carica gli appunti di una materia e chiedigli di farti un riassunto o un quiz. Confronta il risultato con quello che ricordi: vedrai subito dove hai lacune.</p>
+</li>
+<li>
+<p><strong>Sperimenta la modalita tutor</strong>: apri ChatGPT, Claude o Gemini e prova questi prompt su un argomento che stai studiando: &ldquo;Spiegami [argomento] come se avessi 15 anni&rdquo;, poi &ldquo;Fammi 5 domande per verificare se ho capito&rdquo;, e infine &ldquo;Non darmi la risposta, guidami passo per passo&rdquo;. Nota la differenza rispetto a chiedere semplicemente la risposta.</p>
+</li>
+<li>
+<p><strong>Fai una ricerca con Perplexity</strong>: scegli un tema che ti interessa (anche non scolastico) e cercalo su perplexity.ai. Confronta l&rsquo;esperienza con una ricerca su Google: nota come Perplexity cita le fonti e come puoi verificare ogni affermazione. Abituati a pretendere sempre le fonti.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Ma tutti copiano con ChatGPT, perche non dovrei farlo anch&rsquo;io?</strong>
+Perche stai investendo nella persona che sarai tra cinque anni. All&rsquo;universita, al lavoro, in un colloquio, nessuno fara le cose per te. Le competenze che costruisci ora &mdash; pensiero critico, scrittura, ragionamento &mdash; sono il tuo vero vantaggio. L&rsquo;IA le puo potenziare, ma se non le hai mai sviluppate, non c&rsquo;e nulla da potenziare.</p>
+<p><strong>Come fa il professore a sapere se ho usato l&rsquo;IA?</strong>
+Ci sono diversi segnali: un vocabolario troppo sofisticato per il tuo livello, una struttura troppo &ldquo;perfetta&rdquo;, l&rsquo;assenza di errori tipici, contenuti non trattati a lezione. Inoltre le scuole usano strumenti come Turnitin, GPTZero e Compilatio per l&rsquo;analisi automatica. Ma il vero test e l&rsquo;interrogazione orale: se non sai spiegare quello che hai scritto, e evidente.</p>
+<p><strong>NotebookLM e gratuito?</strong>
+Si, al momento e gratuito con un account Google. Ha dei limiti sul numero di notebook e fonti caricabili, ma per l&rsquo;uso scolastico e piu che sufficiente.</p>
+<p><strong>Posso usare l&rsquo;IA per correggere i miei temi?</strong>
+Assolutamente si, e anzi e uno degli usi piu intelligenti. Chiedere &ldquo;Cosa posso migliorare in questo testo?&rdquo; e molto diverso da &ldquo;Scrivi il tema per me&rdquo;. Il primo ti insegna a scrivere meglio, il secondo no.</p>
+<p><strong>E se l&rsquo;IA mi da informazioni sbagliate?</strong>
+Succede, e si chiama &ldquo;allucinazione&rdquo;. Per questo e fondamentale verificare sempre: chiedi le fonti, controlla su almeno 2-3 fonti diverse, fai attenzione ai numeri e alle statistiche (le IA spesso le inventano di sana pianta). Il pensiero critico e la competenza piu importante dell&rsquo;era IA.</p>
+<p><strong>Qual e la differenza tra Perplexity e Google?</strong>
+Google ti da una lista di link e sta a te leggere i siti. Perplexity legge i siti per te e ti da una risposta strutturata con le citazioni. E piu veloce per ottenere risposte, ma ricorda che anche Perplexity puo sbagliare, quindi verifica sempre le fonti che ti propone.</p>
+<p><strong>Cosa significa RAG, la tecnologia dietro NotebookLM?</strong>
+RAG sta per Retrieval Augmented Generation. In pratica, i tuoi documenti vengono trasformati in rappresentazioni numeriche. Quando fai una domanda, il sistema cerca le parti piu rilevanti dei tuoi documenti e le passa al modello linguistico come contesto. Il risultato e che l&rsquo;IA risponde solo usando le informazioni che le hai fornito tu, senza inventare.</p>
+<p><strong>L&rsquo;IA puo sostituire il professore?</strong>
+No, e non e neanche l&rsquo;obiettivo. L&rsquo;IA non sa motivarti come un buon professore, non capisce le dinamiche della classe, non puo adattare la lezione in tempo reale in base alle tue espressioni. L&rsquo;IA e un ottimo strumento di studio individuale, ma l&rsquo;insegnamento e una relazione umana che nessun algoritmo puo replicare.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Qual e la caratteristica principale che distingue NotebookLM da ChatGPT?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">NotebookLM e piu veloce</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">NotebookLM risponde solo basandosi sui documenti che gli carichi tu- C) NotebookLM e disponibile solo in italiano</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">NotebookLM non ha bisogno di una connessione internet</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Quale di questi prompt trasforma l'IA in un tutor socratico?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">&quot;Qual e la risposta alla domanda 5?&quot;</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">&quot;Scrivi un riassunto del capitolo 3&quot;</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">&quot;Non darmi la risposta, guidami passo per passo verso la soluzione&quot;- D) &quot;Copia il testo del libro a pagina 42&quot;</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Perche copiare con l'IA e considerato peggio che copiare da un compagno?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche l'IA costa di piu</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche con l'IA non serve nemmeno capire cosa si sta copiando, creando dipendenza senza apprendimento- C) Perche l'IA viene sempre scoperta, i compagni no</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche copiare da un compagno e legale, con l'IA no</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Cosa fa Consensus rispetto a un motore di ricerca tradizionale?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Cerca solo su Wikipedia</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Cerca nei paper scientifici e mostra il grado di accordo della comunita scientifica su un tema- C) Traduce automaticamente i risultati in italiano</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Genera automaticamente le tesine complete</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Cos'e una &quot;allucinazione&quot; nel contesto dell'intelligenza artificiale?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Un errore di connessione al server</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Un virus informatico che colpisce i modelli IA</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Quando l'IA genera informazioni false presentandole come vere- D) Quando l'IA si rifiuta di rispondere a una domanda</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "A differenza degli assistenti generici, NotebookLM usa la tecnologia RAG per rispondere esclusivamente basandosi sui documenti caricati, riducendo quasi a zero le allucinazioni."}, "2": {"correct": "c", "explanation": "Chiedendo all'IA di guidare verso la risposta senza darla direttamente, si attiva un processo di apprendimento socratico che stimola il ragionamento dello studente."}, "3": {"correct": "b", "explanation": "Copiando da un compagno si deve almeno capire e rielaborare; con l'IA basta un copia-incolla, senza nessun apprendimento reale e creando una dipendenza pericolosa."}, "4": {"correct": "b", "explanation": "Consensus e specializzato nella ricerca di paper scientifici e mostra la percentuale di studi che supportano una determinata tesi, utile per ricerche serie e tesine."}, "5": {"correct": "c", "explanation": "Come una persona che vede qualcosa che non c'e, il modello \"vede\" fatti inesistenti e li presenta con sicurezza; e un limite strutturale dei modelli linguistici."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

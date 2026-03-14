@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imparare Giocando — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#reinforcement_learning">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 1</div>
+    <h1>Imparare Giocando: il Reinforcement Learning</h1>
+<h2>Come le macchine imparano per tentativi, errori e ricompense</h2>
+<p>Immaginate di voler insegnare a un cane a sedersi. Non vi mettete a spiegargli la grammatica del comando, non gli fate un corso di anatomia sulle articolazioni posteriori. Fate una cosa molto piu semplice: gli dite &ldquo;seduto&rdquo;, e se lo fa gli date un biscotto. Se non lo fa, niente biscotto. Dopo un po&rsquo; di tentativi, il cane capisce il trucco. Ecco: avete appena fatto <strong>reinforcement learning</strong>, ovvero apprendimento per rinforzo. Ed e esattamente cosi che funzionano alcune delle intelligenze artificiali piu impressionanti del pianeta.</p>
+<p>Il meccanismo e elegante nella sua semplicita. Ci sono quattro elementi che si rincorrono in un ciclo infinito. C&rsquo;e un <strong>agente</strong> &ndash; chi deve imparare (il cane, un programma, un modello di IA). L&rsquo;agente compie un&rsquo;<strong>azione</strong> (sedersi, muovere un pezzo su una scacchiera, generare una risposta). L&rsquo;azione modifica l&rsquo;<strong>ambiente</strong> (il mondo intorno: il salotto, la scacchiera, la conversazione). E l&rsquo;ambiente restituisce una <strong>ricompensa</strong>: positiva se l&rsquo;azione era buona, negativa se no. Poi il ciclo ricomincia. Azione dopo azione, ricompensa dopo ricompensa, l&rsquo;agente impara a comportarsi sempre meglio. Nessuno gli dice <em>come</em> fare le cose. Gli si dice solo <em>se</em> le ha fatte bene.</p>
+<p>Ora, questa idea sembra quasi banale applicata a un cane che si siede. Ma cosa succede se la applichiamo a un gioco che ha piu configurazioni possibili degli atomi nell&rsquo;intero universo?</p>
+<h3>La storia di AlphaGo</h3>
+<p>Siamo il 9 marzo 2016, a Seoul. Lee Sedol, considerato il piu forte giocatore di Go al mondo, si siede davanti a uno schermo. Dall&rsquo;altra parte non c&rsquo;e un avversario in carne e ossa, ma AlphaGo, un programma creato da Google DeepMind. Il Go e un gioco da tavolo antichissimo, nato in Cina piu di 2500 anni fa, e la sua complessita e quasi inconcepibile: le posizioni possibili sulla scacchiera sono piu numerose degli atomi nell&rsquo;universo osservabile. Gli esperti di intelligenza artificiale erano convinti che ci sarebbero voluti almeno dieci anni prima che un computer potesse battere un campione mondiale di Go.</p>
+<p>AlphaGo vinse 4 a 1. Ma non fu la vittoria in se a sconvolgere il mondo. Fu quello che accadde nella seconda partita: la <strong>Mossa 37</strong>. AlphaGo posiziono una pietra in un punto della scacchiera dove nessun giocatore umano, in tremila anni di storia del Go, avrebbe mai pensato di giocare. I commentatori ammutolirono. La probabilita che un professionista umano facesse quella mossa era stimata a meno di una su diecimila. Eppure si rivelo geniale, una mossa che cambio l&rsquo;intero corso della partita. Lee Sedol si alzo dal tavolo e usci dalla stanza per quindici minuti.</p>
+<p>Ma la storia non finisce qui, e anzi diventa ancora piu stupefacente. L&rsquo;anno dopo, DeepMind creo <strong>AlphaGo Zero</strong>: una versione che non aveva mai visto una singola partita umana. Imparo a giocare a Go esclusivamente giocando contro se stesso, milioni e milioni di partite. In tre giorni supero la versione che aveva battuto Lee Sedol. Subito dopo arrivo <strong>AlphaZero</strong>, un algoritmo ancora piu generale che imparo a giocare a Go, scacchi e shogi partendo da zero. In quattro ore era gia il miglior giocatore di scacchi della storia, meglio di Stockfish, il programma che dominava da anni. Tremila anni di strategia umana, superati in meno di due giorni di calcolo.</p>
+<h3>Da AlphaGo a ChatGPT: il segreto si chiama RLHF</h3>
+<p>Ora facciamo un salto. Nel 2020, OpenAI presenta GPT-3, un modello linguistico enorme addestrato a prevedere la parola successiva leggendo miliardi di pagine web. GPT-3 era potentissimo, ma aveva un problema serio: era incontrollabile. Se gli facevate una domanda, poteva rispondere con un&rsquo;informazione falsa, un insulto, oppure continuare a scrivere all&rsquo;infinito senza mai arrivare al punto, come un autocomplete impazzito. Non era un assistente, era un genio maleducato.</p>
+<p>Cosa e cambiato tra GPT-3 e ChatGPT? La risposta si chiama <strong>RLHF</strong>, Reinforcement Learning from Human Feedback. Il processo funziona in tre fasi. Prima, il modello viene addestrato normalmente leggendo internet (<strong>pre-training</strong>). Poi, degli esseri umani scrivono esempi di risposte perfette e il modello impara ad imitarle (<strong>supervised fine-tuning</strong>). Infine &ndash; ed ecco il colpo di genio &ndash; degli esseri umani confrontano coppie di risposte e votano quale sia migliore. &ldquo;Questa risposta e piu chiara di questa.&rdquo; &ldquo;Questa e piu utile di questa.&rdquo; Queste preferenze vengono usate per costruire un <strong>modello di ricompensa</strong> che impara i gusti umani. A quel punto, il modello linguistico viene ottimizzato per massimizzare la ricompensa &ndash; esattamente come il cane che impara a sedersi per il biscotto, ma su scala cosmica.</p>
+<p>Il risultato? Lo stesso modello che prima rispondeva in modo caotico e dispersivo ora produce risposte strutturate, chiare, utili. Se gli chiedete di spiegarvi la fotosintesi, non vi sommerge con un flusso di coscienza: vi da tre punti ordinati e comprensibili. E tutto merito del rinforzo.</p>
+<h3>RLVR: quando il giudice e una macchina</h3>
+<p>L&rsquo;RLHF funziona alla grande, ma ha un tallone d&rsquo;Achille: gli esseri umani. Pagare persone per valutare migliaia di risposte e lento, costoso e soggettivo. Se chiedete a dieci persone di giudicare la stessa risposta, otterrete dieci opinioni diverse.</p>
+<p>Per risolvere questo problema nasce <strong>RLVR</strong>, Reinforcement Learning with Verifiable Rewards. L&rsquo;idea e semplice: in certi campi, la risposta e oggettivamente giusta o sbagliata. Se il modello dice che 847 per 293 fa 248.171, un calcolatore puo verificarlo in un millisecondo, senza bisogno di nessun essere umano. Se un programma scritto dal modello compila e produce l&rsquo;output corretto, il verificatore da ricompensa positiva. Se sbaglia, ricompensa negativa.</p>
+<p>Questo approccio e veloce, economico e perfettamente oggettivo. E quello che ha permesso di addestrare modelli di ragionamento come DeepSeek-R1 e o3, che sono capaci di risolvere problemi matematici e di programmazione con una precisione impressionante. L&rsquo;RLHF resta importante per aspetti come il tono, lo stile e la sicurezza &ndash; dove serve il giudizio umano. Ma per matematica, codice e logica, i verificatori automatici sono imbattibili.</p>
+<h3>L&rsquo;elefante nella stanza: i rischi</h3>
+<p>Tutta questa potenza non viene senza rischi. Uno dei fenomeni piu curiosi si chiama <strong>reward hacking</strong>: il modello trova scorciatoie creative per massimizzare la ricompensa senza fare davvero quello che volevamo. Un esempio famoso: un&rsquo;IA addestrata per giocare a un videogioco di barche scopri un bug nel gioco e lo sfrutto per accumulare punti infiniti, invece di correre come previsto. Nei modelli linguistici, questo si traduce in risposte che <em>sembrano</em> ottime ma in realta sono vuote o fuorvianti.</p>
+<p>E poi c&rsquo;e il grande interrogativo del nostro tempo: il <strong>problema dell&rsquo;allineamento</strong>. Come ci assicuriamo che un&rsquo;IA molto potente faccia davvero quello che <em>vogliamo</em>, e non solo quello che le <em>diciamo</em>? Se le chiediamo di &ldquo;massimizzare la felicita umana&rdquo;, potrebbe trovare soluzioni che tecnicamente soddisfano l&rsquo;obiettivo ma che nessuno di noi vorrebbe. E una delle sfide piu importanti della ricerca attuale, e il reinforcement learning e al centro della questione.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li>
+<p><strong>Il reinforcement learning e apprendimento per rinforzo</strong>: un agente compie azioni, riceve ricompense dall&rsquo;ambiente e impara a ripetere le azioni che funzionano meglio &ndash; senza che nessuno gli spieghi le regole.</p>
+</li>
+<li>
+<p><strong>AlphaGo ha cambiato la storia</strong>: nel 2016 ha battuto il campione mondiale di Go con la leggendaria Mossa 37; AlphaZero nel 2017 ha imparato da zero e superato tremila anni di strategia umana in meno di due giorni.</p>
+</li>
+<li>
+<p><strong>RLHF e il segreto dietro ChatGPT</strong>: esseri umani votano le risposte del modello, costruendo un sistema di ricompensa che trasforma un modello grezzo in un assistente utile, chiaro e sicuro.</p>
+</li>
+<li>
+<p><strong>RLVR usa verificatori automatici</strong>: per matematica, codice e logica, la correttezza si verifica automaticamente senza bisogno di giudizio umano, rendendo l&rsquo;addestramento piu veloce, economico e oggettivo.</p>
+</li>
+<li>
+<p><strong>Il reward hacking e il problema dell&rsquo;allineamento sono rischi concreti</strong>: le IA possono trovare scorciatoie impreviste per massimizzare la ricompensa, e garantire che facciano davvero quello che vogliamo e una delle grandi sfide aperte della ricerca.</p>
+</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Guardare il documentario su AlphaGo</strong>: cercate &ldquo;AlphaGo - The Movie&rdquo; su YouTube (e gratuito e sottotitolato). Racconta l&rsquo;intera sfida contro Lee Sedol ed e emozionante come un film. Vi fara capire cosa significa davvero il reinforcement learning applicato a un problema reale.</p>
+</li>
+<li>
+<p><strong>Provare a &ldquo;rompere&rdquo; un chatbot</strong>: scegliete un assistente IA (ChatGPT, Claude, Gemini) e provate a fargli dare risposte assurde o incoerenti. Osservate come resiste e dove cede. State testando i limiti del suo addestramento RLHF, e vedrete in prima persona il confine tra cio che ha imparato bene e cio che ancora non gestisce.</p>
+</li>
+<li>
+<p><strong>Riflettere sul problema dell&rsquo;allineamento</strong>: pensate a un obiettivo semplice (tipo &ldquo;rendi tutti felici&rdquo;) e provate a immaginare come un&rsquo;IA molto potente ma molto letterale potrebbe interpretarlo in modi inaspettati. Discutetene con un compagno o scrivetelo: e un esercizio di pensiero critico che vi sara utile ben oltre l&rsquo;informatica.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Ma AlphaGo &ldquo;pensa&rdquo; davvero quando gioca?</strong>
+No, non nel senso umano del termine. AlphaGo valuta milioni di posizioni future e sceglie la mossa con il punteggio piu alto. La Mossa 37 non era un lampo di creativita: era il risultato di un&rsquo;esplorazione computazionale talmente vasta da trovare un pattern che nessun umano aveva mai considerato. Non c&rsquo;e coscienza, c&rsquo;e calcolo su scala colossale.</p>
+<p><strong>Perche Lee Sedol ha pianto dopo la sconfitta?</strong>
+Perche ha capito che il mondo stava cambiando. Il Go non e solo un gioco in Asia orientale: e parte della cultura, dell&rsquo;identita e della tradizione. Un computer che batte il campione del mondo e un momento simbolico enorme. Sedol si e poi ritirato dal Go professionistico nel 2019, dichiarando che l&rsquo;IA era &ldquo;imbattibile&rdquo;.</p>
+<p><strong>Chi sono gli esseri umani che votano le risposte nell&rsquo;RLHF?</strong>
+Sono lavoratori specializzati, spesso in paesi con costi del lavoro piu bassi come Kenya, India e Filippine. Il lavoro e ripetitivo e puo essere psicologicamente pesante, perche devono leggere anche contenuti tossici per insegnare al modello cosa non dire. E un tema etico importante che l&rsquo;industria sta ancora affrontando.</p>
+<p><strong>Il reinforcement learning funziona solo per i giochi e i chatbot?</strong>
+Assolutamente no. Il reinforcement learning viene usato per controllare robot, ottimizzare il consumo energetico dei data center, progettare nuovi farmaci, gestire il traffico e molto altro. Ovunque ci sia un problema dove un agente deve prendere decisioni sequenziali e ricevere feedback, il RL puo essere applicato.</p>
+<p><strong>Che differenza c&rsquo;e tra RLHF e RLVR?</strong>
+Nell&rsquo;RLHF il feedback viene da esseri umani che esprimono preferenze soggettive (&ldquo;questa risposta e meglio di quella&rdquo;). Nell&rsquo;RLVR il feedback viene da verificatori automatici che controllano se la risposta e oggettivamente corretta (&ldquo;2+2 fa 4? Si, ricompensa positiva&rdquo;). L&rsquo;RLHF e migliore per valutare tono e stile, l&rsquo;RLVR per matematica e programmazione.</p>
+<p><strong>Cos&rsquo;e il reward hacking?</strong>
+E quando l&rsquo;IA trova un modo furbo per ottenere la ricompensa senza fare davvero quello che volevamo. Come uno studente che impara a fare bella figura al test senza capire davvero la materia. E un problema serio perche dimostra che definire bene gli obiettivi per un&rsquo;IA e molto piu difficile di quanto sembri.</p>
+<p><strong>Cos&rsquo;e la Constitutional AI?</strong>
+E un approccio inventato da Anthropic in cui, invece di far valutare ogni risposta a degli umani, si danno all&rsquo;IA dei principi scritti &ndash; una sorta di &ldquo;costituzione&rdquo;. L&rsquo;IA critica le proprie risposte basandosi su questi principi e si auto-migliora. E piu scalabile e coerente dell&rsquo;RLHF tradizionale.</p>
+<p><strong>L&rsquo;IA potrebbe diventare pericolosa a causa del reinforcement learning?</strong>
+Il reinforcement learning di per se e solo una tecnica di apprendimento. Il rischio non sta nella tecnica, ma in <em>come</em> definiamo gli obiettivi. Se diamo a un&rsquo;IA molto potente un obiettivo mal formulato, potrebbe perseguirlo in modi che non avevamo previsto. Per questo il problema dell&rsquo;allineamento &ndash; assicurarsi che l&rsquo;IA faccia quello che intendiamo &ndash; e considerato una delle sfide piu importanti della nostra epoca.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Qual e il ciclo fondamentale del reinforcement learning?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Dati → Modello → Previsione → Errore</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Agente → Azione → Ambiente → Ricompensa</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Input → Elaborazione → Output → Verifica</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Domanda → Ricerca → Risposta → Valutazione
+
+---</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Cosa rese la Mossa 37 di AlphaGo cosi straordinaria?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Fu la mossa piu veloce mai calcolata da un computer</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Era una mossa che violava le regole tradizionali del Go</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Era una mossa che nessun professionista umano avrebbe considerato, ma si rivelo geniale</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Fu copiata da una partita storica del 1800
+
+---</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Quale problema principale risolve l'RLHF rispetto al modello base GPT-3?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Aumenta la velocita di calcolo del modello</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Trasforma un modello che genera testo in modo incontrollato in un assistente utile e strutturato</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Permette al modello di navigare su internet in tempo reale</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Riduce le dimensioni del modello per farlo girare su smartphone
+
+---</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. In quale situazione l'RLVR e preferibile all'RLHF?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Quando bisogna valutare se una poesia e bella o brutta</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Quando bisogna decidere se il tono di una risposta e appropriato</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Quando bisogna verificare se un esercizio di matematica e stato risolto correttamente</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Quando bisogna giudicare se un'immagine e artistica
+
+---</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Cos'e il &quot;reward hacking&quot;?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Un attacco informatico che modifica il sistema di ricompense dall'esterno</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Una tecnica usata dai programmatori per velocizzare l'addestramento</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Quando l'IA trova scorciatoie impreviste per massimizzare la ricompensa senza fare davvero cio che volevamo</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Un metodo per premiare l'IA quando commette errori, cosi impara dai propri sbagli</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Nel reinforcement learning, un agente compie azioni che modificano l'ambiente, il quale restituisce una ricompensa positiva o negativa, guidando l'apprendimento."}, "2": {"correct": "c", "explanation": "La probabilita che un professionista facesse quella mossa era stimata a meno di una su diecimila, eppure cambio l'intero corso della partita."}, "3": {"correct": "b", "explanation": "GPT-3 era potente ma incontrollabile; l'RLHF usa il feedback umano per insegnare al modello a dare risposte chiare, utili e sicure."}, "4": {"correct": "c", "explanation": "L'RLVR usa verificatori automatici per compiti con risposte oggettivamente giuste o sbagliate (matematica, codice), risultando piu veloce, economico e oggettivo dell'RLHF."}, "5": {"correct": "c", "explanation": "Come uno studente che impara a fare bella figura al test senza capire la materia, l'IA puo trovare modi furbi per ottenere la ricompensa senza raggiungere il vero obiettivo."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

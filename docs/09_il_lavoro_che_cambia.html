@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Il Lavoro che Cambia — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#09_il_lavoro_che_cambia">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 4</div>
+    <h1>Il Lavoro che Cambia: Rivoluzioni, Mestieri e il Futuro Cognitivo</h1>
+<h2>Come ogni rivoluzione industriale ha trasformato i mestieri — e perche questa volta e diverso</h2>
+<p>Immagina di essere un tessitore nel 1750. Lavori a casa tua, davanti a un telaio di legno, e produci stoffe con le tue mani. Un giorno qualcuno ti racconta di una macchina enorme, alimentata dal vapore, che puo fare in un&rsquo;ora quello che tu fai in una settimana. La tua prima reazione? Panico. &ldquo;Il mio lavoro e finito,&rdquo; pensi. E in un certo senso hai ragione: quel <em>preciso</em> lavoro — tessere a mano in casa — sta per scomparire. Ma quello che non puoi ancora vedere e che stanno nascendo le fabbriche, e con loro decine di nuovi mestieri: operai specializzati, meccanici, capisquadra, ingegneri. Non si lavora piu a casa, ma si lavora ancora. In modo diverso.</p>
+<p>Questa storia si e ripetuta almeno cinque volte negli ultimi 260 anni, e ogni volta il copione e stato lo stesso: una nuova tecnologia arriva, tutti si spaventano, alcuni lavori effettivamente spariscono, ma ne nascono molti di piu. Vediamo come.</p>
+<h3>Il vapore, l&rsquo;elettricita, i computer, internet</h3>
+<p>Con la <strong>macchina a vapore</strong> (intorno al 1760), il lavoro si e spostato dalle case alle fabbriche. I tessitori sono diventati operai, ma sono anche nati i meccanici che riparavano le macchine e i capisquadra che organizzavano il lavoro.</p>
+<p>Poi e arrivata l&rsquo;<strong>elettricita</strong> (intorno al 1870). Henry Ford ha inventato la catena di montaggio: prima serviva un artigiano che sapesse fare tutto, dopo servivano operai specializzati su un singolo compito. Ma accanto a loro sono comparsi ingegneri, progettisti, manager. E i sindacati, per proteggere i diritti di tutti questi nuovi lavoratori.</p>
+<p>Con i <strong>computer</strong> (intorno al 1950) e successa una cosa curiosa: lo sapevi che &ldquo;computer&rdquo; era un mestiere? Erano persone — spesso donne — che facevano calcoli a mano tutto il giorno. I computer elettronici hanno eliminato quel lavoro, ma hanno creato i programmatori, gli analisti di sistema, i tecnici informatici. Milioni di posti di lavoro che prima semplicemente non esistevano.</p>
+<p>E poi <strong>internet</strong> (intorno al 1990). Ti ricordi le videoteche? Le agenzie di viaggio in ogni quartiere? Le edicole piene di riviste? Internet ha trasformato tutto. Blockbuster e fallita, ma Netflix ha assunto migliaia di persone. Sono nati mestieri che nessuno avrebbe potuto immaginare vent&rsquo;anni prima: YouTuber, social media manager, UX designer, e-commerce manager.</p>
+<h3>Ma questa volta e diverso</h3>
+<p>Arriviamo al presente. L&rsquo;<strong>intelligenza artificiale</strong> (dal 2020 in poi) sta facendo qualcosa che nessuna rivoluzione precedente aveva fatto: tocca i lavori <em>cognitivi</em>. Il vapore aveva automatizzato la forza fisica. L&rsquo;elettricita aveva standardizzato la produzione. I computer avevano automatizzato il calcolo ripetitivo. Internet aveva digitalizzato la distribuzione. Ma l&rsquo;IA e la prima tecnologia a entrare nel territorio del pensiero creativo: scrivere, tradurre, analizzare dati, programmare, persino disegnare.</p>
+<p>E questo spaventa, perche per la prima volta sono le persone con lauree e stipendi alti a sentirsi minacciate. Ma — e questo e il punto fondamentale — la storia ci insegna che la trasformazione e sempre stata positiva per chi si adatta.</p>
+<h3>La storia della dattilografa</h3>
+<p>Lascia che ti racconti una storia concreta. Negli anni &lsquo;60, molte donne lavoravano come dattilografe. Il loro compito era battere a macchina lettere dettate dal capo. Dovevano essere velocissime — 60 parole al minuto — e conoscere la stenografia. Archiviavano documenti in enormi schedari di metallo e rispondevano al telefono con il filo.</p>
+<p>Poi sono arrivati i computer, il word processor, l&rsquo;email. Lo schedario e diventato un database. La stenografia e diventata inutile. Il lavoro della dattilografa e scomparso? No. Si e <em>trasformato</em>. Oggi la stessa posizione si chiama &ldquo;assistente di direzione&rdquo; o &ldquo;office manager&rdquo;. Chi ricopre questo ruolo gestisce agende complesse, organizza eventi internazionali, prepara presentazioni con analisi dei dati, coordina team di venti persone, parla tre lingue. La tecnologia ha eliminato la parte noiosa e ripetitiva, liberando tempo per competenze profondamente umane: relazioni, organizzazione, pensiero strategico. E lo stipendio? Triplicato.</p>
+<h3>Cosa sta succedendo adesso</h3>
+<p>Guarda cosa succede oggi in quattro professioni.</p>
+<p>Il <strong>medico</strong> non deve piu ricordare tutto a memoria: l&rsquo;IA analizza migliaia di radiografie e segnala le anomalie. Ma il medico non e meno importante — e <em>piu</em> importante, perche decide la cura, parla con il paziente, considera il contesto umano che nessun algoritmo puo comprendere.</p>
+<p>L&rsquo;<strong>avvocato</strong> non passa piu giorni in biblioteca a cercare precedenti legali: l&rsquo;IA trova i casi rilevanti in pochi secondi. L&rsquo;avvocato e libero di concentrarsi su quello che conta davvero: costruire strategie, negoziare, capire le sfumature di ogni situazione.</p>
+<p>Il <strong>designer</strong> non lavora piu pixel per pixel: strumenti come Midjourney generano immagini in secondi. Ma il gusto, la visione, la capacita di capire cosa vuole davvero il cliente — quello resta profondamente umano. Il designer diventa un direttore creativo.</p>
+<p>Il <strong>programmatore</strong> non scrive piu ogni singola riga di codice: un agente IA puo generare mille righe in un minuto. Ma chi decide <em>cosa</em> costruire? Chi verifica che il codice sia sicuro? Chi progetta l&rsquo;architettura dell&rsquo;intero sistema? Il programmatore diventa un architetto del software.</p>
+<h3>Il lavoratore centauro</h3>
+<p>C&rsquo;e un concetto affascinante che arriva dal mondo degli scacchi. Dopo che il computer Deep Blue ha battuto il campione del mondo Kasparov nel 1997, qualcuno ha provato un esperimento: far giocare insieme un umano e un computer contro un computer da solo. Il risultato? La squadra umano + computer vinceva. Questi giocatori ibridi sono stati chiamati &ldquo;centauri&rdquo;, come le creature mitologiche meta uomo e meta cavallo.</p>
+<p>Questo schema si sta ripetendo ovunque: in medicina, nel diritto, nel design, nella programmazione. Il futuro non e dell&rsquo;IA da sola, e nemmeno dell&rsquo;umano da solo. E del centauro — il professionista che sa usare l&rsquo;IA come un alleato potente.</p>
+<h3>Il pattern che si ripete</h3>
+<p>Il messaggio di fondo e semplice: ogni rivoluzione tecnologica ha eliminato la fatica e ha liberato il talento. Nei 260 anni di rivoluzioni industriali, il tasso di occupazione e <em>aumentato</em>, non diminuito. Il World Economic Forum stima che l&rsquo;IA spostera 85 milioni di posti di lavoro entro il 2030, ma ne creera 97 milioni di nuovi. Il saldo e positivo.</p>
+<p>La chiave non e combattere la tecnologia, ma cavalcarla. E voi siete nella posizione migliore possibile: giovani, adattabili, e state imparando <em>prima</em> degli altri.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>Ogni rivoluzione ha trasformato i mestieri, non li ha eliminati.</strong> Dal vapore all&rsquo;IA, il pattern e sempre lo stesso: spariscono alcuni lavori specifici, ma ne nascono molti di piu.</li>
+<li><strong>L&rsquo;IA e la prima tecnologia a toccare il lavoro cognitivo e creativo.</strong> Scrivere, analizzare, tradurre, programmare, progettare: per la prima volta l&rsquo;automazione arriva dove serve il pensiero.</li>
+<li><strong>Augmentation, non automation.</strong> La maggior parte dei lavori non sara sostituita dall&rsquo;IA, ma <em>aumentata</em>: l&rsquo;IA gestira i compiti ripetitivi, il professionista si concentrera su giudizio, creativita e relazioni.</li>
+<li><strong>Il futuro e dei &ldquo;centauri&rdquo;.</strong> Il professionista che sa usare l&rsquo;IA come alleato sara piu efficace sia dell&rsquo;umano da solo che dell&rsquo;IA da sola.</li>
+<li><strong>Chi impara adesso avra un vantaggio enorme.</strong> La tecnologia elimina la fatica e libera il talento — ma solo per chi sa adattarsi.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Prova un&rsquo;IA nel tuo campo di interesse.</strong> Se ti piace scrivere, prova a usare un assistente IA per creare una bozza e poi migliorala con il tuo stile. Se ti piace il disegno, sperimenta con un generatore di immagini. Se ti piace programmare, prova un assistente di codice. L&rsquo;obiettivo non e delegare, ma capire come collaborare.</p>
+</li>
+<li>
+<p><strong>Chiedi a un adulto come e cambiato il suo lavoro.</strong> Intervista un genitore, un insegnante o un parente sul modo in cui la tecnologia ha trasformato la sua professione negli ultimi 10-20 anni. Scoprirai che molti hanno gia vissuto una piccola &ldquo;rivoluzione&rdquo; personale.</p>
+</li>
+<li>
+<p><strong>Sviluppa le competenze che l&rsquo;IA non ha.</strong> Investi tempo nell&rsquo;empatia (ascoltare davvero le persone), nella creativita (trovare soluzioni originali), nel pensiero critico (valutare se un&rsquo;informazione e affidabile) e nella comunicazione (spiegare idee in modo chiaro). Queste sono le competenze che nessun algoritmo potra replicare.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Ma questa volta non e diverso? L&rsquo;IA sembra molto piu potente delle tecnologie precedenti.</strong>
+Ogni generazione ha detto la stessa cosa. I tessitori pensavano che i telai meccanici fossero la fine del mondo. I calcolatori umani pensavano che i computer li avrebbero resi inutili. Avevano ragione sul fatto che il loro specifico lavoro sarebbe cambiato, ma sbagliavano nel pensare che non ci sarebbe stato piu lavoro. In 260 anni di rivoluzioni, l&rsquo;occupazione totale e sempre aumentata.</p>
+<p><strong>Quali lavori spariranno davvero?</strong>
+I lavori puramente ripetitivi con regole fisse e prevedibili: data entry, traduzione letterale di testi semplici, smistamento manuale di documenti. Ma anche questi non spariscono del tutto — si trasformano. Il traduttore diventa un revisore di traduzioni IA (si chiama &ldquo;post-editing&rdquo;), chi faceva data entry diventa analista dati.</p>
+<p><strong>L&rsquo;IA non potra diventare anche creativa?</strong>
+L&rsquo;IA puo generare testi, immagini e musica, ma non ha <em>intenzione</em>, <em>gusto</em> o <em>comprensione del contesto umano</em>. Un&rsquo;IA puo creare mille varianti di un logo, ma serve un essere umano per scegliere quella giusta, capire se comunica il messaggio corretto e se piace al cliente. La creativita umana non e solo produrre — e scegliere, giudicare, dare significato.</p>
+<p><strong>Come mi preparo per il mondo del lavoro con l&rsquo;IA?</strong>
+Tre consigli pratici: primo, impara a usare gli strumenti IA adesso, mentre sei a scuola. Secondo, sviluppa competenze che l&rsquo;IA non ha — empatia, creativita, giudizio etico, leadership. Terzo, sii flessibile: il lavoro che farai tra 10 anni potrebbe non esistere ancora, e va bene cosi.</p>
+<p><strong>Cosa sono i &ldquo;lavoratori centauro&rdquo;?</strong>
+Sono professionisti che usano l&rsquo;IA come strumento per amplificare le proprie capacita, come un centauro mitologico unisce la mente umana alla forza del cavallo. L&rsquo;idea nasce dagli scacchi, dove le squadre umano+computer battevano sia i soli umani che i soli computer. Oggi questo modello si sta diffondendo in medicina, diritto, design e programmazione.</p>
+<p><strong>L&rsquo;IA non rischia di aumentare le disuguaglianze?</strong>
+E un rischio reale. Chi avra accesso agli strumenti IA e sapra usarli sara piu produttivo, chi restera indietro potrebbe trovarsi in difficolta. Per questo e importante che la scuola insegni a tutti come funzionano e come si usano questi strumenti, non solo a chi ha genitori nel settore tecnologico.</p>
+<p><strong>Servira ancora la laurea?</strong>
+Le competenze conteranno piu del titolo di studio, ma l&rsquo;istruzione restera fondamentale — cambiera la <em>forma</em>. Servira meno memorizzare informazioni (l&rsquo;IA le trova in un secondo) e molto di piu saper pensare in modo critico, risolvere problemi complessi e lavorare con gli altri. La laurea restera utile se insegna a <em>pensare</em>, non solo a <em>sapere</em>.</p>
+<p><strong>Quanto tempo abbiamo prima che cambi tutto?</strong>
+Il cambiamento e gia in corso, ma non avverra tutto in una notte. Le rivoluzioni tecnologiche richiedono decenni per dispiegarsi completamente. Hai tempo per prepararti, ma il momento migliore per iniziare e adesso.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Qual e la caratteristica unica della rivoluzione dell'IA rispetto alle precedenti?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">E la piu veloce di tutte</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">E la prima a toccare i lavori cognitivi e creativi- C) Eliminera piu posti di lavoro di tutte le altre</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Riguarda solo il settore informatico</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Cosa e successo storicamente ogni volta che una nuova tecnologia ha trasformato il lavoro?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">L'occupazione totale e diminuita drasticamente</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">I lavori sono rimasti identici ma con strumenti diversi</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Alcuni lavori specifici sono spariti, ma ne sono nati piu di quanti ne sono scomparsi- D) Solo i lavoratori giovani hanno trovato nuove occupazioni</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Cosa si intende per &quot;lavoratore centauro&quot;?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Un lavoratore che fa il doppio delle ore</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Un professionista che usa l'IA come alleato per amplificare le proprie capacita- C) Un robot con sembianze umane</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Un programmatore specializzato in intelligenza artificiale</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Nell'esempio della dattilografa, cosa ha fatto la tecnologia al suo lavoro?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Lo ha eliminato completamente senza alternative</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Lo ha lasciato identico, cambiando solo gli strumenti</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Ha eliminato la parte ripetitiva e ha liberato tempo per competenze umane piu preziose- D) Ha ridotto lo stipendio perche il lavoro e diventato piu semplice</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Qual e la differenza fondamentale tra &quot;automation&quot; e &quot;augmentation&quot;?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">L'automation riguarda le fabbriche, l'augmentation gli uffici</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Nell'automation l'IA sostituisce il lavoratore, nell'augmentation lo rende piu produttivo- C) L'automation e piu costosa dell'augmentation</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Non c'e differenza, sono sinonimi</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Le rivoluzioni precedenti automatizzavano forza fisica (vapore), produzione (elettricita), calcolo (computer) e distribuzione (internet); l'IA e la prima a toccare il pensiero creativo."}, "2": {"correct": "c", "explanation": "In 260 anni di rivoluzioni industriali, il tasso di occupazione e sempre aumentato: i lavori si trasformano e ne nascono di nuovi e spesso migliori."}, "3": {"correct": "b", "explanation": "Come negli scacchi dove la squadra umano+computer batte sia l'umano che il computer da soli, il \"centauro\" e il professionista che sa usare l'IA come alleato potente."}, "4": {"correct": "c", "explanation": "La stenografia e lo schedario sono spariti, ma il ruolo si e trasformato in \"assistente di direzione\" con competenze piu preziose (organizzazione, relazioni, strategia) e stipendio triplicato."}, "5": {"correct": "b", "explanation": "L'automation elimina il compito umano; l'augmentation potenzia il lavoratore: l'IA gestisce i compiti ripetitivi, il professionista si concentra su giudizio, creativita e relazioni."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quando l'IA Ragiona — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#reasoning_models">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 2</div>
+    <h1>Quando l&rsquo;IA Ragiona — Modelli che Pensano Prima di Rispondere</h1>
+<h2>La storia di un&rsquo;intelligenza artificiale che ha imparato a fermarsi a pensare</h2>
+<p>Immagina di essere a un quiz televisivo. Il conduttore ti fa una domanda di matematica e tu hai due opzioni: sparare la prima risposta che ti viene in mente, oppure prenderti qualche secondo per ragionare con calma. Quale strategia funziona meglio? Ovvio: pensare prima di rispondere. Eppure, fino a poco tempo fa, i modelli di intelligenza artificiale facevano esattamente il contrario: rispondevano di getto, senza mai fermarsi a riflettere.</p>
+<p>Per capire perche questo sia un problema, facciamo un passo indietro. I modelli linguistici (LLM) funzionano generando una parola alla volta, in sequenza. Ogni parola viene scelta in base a quella precedente, un po&rsquo; come completare una frase per inerzia. Questo approccio funziona benissimo per tante cose: scrivere un&rsquo;email, tradurre una frase, riassumere un testo. Ma quando il problema richiede ragionamento — tipo un problema di matematica con piu passaggi — &ldquo;andare a istinto&rdquo; non basta piu.</p>
+<p>Ecco un esempio concreto. Prova a risolvere questo problema: <em>Un negozio ha 15 mele. Ne vende un terzo la mattina e due quinti di quelle rimaste il pomeriggio. Quante mele restano?</em> Se rispondi di getto, potresti dire &ldquo;4&rdquo; o &ldquo;7&rdquo; e sbaglieresti. Ma se ti fermi a ragionare passo per passo — 15 diviso 3 fa 5, ne restano 10, poi 2/5 di 10 fa 4, ne restano 6 — arrivi alla risposta corretta: 6 mele. Ecco, i <strong>reasoning models</strong> fanno esattamente questo: si prendono tempo per pensare prima di rispondere.</p>
+<h3>La Chain of Thought: pensare passo per passo</h3>
+<p>La tecnica che sta alla base di tutto si chiama <strong>Chain of Thought</strong> (catena di pensiero). L&rsquo;idea e semplice ma potente: invece di chiedere al modello di dare subito la risposta finale, gli si chiede di mostrare tutti i passaggi intermedi del ragionamento. E la cosa sorprendente e che basta aggiungere una frase come <em>&ldquo;pensa passo per passo&rdquo;</em> al proprio prompt per attivare questa modalita anche nei modelli standard. La probabilita di risposta corretta su problemi complessi sale drasticamente.</p>
+<p>Ma i veri reasoning models vanno oltre. Non hanno bisogno che tu gli dica di ragionare: lo fanno automaticamente. Generano una serie di &ldquo;token di ragionamento&rdquo; — cioe parole e frasi che rappresentano il processo di pensiero — prima di produrre la risposta finale. Piu token di ragionamento significa piu tempo dedicato a pensare, e generalmente risposte migliori.</p>
+<h3>I protagonisti: chi ragiona oggi?</h3>
+<p>Nel 2024-2025 diversi laboratori hanno lanciato i loro reasoning models, e la corsa e stata entusiasmante.</p>
+<p><strong>o1 e o3 di OpenAI</strong> sono stati i pionieri. Lanciato a settembre 2024, o1 ha dimostrato che investire potenza di calcolo durante la risposta (non solo durante l&rsquo;addestramento) migliora enormemente le prestazioni. Il successore o3, arrivato a gennaio 2025, ha polverizzato i record sui benchmark matematici. La particolarita? La catena di pensiero e nascosta: l&rsquo;utente non vede come il modello ragiona, solo il risultato finale.</p>
+<p><strong>Claude Extended Thinking di Anthropic</strong> ha preso la strada opposta sulla trasparenza: mostra all&rsquo;utente il processo di ragionamento. Puoi letteralmente leggere i &ldquo;pensieri&rdquo; del modello mentre lavora al problema. Questo rende il processo verificabile — se il modello sbaglia al passaggio 3, lo puoi vedere e correggere.</p>
+<p><strong>DeepSeek-R1</strong> e forse la storia piu affascinante. E un modello open source, cioe chiunque puo scaricarlo e usarlo. E stato addestrato con una tecnica chiamata RLVR (Reinforcement Learning with Verifiable Rewards): in pratica, il modello veniva premiato quando la risposta matematica era corretta e penalizzato quando era sbagliata. La cosa straordinaria? Nessuno ha insegnato esplicitamente al modello a ragionare passo per passo. La catena di pensiero e <em>emersa spontaneamente</em> durante l&rsquo;addestramento. Il modello ha scoperto da solo che pensare prima di rispondere funziona meglio.</p>
+<p><strong>Gemini Thinking di Google</strong> completa il quadro, integrando il ragionamento nell&rsquo;ecosistema Google con un approccio multimodale: puo ragionare non solo su testo, ma anche su immagini e video.</p>
+<h3>Quando usare un reasoning model (e quando no)</h3>
+<p>Attenzione pero: il ragionamento non serve sempre. Usare un reasoning model per chiedere &ldquo;Qual e la capitale della Francia?&rdquo; e come usare un cannone per aprire una noce. E piu lento (puo impiegare 30 secondi invece di 2), costa molto di piu in termini di calcolo (da 10 a 50 volte tanto), e per domande semplici non aggiunge nulla.</p>
+<p>La regola pratica e questa: se il problema richiede piu passaggi di ragionamento — problemi di matematica, puzzle logici, debugging del codice, analisi complesse con molte variabili — allora un reasoning model fa la differenza. Se invece devi scrivere un testo creativo, tradurre, fare conversazione o riassumere qualcosa, un modello standard va benissimo (e spesso anche meglio, perche la creativita fluisce meglio senza i vincoli del ragionamento strutturato).</p>
+<p>Un consiglio pratico: se un modello standard sbaglia una risposta che richiede ragionamento, prima di passare a un modello specializzato prova ad aggiungere al tuo prompt frasi come <em>&ldquo;pensa passo per passo&rdquo;</em>, <em>&ldquo;ragiona prima di rispondere&rdquo;</em> o <em>&ldquo;mostra il tuo ragionamento&rdquo;</em>. Spesso basta questo per migliorare la risposta.</p>
+<h3>Il grande dibattito: ragionano davvero?</h3>
+<p>C&rsquo;e una domanda che i ricercatori si fanno continuamente: questi modelli ragionano <em>davvero</em>? La risposta onesta e: dipende da cosa intendi per &ldquo;ragionare&rdquo;. Non pensano come un essere umano — non hanno coscienza, non capiscono il significato profondo di quello che fanno. Quello che fanno e generare sequenze di token che assomigliano molto a un ragionamento, seguendo pattern appresi durante l&rsquo;addestramento. Ma i risultati pratici sono impressionanti: sui problemi di matematica olimpica, o3 supera il 99% degli esseri umani. Sui test scientifici di livello dottorato, batte anche gli esperti.</p>
+<p>C&rsquo;e chi sostiene che sia vero ragionamento perche questi modelli risolvono problemi mai visti prima e generalizzano a domini nuovi. C&rsquo;e chi replica che e pattern matching sofisticato, perche a volte falliscono su varianti banali di problemi che dovrebbero saper risolvere. La verita probabilmente sta nel mezzo, e questo e uno dei dibattiti piu affascinanti dell&rsquo;intelligenza artificiale contemporanea.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li>
+<p><strong>I reasoning models pensano prima di rispondere</strong>: generano una &ldquo;catena di pensiero&rdquo; interna fatta di passaggi intermedi prima di dare la risposta finale, a differenza dei modelli standard che rispondono di getto.</p>
+</li>
+<li>
+<p><strong>La Chain of Thought funziona</strong>: scomporre un problema in passaggi intermedi riduce drasticamente gli errori, e si puo attivare anche nei modelli normali con prompt come &ldquo;pensa passo per passo&rdquo;.</p>
+</li>
+<li>
+<p><strong>Esistono diversi reasoning models</strong>: o1/o3 (OpenAI), Claude Extended Thinking (Anthropic), DeepSeek-R1 (open source) e Gemini Thinking (Google), ciascuno con caratteristiche diverse in termini di trasparenza e accessibilita.</p>
+</li>
+<li>
+<p><strong>Non servono sempre</strong>: il ragionamento e utile per problemi complessi (matematica, logica, debugging) ma e sprecato (e costoso) per compiti semplici come traduzione, conversazione o riassunti.</p>
+</li>
+<li>
+<p><strong>Il ragionamento puo emergere spontaneamente</strong>: DeepSeek-R1 ha dimostrato che con il giusto sistema di addestramento (RLVR), i modelli possono scoprire da soli la strategia del pensiero passo per passo.</p>
+</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Sperimenta la Chain of Thought</strong>: la prossima volta che un chatbot sbaglia una risposta complessa, aggiungi &ldquo;pensa passo per passo&rdquo; al tuo prompt e confronta i risultati. Prova con problemi di matematica, indovinelli logici o qualsiasi domanda che richieda ragionamento.</p>
+</li>
+<li>
+<p><strong>Confronta i modelli</strong>: prova lo stesso problema su ChatGPT (con o3), Claude (con Extended Thinking) e altri assistenti. Osserva le differenze nel processo di ragionamento e nella trasparenza. Quale ti convince di piu? Quale spiega meglio come arriva alla risposta?</p>
+</li>
+<li>
+<p><strong>Rifletti su cosa significa &ldquo;ragionare&rdquo;</strong>: dopo aver visto un modello risolvere un problema passo per passo, chiediti: sta davvero ragionando o sta imitando un ragionamento? Discutine con i compagni — e un dibattito filosofico aperto che non ha una risposta definitiva, ed e proprio questo che lo rende interessante.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Il modello &ldquo;pensa&rdquo; davvero come un essere umano?</strong>
+No, non nel senso in cui pensiamo noi. Non ha coscienza, emozioni o comprensione profonda. Genera sequenze di parole che assomigliano a un ragionamento, seguendo pattern appresi durante l&rsquo;addestramento. Pero il risultato pratico e sorprendente: su molti test di ragionamento, questi modelli battono la maggior parte degli esseri umani.</p>
+<p><strong>Perche non usare sempre un reasoning model se e piu bravo?</strong>
+Perche pensare costa. Un reasoning model puo impiegare 30 secondi per una risposta che un modello standard da in 2. In termini di calcolo, costa da 10 a 50 volte di piu. Per domande semplici come &ldquo;Traduci questa frase&rdquo; o &ldquo;Qual e la capitale della Francia?&rdquo;, e uno spreco enorme senza alcun vantaggio.</p>
+<p><strong>Cosa sono i &ldquo;token di ragionamento&rdquo;?</strong>
+Sono le parole e le frasi che il modello genera internamente durante la fase di pensiero, prima della risposta finale. Rappresentano i passaggi intermedi del ragionamento. Piu token di ragionamento = piu tempo dedicato a pensare = generalmente risposte migliori.</p>
+<p><strong>Posso vedere come ragiona il modello?</strong>
+Dipende. Claude mostra i suoi &ldquo;pensieri estesi&rdquo; all&rsquo;utente. DeepSeek-R1, essendo open source, mostra tutto il processo. OpenAI con o1 e o3 invece nasconde la catena di pensiero interna e mostra solo un riassunto o direttamente la risposta.</p>
+<p><strong>Cos&rsquo;e la RLVR e perche e importante?</strong>
+RLVR sta per Reinforcement Learning with Verifiable Rewards. E un metodo di addestramento dove il modello viene premiato quando da risposte verificabilmente corrette (come in matematica). La cosa rivoluzionaria e che con questo metodo la capacita di ragionare passo per passo emerge da sola, senza che nessuno la programmi esplicitamente.</p>
+<p><strong>I reasoning models possono sbagliare?</strong>
+Assolutamente si. Sono molto piu precisi dei modelli standard sui problemi complessi, ma non sono infallibili. A volte piccoli cambiamenti nel modo in cui formuli la domanda possono causare grandi cambiamenti nel ragionamento. E un fenomeno chiamato &ldquo;fragilita del ragionamento&rdquo;.</p>
+<p><strong>Cosa sono i benchmark come MATH, GPQA e ARC-AGI?</strong>
+Sono test standardizzati per misurare le capacita dei modelli. MATH contiene problemi di matematica da competizione, GPQA sono domande scientifiche di livello dottorato, ARC-AGI testa il ragionamento astratto su pattern visivi. Attenzione: i benchmark misurano le prestazioni su compiti specifici, non l&lsquo;&ldquo;intelligenza&rdquo; in senso generale.</p>
+<p><strong>I reasoning models sono un passo verso l&rsquo;intelligenza artificiale generale (AGI)?</strong>
+E una domanda aperta. Alcuni ricercatori pensano di si, perche il ragionamento era la capacita cognitiva chiave che mancava. Altri sono scettici: risolvere problemi di matematica non equivale a comprendere il mondo. Una cosa certa e che modelli come o3 ottengono punteggi altissimi su test progettati per misurare l&rsquo;intelligenza generale, come ARC-AGI.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Qual e la differenza principale tra un modello standard e un reasoning model?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Il reasoning model e piu veloce nel rispondere</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Il reasoning model genera passaggi di ragionamento intermedi prima della risposta finalec) Il reasoning model usa meno potenza di calcolo</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Il reasoning model funziona solo con la matematica</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Per quale di questi compiti un reasoning model offre il maggior vantaggio?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Tradurre un testo dall'inglese all'italiano</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Scrivere una poesia creativa</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Risolvere un problema di logica con piu passaggid) Riassumere un articolo di giornale</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Cosa ha dimostrato DeepSeek-R1 di particolarmente sorprendente?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Che i modelli open source non possono ragionare</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Che la catena di pensiero puo emergere spontaneamente dall'addestramento con ricompense verificabilic) Che il ragionamento funziona solo con modelli molto grandi</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Che Google ha i migliori modelli di ragionamento</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Perche non conviene usare sempre un reasoning model?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche da risposte meno accurate</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche non funziona con le lingue diverse dall'inglese</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perche e piu lento e costoso, e per compiti semplici non aggiunge valored) Perche e disponibile solo a pagamento</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Cosa si intende per &quot;test-time compute&quot;?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Il tempo impiegato per addestrare il modello</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">La potenza di calcolo usata durante la fase di risposta, quando il modello &quot;pensa&quot;c) La velocita di connessione a Internet del server</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Il numero di utenti che possono usare il modello contemporaneamente</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "I reasoning models generano \"token di ragionamento\" interni -- passaggi intermedi del pensiero -- prima di produrre la risposta finale, a differenza dei modelli standard che rispondono direttamente."}, "2": {"correct": "c", "explanation": "I reasoning models eccellono nei problemi che richiedono ragionamento multi-step (matematica, logica, debugging), dove scomporre il problema in passaggi riduce drasticamente gli errori."}, "3": {"correct": "b", "explanation": "Nessuno ha insegnato esplicitamente a DeepSeek-R1 a ragionare passo per passo: la capacita e emersa spontaneamente grazie all'addestramento con RLVR."}, "4": {"correct": "c", "explanation": "Un reasoning model puo impiegare 30 secondi invece di 2 e costare 10-50 volte di piu; per domande semplici come traduzioni o riassunti, e uno spreco senza alcun vantaggio."}, "5": {"correct": "b", "explanation": "Il test-time compute e la potenza di calcolo investita nel momento della risposta (non dell'addestramento): piu token di ragionamento il modello genera, piu calcolo serve."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

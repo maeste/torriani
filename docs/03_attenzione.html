@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'Attenzione — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#03_attenzione">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 1</div>
+    <h1>L&rsquo;Attenzione: il segreto dei Transformer</h1>
+<h2>Come fa una macchina a capire una frase?</h2>
+<p>Immagina di essere in classe e il professore legge ad alta voce questa frase: <em>&ldquo;Il gatto si sedette sul tappeto perche era stanco.&rdquo;</em> Poi ti chiede: chi era stanco? Il gatto o il tappeto? La risposta ti sembra ovvia: il gatto, naturalmente. Ma fermati un secondo a pensare a <em>come</em> lo hai capito. Il tuo cervello ha fatto qualcosa di straordinario: ha letto &ldquo;era stanco&rdquo;, e istantaneamente andato a cercare nella frase chi potesse essere il soggetto di quell&rsquo;aggettivo, ha scartato il tappeto (i tappeti non si stancano) e ha collegato &ldquo;stanco&rdquo; a &ldquo;gatto&rdquo;. Tutto questo in una frazione di secondo, senza che tu te ne rendessi conto.</p>
+<p>Ora, un computer non ha il buon senso che hai tu. Non sa che i tappeti non si stancano. Eppure i modelli linguistici moderni — quelli dietro ChatGPT, Claude, Llama — riescono a fare questo collegamento in modo sorprendentemente accurato. Come ci riescono? Grazie a un meccanismo che si chiama <strong>attenzione</strong>, ed e il cuore pulsante di tutti i Transformer.</p>
+<h3>Le parole che si guardano tra loro</h3>
+<p>Per capire l&rsquo;attenzione, devi dimenticarti l&rsquo;idea che una macchina legga le parole una alla volta, come fai tu con un libro. Un Transformer fa qualcosa di diverso: quando incontra una parola, guarda <em>tutte</em> le parole che sono venute prima e si chiede: &ldquo;Quali di queste sono importanti per capire <em>me</em>?&rdquo;</p>
+<p>Torniamo alla nostra frase. Quando il modello arriva alla parola &ldquo;era&rdquo;, non la legge in isolamento. Guarda indietro e assegna un <strong>peso</strong> a ogni parola precedente. Nella nostra frase, &ldquo;gatto&rdquo; riceve il peso piu alto — circa 0.52 su 1 — perche il modello ha imparato, leggendo miliardi di frasi durante il suo addestramento, che quando compare &ldquo;era stanco&rdquo; dopo un animale e un oggetto, di solito e l&rsquo;animale a essere stanco. Non &ldquo;capisce&rdquo; nel senso umano: riconosce un pattern statistico. Ma il risultato e impressionante.</p>
+<p>Lo stesso succede con &ldquo;sedette&rdquo;: il modello assegna il peso maggiore a &ldquo;gatto&rdquo;, perche e il gatto che si siede. E con &ldquo;tappeto&rdquo;, l&rsquo;attenzione va soprattutto a &ldquo;sul&rdquo; e &ldquo;sedette&rdquo;, perche il tappeto e l&rsquo;oggetto su cui ci si siede. Ogni parola costruisce il suo significato guardando le altre.</p>
+<h3>La maschera causale: niente spoiler!</h3>
+<p>C&rsquo;e una regola fondamentale: ogni parola puo guardare solo le parole che vengono <em>prima</em> di lei, mai quelle <em>dopo</em>. Questo si chiama <strong>maschera causale</strong> (causal mask). Perche questa regola? Perche il modello genera testo da sinistra a destra, una parola alla volta. Quando sta decidendo la terza parola, la quarta semplicemente non esiste ancora. Sarebbe come chiedere a qualcuno di prevedere il finale di un film mentre lo sta ancora guardando: non puo barare e guardare avanti.</p>
+<p>La prima parola della frase — &ldquo;Il&rdquo; — puo guardare solo se stessa, perche non c&rsquo;e niente prima di lei. L&rsquo;ultima parola, &ldquo;stanco&rdquo;, puo guardare tutte le otto parole precedenti. Piu la frase va avanti, piu contesto ha a disposizione il modello.</p>
+<h3>La matrice di attenzione: una mappa delle relazioni</h3>
+<p>Se prendi tutti i pesi di attenzione di tutte le parole e li metti in una griglia, ottieni quella che si chiama <strong>matrice di attenzione</strong>. Immagina una tabella: sulle righe ci sono le parole che &ldquo;chiedono&rdquo; (ogni parola vuole capire il suo significato), sulle colonne ci sono le parole che &ldquo;rispondono&rdquo; (ogni parola offre informazioni alle altre). Il numero nella cella indica quanta attenzione la parola della riga presta alla parola della colonna.</p>
+<p>Questa matrice ha una caratteristica visiva interessante: la meta superiore destra e vuota (o grigia), proprio a causa della maschera causale. Le parole non possono guardare nel futuro, quindi quelle celle restano a zero. La diagonale — dove ogni parola presta attenzione a se stessa — e sempre presente, ma non e mai il peso dominante: il valore vero dell&rsquo;attenzione sta nei collegamenti <em>tra</em> parole diverse.</p>
+<p>In un modello reale, questa matrice puo avere migliaia o centinaia di migliaia di righe e colonne. E non ce n&rsquo;e una sola: ogni &ldquo;strato&rdquo; (layer) del modello ha la sua matrice, e ogni strato ha piu &ldquo;teste&rdquo; (head) di attenzione. Llama-3 8B, per esempio, ha 32 layer con 32 head ciascuno: un totale di 1.024 meccanismi di attenzione diversi che lavorano in parallelo, ognuno specializzato in un tipo diverso di relazione tra parole.</p>
+<h3>Come nasce la prossima parola</h3>
+<p>L&rsquo;attenzione non serve solo a capire il significato di una frase. E anche il motore che permette al modello di <strong>generare</strong> testo nuovo. Ecco come funziona, passo dopo passo.</p>
+<p>Immagina che il modello abbia la frase incompleta: &ldquo;Il gatto si sedette sul ___&rdquo;. Usa l&rsquo;attenzione per capire il contesto — un gatto che si siede su qualcosa — e poi calcola le probabilita di <em>tutte</em> le possibili parole successive. Non decide una parola sola: assegna una probabilita a ciascuna. &ldquo;Tappeto&rdquo; potrebbe avere il 35%, &ldquo;divano&rdquo; il 20%, &ldquo;pavimento&rdquo; il 15%, &ldquo;letto&rdquo; il 10%, e cosi via. Poi <strong>sceglie</strong> una parola, di solito quella con la probabilita piu alta, ma non sempre. Questo processo si chiama <strong>campionamento</strong>.</p>
+<p>Ecco perche se fai la stessa domanda a ChatGPT due volte, puoi ottenere risposte diverse: il modello non e deterministico. C&rsquo;e un parametro chiamato <strong>temperatura</strong> che controlla quanto il modello &ldquo;rischia&rdquo;: con temperatura bassa sceglie quasi sempre la parola piu probabile; con temperatura alta esplora di piu e puo sorprendere con scelte creative (ma anche meno prevedibili).</p>
+<p>Una volta scelta la parola — per esempio &ldquo;tappeto&rdquo; — il processo ricomincia. Ora la frase e &ldquo;Il gatto si sedette sul tappeto ___&rdquo; e il modello ripete tutto da capo: attenzione sul nuovo contesto, calcolo delle probabilita, scelta. E cosi via, parola dopo parola, finche non decide di mettere un punto o raggiunge il limite massimo.</p>
+<h3>La formula (per i curiosi)</h3>
+<p>Dietro l&rsquo;attenzione c&rsquo;e una formula elegante. Non devi memorizzarla, ma l&rsquo;idea e semplice. Ogni parola genera tre cose: una <strong>Query</strong> (Q — &ldquo;cosa sto cercando?&rdquo;), una <strong>Key</strong> (K — &ldquo;cosa posso offrire?&rdquo;) e un <strong>Value</strong> (V — &ldquo;ecco la mia informazione&rdquo;). L&rsquo;attenzione confronta la Query di una parola con le Key di tutte le altre, calcola quanto combaciano, e usa quei punteggi per decidere quanto leggere di ogni Value.</p>
+<p>L&rsquo;analogia migliore e una <strong>biblioteca</strong>: hai una domanda (la Query), ogni libro ha un titolo (la Key) e un contenuto (il Value). Confronti la tua domanda con i titoli di tutti i libri e leggi soprattutto quelli il cui titolo corrisponde meglio alla tua ricerca. Semplice, ma potentissimo.</p>
+<h3>Perche i modelli hanno un limite di token?</h3>
+<p>Ultima curiosita: l&rsquo;attenzione confronta ogni parola con tutte le altre. Questo significa che se raddoppi la lunghezza del testo, i calcoli non raddoppiano — si <em>quadruplicano</em>. Con 1.000 parole servono un milione di calcoli; con 100.000 parole ne servono dieci miliardi. Questa crescita &ldquo;quadratica&rdquo; e il motivo per cui i modelli hanno un limite di contesto e perche i contesti lunghissimi costano cosi tanto in termini di memoria e tempo di calcolo.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>L&rsquo;attenzione e il meccanismo chiave dei Transformer</strong>: permette a ogni parola di &ldquo;guardare&rdquo; tutte le parole precedenti e decidere quali sono importanti per capire il proprio significato.</li>
+<li><strong>La maschera causale impedisce di guardare nel futuro</strong>: il modello genera testo da sinistra a destra, quindi ogni parola puo vedere solo cio che viene prima di lei.</li>
+<li><strong>I pesi di attenzione non sono programmati a mano</strong>: emergono automaticamente dal training su miliardi di frasi. Il modello impara da solo che &ldquo;stanco&rdquo; si collega a esseri viventi, non a oggetti.</li>
+<li><strong>Un LLM genera testo una parola alla volta</strong>, calcolando le probabilita di tutti i possibili token successivi e scegliendone uno tramite campionamento. Per questo le risposte possono variare.</li>
+<li><strong>La scalabilita e quadratica</strong>: raddoppiando la lunghezza del testo i calcoli si quadruplicano, ed e per questo che i modelli hanno limiti di contesto.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Prova a giocare con la temperatura</strong>: apri ChatGPT o un altro chatbot e fai la stessa domanda piu volte. Nota come le risposte cambiano leggermente ogni volta. Se hai accesso alle impostazioni, prova a cambiare la temperatura e osserva la differenza tra risposte &ldquo;conservative&rdquo; e &ldquo;creative&rdquo;.</p>
+</li>
+<li>
+<p><strong>Inventa frasi ambigue e testale</strong>: scrivi frasi come &ldquo;La mamma guardo la figlia perche era preoccupata&rdquo; e chiedi a un LLM chi era preoccupata. Prova con frasi sempre piu ambigue e vedi quando il modello sbaglia. Questo ti aiutera a capire i limiti del meccanismo di attenzione.</p>
+</li>
+<li>
+<p><strong>Guarda il video &ldquo;Attention Is All You Need&rdquo; su YouTube</strong>: cerca spiegazioni visuali del paper originale del 2017 di Vaswani e colleghi. Ci sono ottimi video con animazioni che mostrano come funziona la matrice di attenzione in tempo reale, e rendono tutto ancora piu chiaro.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Il modello capisce davvero chi e &ldquo;era&rdquo; nella frase?</strong>
+Non nel senso umano del termine. Il modello non ha comprensione: ha imparato pattern statistici da miliardi di frasi. Quando vede &ldquo;X si sedette&hellip; perche era stanco&rdquo;, riconosce un pattern che associa il soggetto dell&rsquo;azione a &ldquo;era&rdquo;. E riconoscimento di pattern, non comprensione.</p>
+<p><strong>Perche il modello non puo guardare le parole successive?</strong>
+Perche genera testo da sinistra a destra, una parola alla volta. Quando sta generando la terza parola, la quarta non esiste ancora. La maschera causale impone questa regola. Esistono pero modelli come BERT che <em>possono</em> guardare in entrambe le direzioni, perche il loro compito non e generare testo ma analizzarlo.</p>
+<p><strong>Come fa il modello a sapere che &ldquo;gatto&rdquo; e piu rilevante di &ldquo;tappeto&rdquo; per la parola &ldquo;era&rdquo;?</strong>
+Lo ha imparato durante il training, leggendo miliardi di frasi. Ha visto che aggettivi come &ldquo;stanco&rdquo; si associano piu spesso a esseri viventi che a oggetti. I pesi di attenzione non vengono programmati: emergono dall&rsquo;addestramento.</p>
+<p><strong>Se non e sicuro al 100%, come sceglie la parola giusta?</strong>
+In realta non sceglie sempre &ldquo;la migliore&rdquo; in senso assoluto: campiona dalle probabilita. Con la temperatura bassa tende a scegliere la parola piu probabile; con temperatura alta esplora scelte meno ovvie. Per questo le risposte possono variare ad ogni richiesta.</p>
+<p><strong>Cosa sono le &ldquo;teste&rdquo; (head) di attenzione?</strong>
+Il modello non ha un unico meccanismo di attenzione, ma molti che lavorano in parallelo. Ogni &ldquo;testa&rdquo; si specializza in un tipo diverso di relazione: una potrebbe catturare relazioni grammaticali (soggetto-verbo), un&rsquo;altra la coreferenza (a chi si riferisce &ldquo;era&rdquo;?), un&rsquo;altra le relazioni di vicinanza. Llama-3 8B ne ha 1.024 in totale.</p>
+<p><strong>Cosa significano Query, Key e Value?</strong>
+Sono tre &ldquo;trasformazioni&rdquo; che ogni parola subisce. La Query e la domanda che una parola fa (&ldquo;cosa cerco?&rdquo;), la Key e l&rsquo;etichetta che offre (&ldquo;cosa posso offrire?&rdquo;), il Value e il contenuto informativo effettivo. L&rsquo;attenzione confronta le Query con le Key per decidere quanto leggere di ogni Value. Pensala come cercare un libro in biblioteca: la tua domanda e la Query, i titoli dei libri sono le Key, il contenuto dei libri e il Value.</p>
+<p><strong>Perche si chiama &ldquo;Transformer&rdquo;?</strong>
+Il nome viene dal paper &ldquo;Attention Is All You Need&rdquo; del 2017 di Vaswani e colleghi. L&rsquo;idea e che il modello &ldquo;trasforma&rdquo; la rappresentazione di ogni parola attraverso molteplici layer di attenzione, arricchendola progressivamente con informazioni sul contesto. Ogni layer aggiunge un po&rsquo; di comprensione in piu.</p>
+<p><strong>Perche i modelli hanno un limite di token?</strong>
+Perche il numero di calcoli dell&rsquo;attenzione cresce con il quadrato della lunghezza del testo. Con 1.000 token servono 1 milione di confronti; con 100.000 token ne servono 10 miliardi. Questo rende i contesti molto lunghi estremamente costosi in termini di memoria e di tempo.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Nella frase &quot;Il gatto si sedette sul tappeto perche era stanco&quot;, come fa il modello a collegare &quot;era stanco&quot; a &quot;gatto&quot;?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Ha una regola scritta dal programmatore che dice &quot;stanco si riferisce sempre agli animali&quot;</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Usa il meccanismo di attenzione, che assegna un peso alto a &quot;gatto&quot; basandosi su pattern appresi durante il training</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Legge la frase al contrario e trova &quot;gatto&quot; come prima parola utile</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Sceglie sempre il soggetto piu vicino alla parola &quot;era&quot;</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Cosa impedisce al modello di &quot;guardare avanti&quot; e vedere le parole future della frase?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Una limitazione hardware delle GPU</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">La temperatura, che restringe il campo visivo del modello</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">La maschera causale, che blocca l'accesso alle parole successive</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Il fatto che il modello legge le parole al contrario</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Quando un LLM deve generare la prossima parola, cosa fa esattamente?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Cerca la parola giusta in un dizionario incorporato</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Calcola le probabilita di tutti i possibili token successivi e ne campiona uno</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Copia la parola piu frequente nei testi di addestramento</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Sceglie sempre la parola con la probabilita piu alta, senza eccezioni</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Perche se fai la stessa domanda a ChatGPT due volte puoi ottenere risposte diverse?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche il modello viene ri-addestrato tra una domanda e l'altra</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche la connessione internet influenza le risposte</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perche il modello campiona dalle probabilita invece di scegliere sempre la parola piu probabile, e il parametro temperatura regola questa variabilita</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche ogni utente ha una versione diversa del modello</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Perche i modelli linguistici hanno un limite massimo di token (lunghezza del contesto)?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche dopo un certo numero di parole il modello si &quot;dimentica&quot; le prime</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche il numero di calcoli dell'attenzione cresce con il quadrato della lunghezza del testo, rendendo contesti molto lunghi troppo costosi</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perche i server di OpenAI e Anthropic non hanno abbastanza spazio su disco</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche le lingue umane non producono mai testi piu lunghi del limite</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Il meccanismo di attenzione assegna pesi alle parole precedenti; avendo appreso da miliardi di frasi, sa che aggettivi come \"stanco\" si associano a esseri viventi."}, "2": {"correct": "c", "explanation": "La maschera causale impedisce al modello di vedere parole che non sono ancora state generate, poiche il testo viene prodotto da sinistra a destra."}, "3": {"correct": "b", "explanation": "Il modello assegna una probabilita a ogni possibile token successivo e ne sceglie uno tramite campionamento, non sempre quello piu probabile."}, "4": {"correct": "c", "explanation": "Il campionamento introduce casualita: il modello non sceglie sempre la parola piu probabile, e la temperatura controlla il grado di questa variabilita."}, "5": {"correct": "b", "explanation": "L'attenzione confronta ogni parola con tutte le altre: raddoppiando la lunghezza, i calcoli si quadruplicano, rendendo i contesti lunghi estremamente costosi."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>
