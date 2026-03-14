@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -332,13 +332,13 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Perché non usare una sola head grande invece di tante head piccole?</strong>
+<p><strong>Perché non usare una sola head grande invece di tante head piccole?</strong><br>
 Sperimentalmente, le multi-head attention imparano relazioni diverse e complementari. Una sola head grande tenderebbe a specializzarsi in un unico tipo di relazione, perdendo la ricchezza informativa che emerge dalla specializzazione parallela.</p>
-<p><strong>Il numero di head è sempre uguale in tutti i layer?</strong>
+<p><strong>Il numero di head è sempre uguale in tutti i layer?</strong><br>
 Nelle architetture standard sì. Alcune architetture recenti sperimentano con configurazioni diverse per layer diversi, ma è relativamente raro nei modelli di produzione.</p>
-<p><strong>Cosa determina d_model in pratica?</strong>
+<p><strong>Cosa determina d_model in pratica?</strong><br>
 È una scelta di design che scala con la dimensione del modello. Più grande è d_model, più espressiva è la rappresentazione, ma più costosa è ogni operazione. Tipicamente scala come la radice quadrata del numero totale di parametri.</p>
-<p><strong>Perché i layer bassi catturano la grammatica e quelli alti il ragionamento?</strong>
+<p><strong>Perché i layer bassi catturano la grammatica e quelli alti il ragionamento?</strong><br>
 È una proprietà emergente del training, non una scelta progettuale. Si ipotizza che il modello impari prima le regolarità più semplici (sintassi) nei layer iniziali, e poi costruisca rappresentazioni sempre più astratte nei layer successivi — in modo simile a come le reti neurali convoluzionali imparano prima i bordi e poi le forme complesse.</p>
 <hr>
 <div class="quiz-container" id="quiz">

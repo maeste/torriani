@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -240,16 +240,16 @@
 <p>L&rsquo;analogia più efficace è quella del libro copiato a mano. Se qualcuno cambia una parola a pagina 5, devi rileggere e riscrivere tutto da pagina 5 in poi — anche se il testo delle pagine successive è identico. Il senso delle frasi precedenti influenza come si comprendono e si elaborano quelle successive.</p>
 <p>L&rsquo;invalidazione si propaga <strong>sempre verso destra, mai verso sinistra</strong>. Ogni token dipende causalmente da tutti quelli che lo precedono, tramite la causal mask dell&rsquo;attention. Cambia un token in posizione i → invalidi tutto da i in poi, non importa quanto identico sia il testo successivo.</p>
 <h3>Scenari pratici: dove si spreca e dove si risparmia</h3>
-<p><strong>Scenario 1 — Prefix Cache Hit (hit rate ~80%)</strong>
+<p><strong>Scenario 1 — Prefix Cache Hit (hit rate ~80%)</strong><br>
 La conversazione continua normalmente: system prompt fisso, cronologia, nuova domanda. Il prefisso fino alla nuova domanda è già in cache → il modello ricalcola solo la nuova domanda. Questo è il caso &ldquo;felice&rdquo;, il massimo risparmio.</p>
-<p><strong>Scenario 2 — Modifica nel system prompt (hit rate ~28%)</strong>
+<p><strong>Scenario 2 — Modifica nel system prompt (hit rate ~28%)</strong><br>
 Si cambia un token nel system prompt. Tutto ciò che segue va ricalcolato, anche se identico al turno precedente. Questo scenario è più comune di quanto si pensi: qualsiasi system prompt che contiene variabili dinamiche (timestamp, ID utente, data corrente) invalida l&rsquo;intera cache ad ogni richiesta.</p>
 <blockquote>
 <p>Se metti <code>Oggi è {date}</code> nel system prompt, ogni giorno il KV Cache parte da zero. Su un&rsquo;API con 100.000 richieste al giorno, il costo aggiuntivo può essere significativo.</p>
 </blockquote>
-<p><strong>Scenario 3 — System prompt stabile (hit rate ~50%)</strong>
+<p><strong>Scenario 3 — System prompt stabile (hit rate ~50%)</strong><br>
 Il system prompt non cambia mai → rimane in cache come prefisso. Solo la nuova domanda viene ricalcolata. Questa è la base del <strong>Prompt Caching</strong> di Anthropic e del prefix caching di vLLM.</p>
-<p><strong>Scenario 4 — RAG con documento prima della domanda (hit rate ~66%)</strong>
+<p><strong>Scenario 4 — RAG con documento prima della domanda (hit rate ~66%)</strong><br>
 Se usi lo stesso documento di contesto per più domande diverse, mettere il documento <em>prima</em> della domanda permette di cacharlo. La domanda cambia, il documento no → risparmio massiccio nelle pipeline RAG.</p>
 <h3>La regola d&rsquo;oro: ordine di stabilità</h3>
 <p>L&rsquo;ordine ottimale di un prompt è:</p>
@@ -291,13 +291,13 @@ Se usi lo stesso documento di contesto per più domande diverse, mettere il docu
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Il KV Cache è condiviso tra richieste diverse di utenti diversi?</strong>
+<p><strong>Il KV Cache è condiviso tra richieste diverse di utenti diversi?</strong><br>
 Dipende dall&rsquo;implementazione. Nel Prompt Caching di Anthropic e in server come vLLM con prefix caching, il cache del system prompt può essere condiviso tra utenti che usano lo stesso prompt. I messaggi utente restano sempre privati.</p>
-<p><strong>Quanto dura il KV Cache in memoria?</strong>
+<p><strong>Quanto dura il KV Cache in memoria?</strong><br>
 Nell&rsquo;API di Anthropic, i blocchi con <code>cache_control: ephemeral</code> durano circa 5 minuti dall&rsquo;ultimo utilizzo. Altri sistemi hanno policy diverse. In Ollama o LM Studio, la cache dura per tutta la sessione attiva.</p>
-<p><strong>In sviluppo locale (Ollama, LM Studio) funziona lo stesso?</strong>
+<p><strong>In sviluppo locale (Ollama, LM Studio) funziona lo stesso?</strong><br>
 Sì, tutti i server di inferenza basati su llama.cpp o vLLM implementano il prefix caching. L&rsquo;ottimizzazione sull&rsquo;ordine del prompt è valida sempre, indipendentemente dall&rsquo;infrastruttura.</p>
-<p><strong>Perché non si può cachare il testo dopo il punto di modifica, anche se è identico?</strong>
+<p><strong>Perché non si può cachare il testo dopo il punto di modifica, anche se è identico?</strong><br>
 Perché nel Transformer ogni token dipende causalmente da tutti quelli che lo precedono. Anche se il testo successivo è identico lettera per lettera, il suo significato contestuale — e quindi i vettori K e V — cambia se qualcosa prima di esso è stato modificato.</p>
 <hr>
 <div class="quiz-container" id="quiz">

@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -283,21 +283,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Quando arrivera&rsquo; l&rsquo;AGI?</strong>
+<p><strong>Quando arrivera&rsquo; l&rsquo;AGI?</strong><br>
 Nessuno lo sa con certezza. Le stime degli esperti variano enormemente: si va da 5 a oltre 50 anni. Ricercatori importantissimi come Geoffrey Hinton, Yoshua Bengio e Yann LeCun non sono d&rsquo;accordo tra loro. Il punto importante e&rsquo; che non serve l&rsquo;AGI per avere impatti enormi: l&rsquo;IA ristretta di oggi sta gia&rsquo; trasformando il mondo.</p>
-<p><strong>L&rsquo;IA diventera&rsquo; cosciente?</strong>
+<p><strong>L&rsquo;IA diventera&rsquo; cosciente?</strong><br>
 E&rsquo; una domanda filosofica ancora completamente aperta. La maggior parte dei ricercatori ritiene che i sistemi attuali non siano coscienti in alcun senso significativo. Ma c&rsquo;e&rsquo; un problema a monte: non abbiamo nemmeno una definizione precisa di cosa sia la &ldquo;coscienza&rdquo; per gli esseri umani. E&rsquo; difficile riconoscere qualcosa che non sappiamo definire.</p>
-<p><strong>E se l&rsquo;IA decidesse di eliminarci, tipo Terminator?</strong>
+<p><strong>E se l&rsquo;IA decidesse di eliminarci, tipo Terminator?</strong><br>
 Lo scenario da film di fantascienza e&rsquo; molto improbabile. I rischi reali sono piu&rsquo; sottili e meno cinematografici, ma piu&rsquo; concreti: sistemi che ottimizzano per obiettivi sbagliati, pregiudizi (bias) amplificati su scala globale, concentrazione del potere tecnologico ed economico in pochissime mani. Meno spettacolari di un robot assassino, ma molto piu&rsquo; pericolosi.</p>
-<p><strong>Cosa vuol dire esattamente &ldquo;singolarita&rsquo;&rdquo;?</strong>
+<p><strong>Cosa vuol dire esattamente &ldquo;singolarita&rsquo;&rdquo;?</strong><br>
 E&rsquo; un concetto preso in prestito dalla fisica (dove indica un punto di densita&rsquo; infinita, come il centro di un buco nero). Applicato all&rsquo;IA, indica il momento ipotetico in cui una macchina abbastanza intelligente inizia a migliorare se stessa, innescando un ciclo di miglioramenti sempre piu&rsquo; rapidi. Oltre quel punto, non siamo in grado di prevedere cosa succedera&rsquo;. Per questo si chiama singolarita&rsquo;: e&rsquo; un &ldquo;muro&rdquo; nella nostra capacita&rsquo; di previsione.</p>
-<p><strong>L&rsquo;IA ruber il mio futuro lavoro?</strong>
+<p><strong>L&rsquo;IA ruber il mio futuro lavoro?</strong><br>
 Piu&rsquo; che &ldquo;rubare lavori&rdquo;, l&rsquo;IA cambiera&rsquo; cosa significa lavorare. Molti compiti ripetitivi e cognitivi verranno automatizzati, ma emergeranno nuove professioni oggi inimmaginabili (come e&rsquo; successo con internet). Le competenze che resteranno centrali sono quelle piu&rsquo; umane: pensiero critico, etica, empatia, creativita&rsquo; e leadership.</p>
-<p><strong>Cosa si intende per &ldquo;responsible scaling&rdquo;?</strong>
+<p><strong>Cosa si intende per &ldquo;responsible scaling&rdquo;?</strong><br>
 E&rsquo; l&rsquo;approccio proposto da Anthropic (e condiviso da altre aziende): aumentare le capacita&rsquo; dell&rsquo;IA in modo graduale, eseguendo test di sicurezza a ogni livello prima di procedere al successivo. L&rsquo;idea e&rsquo; che la sicurezza non debba essere un freno allo sviluppo, ma una parte integrante del processo. Come testare i freni di un&rsquo;auto prima di aumentarne la velocita&rsquo; massima.</p>
-<p><strong>Perche&rsquo; si parla di &ldquo;IA adolescente&rdquo;?</strong>
+<p><strong>Perche&rsquo; si parla di &ldquo;IA adolescente&rdquo;?</strong><br>
 E&rsquo; una metafora usata da Dario Amodei. Come un adolescente, l&rsquo;IA attuale e&rsquo; potente ma immatura: capace di prestazioni straordinarie ma anche di errori grossolani. Non puoi lasciarla sola (servono regole e supervisione), ma nemmeno soffocarla (bloccare lo sviluppo sarebbe controproducente). La soluzione e&rsquo; accompagnarla nella crescita con responsabilita&rsquo;.</p>
-<p><strong>AlphaFold e&rsquo; davvero cosi&rsquo; importante?</strong>
+<p><strong>AlphaFold e&rsquo; davvero cosi&rsquo; importante?</strong><br>
 Enormemente. Conoscere la struttura tridimensionale delle proteine e&rsquo; fondamentale per capire le malattie, sviluppare farmaci, progettare enzimi industriali e molto altro. Prima di AlphaFold, determinare la struttura di una singola proteina poteva richiedere anni di lavoro in laboratorio. AlphaFold ha previsto la struttura di oltre 200 milioni di proteine, rendendo questa conoscenza accessibile gratuitamente a tutti i ricercatori del mondo. Ha vinto il Premio Nobel per la Chimica nel 2024.</p>
 <hr>
 <div class="quiz-container" id="quiz">

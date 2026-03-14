@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -281,21 +281,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Il modello &ldquo;pensa&rdquo; davvero come un essere umano?</strong>
+<p><strong>Il modello &ldquo;pensa&rdquo; davvero come un essere umano?</strong><br>
 No, non nel senso in cui pensiamo noi. Non ha coscienza, emozioni o comprensione profonda. Genera sequenze di parole che assomigliano a un ragionamento, seguendo pattern appresi durante l&rsquo;addestramento. Pero il risultato pratico e sorprendente: su molti test di ragionamento, questi modelli battono la maggior parte degli esseri umani.</p>
-<p><strong>Perche non usare sempre un reasoning model se e piu bravo?</strong>
+<p><strong>Perche non usare sempre un reasoning model se e piu bravo?</strong><br>
 Perche pensare costa. Un reasoning model puo impiegare 30 secondi per una risposta che un modello standard da in 2. In termini di calcolo, costa da 10 a 50 volte di piu. Per domande semplici come &ldquo;Traduci questa frase&rdquo; o &ldquo;Qual e la capitale della Francia?&rdquo;, e uno spreco enorme senza alcun vantaggio.</p>
-<p><strong>Cosa sono i &ldquo;token di ragionamento&rdquo;?</strong>
+<p><strong>Cosa sono i &ldquo;token di ragionamento&rdquo;?</strong><br>
 Sono le parole e le frasi che il modello genera internamente durante la fase di pensiero, prima della risposta finale. Rappresentano i passaggi intermedi del ragionamento. Piu token di ragionamento = piu tempo dedicato a pensare = generalmente risposte migliori.</p>
-<p><strong>Posso vedere come ragiona il modello?</strong>
+<p><strong>Posso vedere come ragiona il modello?</strong><br>
 Dipende. Claude mostra i suoi &ldquo;pensieri estesi&rdquo; all&rsquo;utente. DeepSeek-R1, essendo open source, mostra tutto il processo. OpenAI con o1 e o3 invece nasconde la catena di pensiero interna e mostra solo un riassunto o direttamente la risposta.</p>
-<p><strong>Cos&rsquo;e la RLVR e perche e importante?</strong>
+<p><strong>Cos&rsquo;e la RLVR e perche e importante?</strong><br>
 RLVR sta per Reinforcement Learning with Verifiable Rewards. E un metodo di addestramento dove il modello viene premiato quando da risposte verificabilmente corrette (come in matematica). La cosa rivoluzionaria e che con questo metodo la capacita di ragionare passo per passo emerge da sola, senza che nessuno la programmi esplicitamente.</p>
-<p><strong>I reasoning models possono sbagliare?</strong>
+<p><strong>I reasoning models possono sbagliare?</strong><br>
 Assolutamente si. Sono molto piu precisi dei modelli standard sui problemi complessi, ma non sono infallibili. A volte piccoli cambiamenti nel modo in cui formuli la domanda possono causare grandi cambiamenti nel ragionamento. E un fenomeno chiamato &ldquo;fragilita del ragionamento&rdquo;.</p>
-<p><strong>Cosa sono i benchmark come MATH, GPQA e ARC-AGI?</strong>
+<p><strong>Cosa sono i benchmark come MATH, GPQA e ARC-AGI?</strong><br>
 Sono test standardizzati per misurare le capacita dei modelli. MATH contiene problemi di matematica da competizione, GPQA sono domande scientifiche di livello dottorato, ARC-AGI testa il ragionamento astratto su pattern visivi. Attenzione: i benchmark misurano le prestazioni su compiti specifici, non l&lsquo;&ldquo;intelligenza&rdquo; in senso generale.</p>
-<p><strong>I reasoning models sono un passo verso l&rsquo;intelligenza artificiale generale (AGI)?</strong>
+<p><strong>I reasoning models sono un passo verso l&rsquo;intelligenza artificiale generale (AGI)?</strong><br>
 E una domanda aperta. Alcuni ricercatori pensano di si, perche il ragionamento era la capacita cognitiva chiave che mancava. Altri sono scettici: risolvere problemi di matematica non equivale a comprendere il mondo. Una cosa certa e che modelli come o3 ottengono punteggi altissimi su test progettati per misurare l&rsquo;intelligenza generale, come ARC-AGI.</p>
 <hr>
 <div class="quiz-container" id="quiz">

@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -279,21 +279,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>L&rsquo;IA mi rubera il lavoro?</strong>
+<p><strong>L&rsquo;IA mi rubera il lavoro?</strong><br>
 La storia delle rivoluzioni tecnologiche ci insegna che nascono piu lavori di quanti ne scompaiano. Molti lavori cambieranno profondamente, alcuni spariranno, ma ne nasceranno di nuovi che oggi non riusciamo nemmeno a immaginare. Il rischio reale non e l&rsquo;IA in se: e non saperla usare mentre gli altri imparano.</p>
-<p><strong>Quale strumento di IA e il migliore per iniziare?</strong>
+<p><strong>Quale strumento di IA e il migliore per iniziare?</strong><br>
 Non esiste un &ldquo;migliore&rdquo; in assoluto. ChatGPT e il piu diffuso e ha un piano gratuito generoso. Claude e particolarmente forte nel ragionamento e nella scrittura. Gemini si integra bene con i servizi Google. Per iniziare, scegliete quello che vi e piu comodo e cominciate a sperimentare.</p>
-<p><strong>Devo saper programmare per usare l&rsquo;IA?</strong>
+<p><strong>Devo saper programmare per usare l&rsquo;IA?</strong><br>
 Assolutamente no. L&rsquo;interfaccia dei chatbot moderni e il linguaggio naturale: scrivete in italiano come parlereste a una persona. Le competenze di programmazione servono se volete <em>costruire</em> sistemi di IA, non per <em>usarli</em>.</p>
-<p><strong>Come faccio a capire se l&rsquo;IA sta inventando qualcosa?</strong>
+<p><strong>Come faccio a capire se l&rsquo;IA sta inventando qualcosa?</strong><br>
 Purtroppo non c&rsquo;e un segnale evidente: le allucinazioni sono scritte con la stessa sicurezza delle informazioni corrette. La strategia migliore e verificare sempre i fatti importanti con fonti indipendenti (libri di testo, siti autorevoli, enciclopedie). Se l&rsquo;IA cita un articolo o un libro, controllate che esista davvero.</p>
-<p><strong>Cosa significa &ldquo;modello locale&rdquo; e perche dovrebbe interessarmi?</strong>
+<p><strong>Cosa significa &ldquo;modello locale&rdquo; e perche dovrebbe interessarmi?</strong><br>
 Un modello locale e un&rsquo;IA che gira interamente sul vostro computer, senza inviare dati a server esterni. Questo garantisce la massima privacy: nessuno puo leggere i vostri prompt. Strumenti come Ollama rendono l&rsquo;installazione semplice, e modelli come Llama e Mistral sono gratuiti. Lo svantaggio e che richiedono un computer abbastanza potente e non sono sempre al livello dei modelli cloud.</p>
-<p><strong>Cosa sono le &ldquo;allucinazioni&rdquo; dell&rsquo;IA?</strong>
+<p><strong>Cosa sono le &ldquo;allucinazioni&rdquo; dell&rsquo;IA?</strong><br>
 Sono risposte che sembrano corrette e convincenti ma contengono informazioni false, inventate dal modello. Possono essere nomi di libri inesistenti, citazioni mai dette, date sbagliate o fatti completamente fabbricati. Succede perche il modello genera il testo statisticamente piu probabile, non necessariamente quello vero.</p>
-<p><strong>Cos&rsquo;e l&rsquo;AGI e dovrei preoccuparmene?</strong>
+<p><strong>Cos&rsquo;e l&rsquo;AGI e dovrei preoccuparmene?</strong><br>
 AGI sta per Artificial General Intelligence: un&rsquo;IA capace di svolgere qualsiasi compito intellettuale umano. Oggi non esiste ancora, e nessuno sa con certezza quando arrivera. Non e qualcosa di cui preoccuparsi nell&rsquo;immediato, ma e utile sapere che la ricerca in questa direzione e molto attiva e che il dibattito sul suo impatto e uno dei piu importanti nel mondo tecnologico.</p>
-<p><strong>Open source e closed source: cosa cambia per me?</strong>
+<p><strong>Open source e closed source: cosa cambia per me?</strong><br>
 I modelli open source (come Llama e Mistral) sono pubblici: potete scaricarli, studiarli, modificarli. I modelli closed source (come GPT e Claude) sono accessibili solo attraverso le piattaforme delle aziende che li hanno creati. Per un utente normale, la differenza principale e nella privacy e nel controllo: con un modello open source avete il pieno controllo dei vostri dati.</p>
 <hr>
 <div class="quiz-container" id="quiz">

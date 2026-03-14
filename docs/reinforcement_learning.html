@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -280,21 +280,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Ma AlphaGo &ldquo;pensa&rdquo; davvero quando gioca?</strong>
+<p><strong>Ma AlphaGo &ldquo;pensa&rdquo; davvero quando gioca?</strong><br>
 No, non nel senso umano del termine. AlphaGo valuta milioni di posizioni future e sceglie la mossa con il punteggio piu alto. La Mossa 37 non era un lampo di creativita: era il risultato di un&rsquo;esplorazione computazionale talmente vasta da trovare un pattern che nessun umano aveva mai considerato. Non c&rsquo;e coscienza, c&rsquo;e calcolo su scala colossale.</p>
-<p><strong>Perche Lee Sedol ha pianto dopo la sconfitta?</strong>
+<p><strong>Perche Lee Sedol ha pianto dopo la sconfitta?</strong><br>
 Perche ha capito che il mondo stava cambiando. Il Go non e solo un gioco in Asia orientale: e parte della cultura, dell&rsquo;identita e della tradizione. Un computer che batte il campione del mondo e un momento simbolico enorme. Sedol si e poi ritirato dal Go professionistico nel 2019, dichiarando che l&rsquo;IA era &ldquo;imbattibile&rdquo;.</p>
-<p><strong>Chi sono gli esseri umani che votano le risposte nell&rsquo;RLHF?</strong>
+<p><strong>Chi sono gli esseri umani che votano le risposte nell&rsquo;RLHF?</strong><br>
 Sono lavoratori specializzati, spesso in paesi con costi del lavoro piu bassi come Kenya, India e Filippine. Il lavoro e ripetitivo e puo essere psicologicamente pesante, perche devono leggere anche contenuti tossici per insegnare al modello cosa non dire. E un tema etico importante che l&rsquo;industria sta ancora affrontando.</p>
-<p><strong>Il reinforcement learning funziona solo per i giochi e i chatbot?</strong>
+<p><strong>Il reinforcement learning funziona solo per i giochi e i chatbot?</strong><br>
 Assolutamente no. Il reinforcement learning viene usato per controllare robot, ottimizzare il consumo energetico dei data center, progettare nuovi farmaci, gestire il traffico e molto altro. Ovunque ci sia un problema dove un agente deve prendere decisioni sequenziali e ricevere feedback, il RL puo essere applicato.</p>
-<p><strong>Che differenza c&rsquo;e tra RLHF e RLVR?</strong>
+<p><strong>Che differenza c&rsquo;e tra RLHF e RLVR?</strong><br>
 Nell&rsquo;RLHF il feedback viene da esseri umani che esprimono preferenze soggettive (&ldquo;questa risposta e meglio di quella&rdquo;). Nell&rsquo;RLVR il feedback viene da verificatori automatici che controllano se la risposta e oggettivamente corretta (&ldquo;2+2 fa 4? Si, ricompensa positiva&rdquo;). L&rsquo;RLHF e migliore per valutare tono e stile, l&rsquo;RLVR per matematica e programmazione.</p>
-<p><strong>Cos&rsquo;e il reward hacking?</strong>
+<p><strong>Cos&rsquo;e il reward hacking?</strong><br>
 E quando l&rsquo;IA trova un modo furbo per ottenere la ricompensa senza fare davvero quello che volevamo. Come uno studente che impara a fare bella figura al test senza capire davvero la materia. E un problema serio perche dimostra che definire bene gli obiettivi per un&rsquo;IA e molto piu difficile di quanto sembri.</p>
-<p><strong>Cos&rsquo;e la Constitutional AI?</strong>
+<p><strong>Cos&rsquo;e la Constitutional AI?</strong><br>
 E un approccio inventato da Anthropic in cui, invece di far valutare ogni risposta a degli umani, si danno all&rsquo;IA dei principi scritti &ndash; una sorta di &ldquo;costituzione&rdquo;. L&rsquo;IA critica le proprie risposte basandosi su questi principi e si auto-migliora. E piu scalabile e coerente dell&rsquo;RLHF tradizionale.</p>
-<p><strong>L&rsquo;IA potrebbe diventare pericolosa a causa del reinforcement learning?</strong>
+<p><strong>L&rsquo;IA potrebbe diventare pericolosa a causa del reinforcement learning?</strong><br>
 Il reinforcement learning di per se e solo una tecnica di apprendimento. Il rischio non sta nella tecnica, ma in <em>come</em> definiamo gli obiettivi. Se diamo a un&rsquo;IA molto potente un obiettivo mal formulato, potrebbe perseguirlo in modi che non avevamo previsto. Per questo il problema dell&rsquo;allineamento &ndash; assicurarsi che l&rsquo;IA faccia quello che intendiamo &ndash; e considerato una delle sfide piu importanti della nostra epoca.</p>
 <hr>
 <div class="quiz-container" id="quiz">

@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -278,21 +278,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Come fa il modello a sapere dove mettere le parole nello spazio, se nessuno glielo dice?</strong>
+<p><strong>Come fa il modello a sapere dove mettere le parole nello spazio, se nessuno glielo dice?</strong><br>
 Il modello impara le posizioni durante l&rsquo;addestramento, leggendo miliardi di frasi. Se in molti testi &ldquo;gatto&rdquo; e &ldquo;cane&rdquo; appaiono in contesti simili (&ldquo;il ___ dorme&rdquo;, &ldquo;ho portato il ___ dal veterinario&rdquo;), il modello scopre che devono stare vicini. E un apprendimento completamente automatico.</p>
-<p><strong>Perche usare vettori e non un semplice dizionario?</strong>
+<p><strong>Perche usare vettori e non un semplice dizionario?</strong><br>
 Un dizionario ti dice la definizione, ma non cattura le <em>relazioni</em> tra parole in modo che un computer possa calcolarci sopra. Con i vettori puoi misurare quanto due parole sono simili (calcolando la distanza), trovare analogie (con l&rsquo;aritmetica), e fare tutto questo con semplici operazioni matematiche.</p>
-<p><strong>L&rsquo;esempio Re/Regina funziona davvero nella pratica?</strong>
+<p><strong>L&rsquo;esempio Re/Regina funziona davvero nella pratica?</strong><br>
 Si. E stato dimostrato nel 2013 dal team di Google che ha creato Word2Vec. Non funziona sempre alla perfezione, ma funziona sorprendentemente bene per moltissime relazioni semantiche. I modelli moderni (GPT, Claude, Llama) hanno embedding ancora piu sofisticati che catturano relazioni molto piu complesse.</p>
-<p><strong>Ma quanti numeri servono davvero per rappresentare una parola?</strong>
+<p><strong>Ma quanti numeri servono davvero per rappresentare una parola?</strong><br>
 Dipende dal modello. GPT-2 usava 768 numeri, Llama-3 ne usa 4.096, GPT-4 circa 12.288. Piu numeri significano piu sfumature di significato. Pensa ai colori: con 3 numeri (rosso, verde, blu) puoi descrivere milioni di colori. Con 4.096 numeri puoi distinguere milioni di sfumature di significato.</p>
-<p><strong>Il grafico 2D che si vede nelle presentazioni e realistico?</strong>
+<p><strong>Il grafico 2D che si vede nelle presentazioni e realistico?</strong><br>
 No, e una semplificazione estrema. I vettori reali hanno migliaia di dimensioni. Per visualizzarli in 2D si usano tecniche matematiche (come t-SNE o UMAP) che cercano di preservare le distanze tra i punti, ma inevitabilmente distorcono la realta. E un po&rsquo; come proiettare la Terra sferica su una mappa piatta: utile, ma non perfetto.</p>
-<p><strong>Ma allora le macchine capiscono davvero il significato delle parole?</strong>
+<p><strong>Ma allora le macchine capiscono davvero il significato delle parole?</strong><br>
 Questa e una delle grandi domande aperte della ricerca. I modelli catturano le relazioni statistiche tra parole, il che <em>assomiglia molto</em> alla comprensione del significato. Ma e davvero la stessa cosa? I filosofi e i ricercatori ne discutono ancora. Quello che e certo e che il risultato pratico e impressionante.</p>
-<p><strong>Perche le parole in italiano costano piu token di quelle in inglese?</strong>
+<p><strong>Perche le parole in italiano costano piu token di quelle in inglese?</strong><br>
 I modelli vengono addestrati prevalentemente su testi in inglese. Questo significa che le parole inglesi piu comuni sono spesso token interi, mentre le parole italiane (meno rappresentate nei dati) vengono spezzate piu frequentemente. Il risultato e che la stessa frase in italiano richiede piu token, il che &ldquo;consuma&rdquo; piu contesto.</p>
-<p><strong>Cosa vuol dire che nei modelli moderni gli embedding sono &ldquo;contestuali&rdquo;?</strong>
+<p><strong>Cosa vuol dire che nei modelli moderni gli embedding sono &ldquo;contestuali&rdquo;?</strong><br>
 Nei primi modelli (come Word2Vec), la parola &ldquo;pesca&rdquo; aveva sempre lo stesso vettore, che si parlasse del frutto o dell&rsquo;attivita di pescare. Nei transformer moderni, lo stesso token riceve vettori diversi a seconda del contesto della frase. Il modello riesce cosi a distinguere i diversi significati di una stessa parola.</p>
 <hr>
 <div class="quiz-container" id="quiz">

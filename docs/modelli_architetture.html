@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -272,21 +272,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Posso far girare ChatGPT sul mio portatile?</strong>
+<p><strong>Posso far girare ChatGPT sul mio portatile?</strong><br>
 Non ChatGPT specificamente, perche quello gira sui server di OpenAI. Ma puoi far girare modelli simili come Llama-3 8B. Con 16 GB di RAM puoi usare un modello da 7-8 miliardi di parametri. Non sara potente come GPT-4, ma funziona sorprendentemente bene per molti compiti quotidiani.</p>
-<p><strong>Cosa sono esattamente le GPU e perche sono cosi importanti per l&rsquo;IA?</strong>
+<p><strong>Cosa sono esattamente le GPU e perche sono cosi importanti per l&rsquo;IA?</strong><br>
 Le GPU (Graphics Processing Units) sono processori nati per i videogiochi, progettati per eseguire milioni di operazioni in parallelo. Le reti neurali richiedono esattamente questo tipo di calcolo massiccio e parallelo, motivo per cui le GPU sono diventate l&rsquo;hardware fondamentale dell&rsquo;intelligenza artificiale moderna.</p>
-<p><strong>Perche non si puo semplicemente rendere il modello piu piccolo senza perdere qualita?</strong>
+<p><strong>Perche non si puo semplicemente rendere il modello piu piccolo senza perdere qualita?</strong><br>
 In parte si puo, grazie a tecniche come la quantizzazione (ridurre la precisione dei numeri) e la distillazione (far imparare un modello piccolo da uno grande). Ma c&rsquo;e un limite fisico: sotto una certa dimensione, il modello non riesce a catturare pattern sufficientemente complessi per dare risposte di qualita.</p>
-<p><strong>Cosa significa MoE (Mixture of Experts)?</strong>
+<p><strong>Cosa significa MoE (Mixture of Experts)?</strong><br>
 E un&rsquo;architettura in cui il modello contiene tanti &ldquo;esperti&rdquo; specializzati, ma ne attiva solo alcuni per ogni domanda. Mixtral, ad esempio, ha 47 miliardi di parametri totali ma ne usa solo 13 miliardi alla volta. Questo permette di avere le prestazioni di un modello grande con il costo computazionale di uno piu piccolo.</p>
-<p><strong>Quanto costa davvero usare un modello come GPT-4?</strong>
+<p><strong>Quanto costa davvero usare un modello come GPT-4?</strong><br>
 Per l&rsquo;utente finale, ogni domanda costa tra 0,001 e 0,05 dollari — frazioni di centesimo. Il costo enorme e per chi crea il modello: addestrare GPT-4 e costato oltre 100 milioni di dollari. E la differenza tra costruire un&rsquo;autostrada e pagare il pedaggio per percorrerla.</p>
-<p><strong>Cosa vuol dire &ldquo;quantizzazione&rdquo; in parole semplici?</strong>
+<p><strong>Cosa vuol dire &ldquo;quantizzazione&rdquo; in parole semplici?</strong><br>
 E come scegliere quante cifre decimali usare. Se un parametro vale 3,14159265, a 32 bit lo memorizzi esattamente cosi. A 4 bit lo memorizzi come &ldquo;circa 3&rdquo;. Perdi un po&rsquo; di precisione, ma risparmi un sacco di memoria — e per molti compiti la differenza e trascurabile.</p>
-<p><strong>Esistono alternative ai Transformer?</strong>
+<p><strong>Esistono alternative ai Transformer?</strong><br>
 Si, la ricerca e molto attiva. Architetture come Mamba (basata su State Space Models) e RWKV offrono complessita lineare invece che quadratica, il che le rende potenzialmente molto piu veloci su testi lunghi. Esistono anche modelli ibridi come Jamba che combinano Transformer e nuove architetture. Pero, al momento, nessuna ha sostituito completamente i Transformer.</p>
-<p><strong>I modelli locali sono sicuri da usare?</strong>
+<p><strong>I modelli locali sono sicuri da usare?</strong><br>
 Si, anzi sono piu sicuri dal punto di vista della privacy rispetto ai servizi cloud. Tutti i dati restano sul tuo computer e nessuna informazione viene inviata a server esterni. Questo li rende ideali per lavorare con dati sensibili o personali.</p>
 <hr>
 <div class="quiz-container" id="quiz">
