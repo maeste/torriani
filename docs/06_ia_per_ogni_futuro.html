@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'IA per Ogni Futuro — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#06_ia_per_ogni_futuro">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 3</div>
+    <h1>L&rsquo;IA per ogni futuro: scenari per ogni campo professionale</h1>
+<h2>Il nuovo foglio di calcolo</h2>
+<p>Facciamo un salto indietro nel tempo. Siamo negli anni &lsquo;80, e nelle aziende italiane arrivano i primi computer con un programma chiamato &ldquo;foglio di calcolo&rdquo; — quello che oggi conosciamo come Excel. All&rsquo;inizio, tutti pensano che sia roba da contabili, da ragionieri, da chi lavora con i numeri. Ma nel giro di pochi anni succede qualcosa di sorprendente: il foglio di calcolo finisce sulla scrivania di <em>tutti</em>. Lo usano gli architetti per i preventivi, i medici per le statistiche dei pazienti, i giornalisti per analizzare dati elettorali, i musicisti per organizzare le date dei concerti. Non era uno strumento &ldquo;da matematici&rdquo;. Era uno strumento per pensare meglio con i numeri.</p>
+<p>Ecco, l&rsquo;intelligenza artificiale sta facendo la stessa identica cosa, ma per il <em>pensiero</em> in generale. Non e&rsquo; roba da informatici, da nerd, da gente che scrive codice in cantina. E&rsquo; uno strumento che amplifica le capacita&rsquo; di chiunque, in qualsiasi campo. E la cosa bella e&rsquo; che potete iniziare a usarla adesso, gratis, senza sapere nulla di programmazione.</p>
+<p>Ma vediamo in pratica cosa significa.</p>
+<h3>L&rsquo;IA in medicina: il tuo assistente diagnostico</h3>
+<p>Immaginate di essere un giovane medico al pronto soccorso. Arriva un paziente di 45 anni con affaticamento cronico, dolori articolari e strane macchie sulla pelle. Potrebbero essere decine di malattie diverse. Un medico esperto, con trent&rsquo;anni di esperienza, potrebbe restringere la lista rapidamente. Ma voi siete al vostro primo anno. Cosa fate?</p>
+<p>Con l&rsquo;IA, potete descrivere i sintomi e chiedere le diagnosi differenziali piu&rsquo; probabili, ordinate per frequenza, con i test diagnostici consigliati. In trenta secondi avete una lista strutturata — lupus, artrite reumatoide, fibromialgia, e altre — con per ciascuna i test da prescrivere. Non significa che il medico diventa inutile: l&rsquo;IA non visita il paziente, non sente il suo tono di voce, non coglie quell&rsquo;esitazione che rivela qualcosa di importante. Ma vi da&rsquo; un punto di partenza solido, come avere un collega esperto che vi sussurra suggerimenti all&rsquo;orecchio.</p>
+<h3>L&rsquo;IA in giurisprudenza: il cacciatore di clausole</h3>
+<p>Vi hanno mai fatto firmare un contratto online senza leggerlo? (Tranquilli, lo fanno tutti.) Un avvocato potrebbe analizzare quel contratto e trovare clausole pericolose — per esempio, una che dice &ldquo;il fornitore puo&rsquo; cambiare le condizioni quando vuole, con soli 7 giorni di preavviso&rdquo;. L&rsquo;IA puo&rsquo; fare la stessa cosa: legge il contratto, identifica i rischi per voi e suggerisce una riformulazione piu&rsquo; equilibrata. Non sostituisce l&rsquo;avvocato, ma rende accessibile a tutti una prima analisi che prima richiedeva una consulenza costosa.</p>
+<h3>L&rsquo;IA nelle lettere e nella filosofia: il compagno di dibattito</h3>
+<p>Pensate che l&rsquo;IA serva solo per i numeri? Provate a chiederle di confrontare il concetto di liberta&rsquo; in Kant e Sartre, con esempi concreti. Quello che ottenete e&rsquo; un saggio strutturato che mette a confronto l&rsquo;imperativo categorico kantiano con la liberta&rsquo; radicale sartriana, collegandoli a situazioni di oggi — le scelte etiche nel lavoro, il modo in cui ci comportiamo sui social media. Non sta &ldquo;inventando&rdquo; filosofia: sta organizzando conoscenza esistente in modo chiaro e connesso. E voi quanto ci mettereste a scrivere lo stesso saggio? Ore, forse giorni. L&rsquo;IA vi da&rsquo; una prima bozza in 30 secondi — poi sta a voi migliorarla con il vostro pensiero critico.</p>
+<h3>L&rsquo;IA nell&rsquo;economia: il consulente che non dorme mai</h3>
+<p>Avete un&rsquo;idea per un piccolo business. Un negozio, un e-commerce, un servizio. Avete i dati di vendita degli ultimi due anni e vedete che a gennaio le vendite crollano del 15%, mentre a dicembre esplodono del 30%. Capire la stagionalita&rsquo;, identificare il trend di fondo e trovare strategie per ridurre il calo invernale richiederebbe competenze avanzate di analisi dati. Oppure&hellip; una domanda ben fatta a un&rsquo;IA. Niente formule Excel complicate, niente corsi di statistica: una domanda in italiano e avete un&rsquo;analisi con strategie concrete — promozioni invernali, diversificazione dei prodotti, programmi fedelta&rsquo;.</p>
+<h3>L&rsquo;IA nell&rsquo;arte: il brainstorming infinito</h3>
+<p>Dovete creare un poster per un evento. Il tema e&rsquo; &ldquo;Jazz sotto le stelle&rdquo;. Siete davanti al foglio bianco e non vi viene niente. L&rsquo;IA puo&rsquo; generarvi cinque concept visivi diversi, ciascuno con palette colori, stile grafico, elemento centrale e mood. Non crea il poster per voi — ma vi da&rsquo; cinque direzioni da esplorare invece di fissare il vuoto. E&rsquo; come avere un collega creativo che non si stanca mai di proporre idee.</p>
+<h3>L&rsquo;IA nelle scienze: il progettista di esperimenti</h3>
+<p>Volete testare se la musica classica migliora la concentrazione durante lo studio? L&rsquo;IA puo&rsquo; progettarvi un esperimento completo: ipotesi, variabili, gruppo di controllo, procedura, analisi statistica. Un protocollo che in un corso universitario impieghereste settimane a costruire, pronto in un minuto per essere valutato, adattato e migliorato.</p>
+<h3>L&rsquo;IA nella musica: il maestro di armonia</h3>
+<p>State imparando la chitarra e vi chiedete perche&rsquo; certi giri di accordi &ldquo;funzionano&rdquo; emotivamente. L&rsquo;IA puo&rsquo; analizzare la progressione I-vi-IV-V e spiegarvi la funzione tonale di ogni accordo, poi proporvi variazioni piu&rsquo; sofisticate con accordi di settima, descrivendovi l&rsquo;effetto emotivo di ciascuna. La teoria musicale diventa accessibile e concreta.</p>
+<h3>Il prima e il dopo</h3>
+<p>Guardate cosa cambia concretamente:</p>
+<ul>
+<li><strong>Ricerca bibliografica</strong>: prima ci volevano ore in biblioteca, ora bastano minuti con l&rsquo;IA — un miglioramento di 20 volte.</li>
+<li><strong>Traduzione di un documento tecnico</strong>: prima servivano giorni, ora secondi — un fattore 1000.</li>
+<li><strong>Analisi di dati di vendita</strong>: prima servivano competenze Excel avanzate, ora basta una domanda in italiano.</li>
+<li><strong>Prima bozza di un testo</strong>: prima, ore davanti alla pagina bianca; ora, una bozza in 30 secondi da cui partire.</li>
+</ul>
+<p>Ma attenzione: l&rsquo;IA non elimina il lavoro. Elimina la parte ripetitiva, lasciandovi la parte creativa — quella che solo voi potete fare.</p>
+<h3>La domanda che conta davvero</h3>
+<p>&ldquo;Ma allora perche&rsquo; studiare, se l&rsquo;IA puo&rsquo; fare tutto?&rdquo; Ecco il punto: l&rsquo;IA <em>non</em> puo&rsquo; fare tutto. Puo&rsquo; generare testo, ma non puo&rsquo; avere un&rsquo;opinione autentica. Puo&rsquo; analizzare dati, ma non puo&rsquo; decidere la strategia giusta per la <em>vostra</em> situazione specifica. Puo&rsquo; scrivere codice, ma non puo&rsquo; capire cosa serve davvero al vostro utente. Studiare vi da&rsquo; la capacita&rsquo; di <em>giudicare</em> — di capire se quello che l&rsquo;IA produce e&rsquo; corretto, utile e appropriato. Senza conoscenza, non sapete nemmeno se vi sta dando una risposta geniale o una totale assurdita&rsquo;.</p>
+<p>L&rsquo;IA e&rsquo; un amplificatore. Se sapete poco, amplifica poco. Se sapete molto, amplifica moltissimo. Il vostro studio e&rsquo; il segnale; l&rsquo;IA e&rsquo; l&rsquo;altoparlante.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>L&rsquo;IA e&rsquo; trasversale</strong>: non e&rsquo; uno strumento riservato a chi fa informatica. Si applica a medicina, legge, arte, musica, economia, scienze e lettere — esattamente come il foglio di calcolo si e&rsquo; diffuso ovunque negli anni &lsquo;80.</li>
+<li><strong>Amplifica, non sostituisce</strong>: l&rsquo;IA elimina le parti ripetitive del lavoro (cercare, organizzare, sintetizzare) e lascia a voi la parte che richiede creativita&rsquo;, empatia e giudizio critico.</li>
+<li><strong>La qualita&rsquo; del prompt fa la differenza</strong>: non importa quale IA usate — importa <em>come</em> fate la domanda. Un prompt preciso e ben strutturato produce risultati enormemente migliori di una domanda vaga.</li>
+<li><strong>Verificate sempre</strong>: i modelli linguistici possono &ldquo;allucinare&rdquo;, cioe&rsquo; generare informazioni plausibili ma false. Usate l&rsquo;IA come punto di partenza, non come verita&rsquo; assoluta, e controllate le informazioni importanti con fonti affidabili.</li>
+<li><strong>Studiare conta piu&rsquo; che mai</strong>: l&rsquo;IA e&rsquo; un amplificatore della vostra conoscenza. Piu&rsquo; sapete, meglio sapete usarla e valutare le sue risposte. Senza competenze, non potete distinguere una risposta eccellente da una sbagliata.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Provate un prompt nel vostro campo di interesse</strong>: andate su <a href="https://claude.ai">claude.ai</a> o ChatGPT (entrambi hanno versioni gratuite) e copiate uno dei prompt visti nella lezione — quello di medicina, filosofia, economia o qualsiasi altro vi incuriosisca. Leggete la risposta con occhio critico: cosa vi sembra accurato? Cosa verifichereste?</p>
+</li>
+<li>
+<p><strong>Create il vostro prompt originale</strong>: pensate a un problema reale che avete — un argomento difficile da studiare, un progetto scolastico, una curiosita&rsquo; personale — e formulate una domanda dettagliata per l&rsquo;IA. Sperimentate: cambiate il prompt, aggiungete contesto, chiedete formati diversi, e osservate come cambia la qualita&rsquo; della risposta.</p>
+</li>
+<li>
+<p><strong>Fate il &ldquo;test dell&rsquo;allucinazione&rdquo;</strong>: chiedete all&rsquo;IA qualcosa di cui conoscete bene la risposta — un argomento che avete studiato a fondo, un fatto della vostra citta&rsquo;, un dettaglio del vostro hobby. Controllate se la risposta e&rsquo; accurata. Questo vi allena a riconoscere quando l&rsquo;IA sbaglia, una competenza fondamentale per usarla in modo consapevole.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>L&rsquo;IA ci rubera&rsquo; il lavoro?</strong></p>
+<p>No, ma cambiera&rsquo; <em>come</em> lavoriamo. Pensate alla calcolatrice: ha eliminato i contabili? No, ha eliminato il calcolo manuale. I contabili fanno ancora analisi finanziaria, ma con strumenti migliori. L&rsquo;IA fara&rsquo; la stessa cosa: elimina le parti ripetitive, lasciandovi la parte che richiede creativita&rsquo;, empatia e giudizio.</p>
+<p><strong>Se l&rsquo;IA puo&rsquo; fare tutto, perche&rsquo; dovrei studiare?</strong></p>
+<p>L&rsquo;IA non puo&rsquo; fare tutto. Puo&rsquo; generare testo, ma non puo&rsquo; avere un&rsquo;opinione autentica. Puo&rsquo; analizzare dati, ma non puo&rsquo; decidere la strategia giusta per la vostra situazione. Studiare vi da&rsquo; la capacita&rsquo; di giudicare se quello che l&rsquo;IA produce e&rsquo; corretto e utile. Senza conoscenza, non sapete se vi sta dando una risposta buona o pessima.</p>
+<p><strong>L&rsquo;IA non inventa le cose? Come posso fidarmi?</strong></p>
+<p>Si&rsquo;, i modelli linguistici possono &ldquo;allucinare&rdquo; — generare informazioni che sembrano vere ma sono inventate. Per questo: (1) usate l&rsquo;IA come punto di partenza, non come fonte finale; (2) verificate sempre le informazioni importanti con fonti affidabili; (3) per medicina, legge e finanza, un professionista deve sempre validare; (4) imparare a riconoscere quando l&rsquo;IA e&rsquo; incerta e&rsquo; una competenza chiave.</p>
+<p><strong>E&rsquo; etico usare l&rsquo;IA per i compiti scolastici?</strong></p>
+<p>Dipende da come la usate. Copiare un testo generato dall&rsquo;IA e spacciarlo per vostro e&rsquo; disonesto — come copiare da Wikipedia. Ma usarla per capire meglio un argomento, generare una bozza da rielaborare o verificare un ragionamento e&rsquo; come usare un dizionario o un manuale. La regola d&rsquo;oro: il pensiero critico finale deve essere vostro.</p>
+<p><strong>Quale IA dovrei usare?</strong></p>
+<p>Per iniziare, Claude (claude.ai) o ChatGPT sono entrambi ottimi e hanno versioni gratuite. Non importa quale scegliete — importa che impariate a fare buone domande. E&rsquo; la qualita&rsquo; del prompt che fa la differenza, non lo strumento.</p>
+<p><strong>L&rsquo;IA funziona solo in inglese?</strong></p>
+<p>No. I modelli moderni come Claude e GPT funzionano molto bene in italiano. Potete fare domande in italiano e ottenere risposte in italiano. La qualita&rsquo; e&rsquo; leggermente superiore in inglese per argomenti tecnici molto specifici, ma per l&rsquo;uso quotidiano l&rsquo;italiano funziona benissimo.</p>
+<p><strong>Quanto costa usare l&rsquo;IA?</strong></p>
+<p>Esistono versioni gratuite di Claude e ChatGPT che sono gia&rsquo; molto potenti. Le versioni a pagamento (circa 20 euro al mese) offrono modelli piu&rsquo; avanzati e limiti d&rsquo;uso maggiori, ma per esplorare e imparare le versioni gratuite sono piu&rsquo; che sufficienti.</p>
+<p><strong>L&rsquo;IA puo&rsquo; aiutarmi anche se non so ancora cosa voglio fare da grande?</strong></p>
+<p>Assolutamente si&rsquo;. Anzi, e&rsquo; uno dei suoi usi migliori: potete chiederle di esplorare diverse carriere, confrontare percorsi di studio, simulare scenari professionali. E&rsquo; come avere un orientatore disponibile 24 ore su 24 che non si stanca mai delle vostre domande.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Perche' l'IA viene paragonata al foglio di calcolo degli anni '80?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche' entrambi servono solo per fare calcoli matematici</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche' entrambi sono stati inizialmente percepiti come strumenti di nicchia, ma si sono rivelati utili in ogni campo- c) Perche' l'IA sostituira' Excel in tutte le aziende</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche' entrambi sono stati inventati in Italia</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Un medico usa l'IA per ottenere una lista di diagnosi differenziali a partire dai sintomi di un paziente. Qual e' l'affermazione corretta?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Il medico puo' fidarsi ciecamente della lista e prescrivere direttamente le cure</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">L'IA ha sostituito completamente il lavoro diagnostico del medico</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">La lista e' un punto di partenza utile, ma il medico deve validarla con la propria esperienza e la visita del paziente- d) L'IA non e' in grado di produrre diagnosi differenziali attendibili</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Cosa si intende quando si dice che i modelli linguistici possono &quot;allucinare&quot;?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Che l'IA ha dei bug che la fanno crashare frequentemente</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Che l'IA puo' generare informazioni che sembrano plausibili ma sono in realta' false o inventate- c) Che l'IA funziona solo quando ha accesso a internet</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Che l'IA vede immagini che non esistono</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Qual e' il modo piu' corretto di usare l'IA per un compito scolastico?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Copiare la risposta dell'IA e consegnarla come propria</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Non usare mai l'IA perche' e' sempre scorretto</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Usarla per capire meglio l'argomento e generare una bozza, poi rielaborare con il proprio pensiero critico- d) Usarla solo per le materie scientifiche, mai per quelle umanistiche</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Perche' studiare e' ancora importante nell'era dell'IA?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche' l'IA non funziona bene e non si puo' usare nella pratica</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche' la conoscenza personale permette di valutare criticamente le risposte dell'IA e di usarla come amplificatore delle proprie competenze- c) Perche' le scuole vietano l'uso dell'IA e quindi bisogna fare tutto da soli</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche' l'IA e' troppo costosa e accessibile solo alle grandi aziende</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Come Excel e passato dall'essere \"roba da contabili\" a strumento universale, l'IA si sta rivelando utile in medicina, arte, legge, economia e ogni altro campo."}, "2": {"correct": "c", "explanation": "L'IA non visita il paziente, non sente il suo tono di voce, non coglie le sfumature; il medico deve sempre validare con la propria esperienza professionale e l'esame diretto."}, "3": {"correct": "b", "explanation": "I modelli generano il testo piu probabile, non il piu vero: possono inventare fatti, citazioni e numeri presentandoli con totale sicurezza."}, "4": {"correct": "c", "explanation": "L'uso corretto e come un dizionario o un manuale: si usa per capire meglio, generare bozze da rielaborare e verificare ragionamenti, ma il pensiero critico finale deve essere proprio."}, "5": {"correct": "b", "explanation": "L'IA e un amplificatore: se sapete poco, amplifica poco; se sapete molto, amplifica moltissimo. Senza conoscenza, non potete nemmeno valutare se una risposta e corretta."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

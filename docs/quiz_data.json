@@ -1,0 +1,508 @@
+{
+  "00_la_quinta_rivoluzione": [
+    {
+      "correct": "b",
+      "explanation": "Dal vapore a internet, ogni rivoluzione ha seguito lo stesso schema: iniziale resistenza seguita da adozione progressiva che ha premiato i pionieri."
+    },
+    {
+      "correct": "b",
+      "explanation": "Le rivoluzioni precedenti (vapore, elettricita) automatizzavano la forza fisica; il computer e stato il primo strumento a sostituire il calcolo mentale ripetitivo."
+    },
+    {
+      "correct": "c",
+      "explanation": "Come internet nel 1995 era appena diventato accessibile al pubblico (con Netscape), ChatGPT nel 2022 ha reso l'IA accessibile a tutti, e il potenziale e ancora largamente inesplorato."
+    },
+    {
+      "correct": "b",
+      "explanation": "Per la prima volta, la tecnologia non automatizza solo operazioni fisiche o calcoli ripetitivi, ma compiti che richiedono capacita cognitive complesse."
+    },
+    {
+      "correct": "b",
+      "explanation": "Un neurone biologico e una cellula estremamente complessa con migliaia di connessioni sinaptiche, mentre un parametro artificiale e un singolo numero; il confronto diretto e quindi fuorviante."
+    }
+  ],
+  "01_dalle_parole_ai_numeri": [
+    {
+      "correct": "b",
+      "explanation": "Il tokenizer e il primo passo: trasforma il testo in una sequenza di numeri identificativi che il modello puo elaborare."
+    },
+    {
+      "correct": "c",
+      "explanation": "Con 30.000-50.000 sotto-parti si puo rappresentare qualsiasi testo, anche parole nuove o rare, senza un vocabolario enorme."
+    },
+    {
+      "correct": "b",
+      "explanation": "I vettori (liste di migliaia di numeri) di parole come \"gatto\" e \"cane\" sono vicini nello spazio multidimensionale, perche appaiono in contesti simili nei dati di addestramento."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il modello ha appreso le relazioni semantiche dai dati: la \"direzione\" nello spazio vettoriale da \"uomo\" a \"donna\" e la stessa da \"re\" a \"regina\"."
+    },
+    {
+      "correct": "c",
+      "explanation": "E l'ipotesi distribuzionale: \"una parola e caratterizzata dalla compagnia che tiene\". Il modello impara le posizioni osservando i contesti d'uso nelle miliardi di frasi lette."
+    }
+  ],
+  "02_come_impara_una_macchina": [
+    {
+      "correct": "b",
+      "explanation": "Ogni modello di ML funziona con questo ciclo: fa una previsione, misura quanto e lontana dalla realta (l'errore), e aggiusta i parametri per ridurre l'errore."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il gradiente indica la direzione di massima crescita dell'errore; il modello si muove nella direzione opposta per ridurlo, come scendere da una montagna nella nebbia."
+    },
+    {
+      "correct": "b",
+      "explanation": "Con passi troppo grandi, il modello \"salta\" avanti e indietro senza mai stabilizzarsi sulla soluzione, come un escursionista che fa passi enormi e rimbalza da un lato all'altro della valle."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il principio (provare, misurare, correggere) e identico; cambia solo la scala: 2 parametri per la retta contro circa 1.800 miliardi per GPT-4."
+    },
+    {
+      "correct": "c",
+      "explanation": "Elevando al quadrato si eliminano i segni negativi (cosi errori sopra e sotto contano uguale) e si penalizzano maggiormente gli errori grandi, che sono piu problematici."
+    }
+  ],
+  "03_attenzione": [
+    {
+      "correct": "b",
+      "explanation": "Il meccanismo di attenzione assegna pesi alle parole precedenti; avendo appreso da miliardi di frasi, sa che aggettivi come \"stanco\" si associano a esseri viventi."
+    },
+    {
+      "correct": "c",
+      "explanation": "La maschera causale impedisce al modello di vedere parole che non sono ancora state generate, poiche il testo viene prodotto da sinistra a destra."
+    },
+    {
+      "correct": "b",
+      "explanation": "Il modello assegna una probabilita a ogni possibile token successivo e ne sceglie uno tramite campionamento, non sempre quello piu probabile."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il campionamento introduce casualita: il modello non sceglie sempre la parola piu probabile, e la temperatura controlla il grado di questa variabilita."
+    },
+    {
+      "correct": "b",
+      "explanation": "L'attenzione confronta ogni parola con tutte le altre: raddoppiando la lunghezza, i calcoli si quadruplicano, rendendo i contesti lunghi estremamente costosi."
+    }
+  ],
+  "scaling_laws": [
+    {
+      "correct": "b",
+      "explanation": "Le RNN leggono le parole una alla volta in sequenza; i Transformer usano il meccanismo di self-attention per guardarle tutte contemporaneamente, sfruttando le GPU."
+    },
+    {
+      "correct": "c",
+      "explanation": "Le scaling laws descrivono una legge di potenza: raddoppiare i parametri produce un miglioramento costante (circa il 5%), non proporzionale ma prevedibile."
+    },
+    {
+      "correct": "b",
+      "explanation": "Come le gambe di uno sgabello, servono tutti e tre in equilibrio: se manca uno, gli altri non compensano."
+    },
+    {
+      "correct": "b",
+      "explanation": "ChatGPT ha reso l'IA accessibile a chiunque con una connessione internet, raggiungendo 100 milioni di utenti in due mesi, la crescita piu rapida nella storia."
+    },
+    {
+      "correct": "c",
+      "explanation": "Chinchilla ha dimostrato che per ottenere il massimo da un modello, parametri e dati devono crescere in modo proporzionale; GPT-3 aveva troppi parametri rispetto ai dati usati."
+    }
+  ],
+  "reinforcement_learning": [
+    {
+      "correct": "b",
+      "explanation": "Nel reinforcement learning, un agente compie azioni che modificano l'ambiente, il quale restituisce una ricompensa positiva o negativa, guidando l'apprendimento."
+    },
+    {
+      "correct": "c",
+      "explanation": "La probabilita che un professionista facesse quella mossa era stimata a meno di una su diecimila, eppure cambio l'intero corso della partita."
+    },
+    {
+      "correct": "b",
+      "explanation": "GPT-3 era potente ma incontrollabile; l'RLHF usa il feedback umano per insegnare al modello a dare risposte chiare, utili e sicure."
+    },
+    {
+      "correct": "c",
+      "explanation": "L'RLVR usa verificatori automatici per compiti con risposte oggettivamente giuste o sbagliate (matematica, codice), risultando piu veloce, economico e oggettivo dell'RLHF."
+    },
+    {
+      "correct": "c",
+      "explanation": "Come uno studente che impara a fare bella figura al test senza capire la materia, l'IA puo trovare modi furbi per ottenere la ricompensa senza raggiungere il vero obiettivo."
+    }
+  ],
+  "04_limiti": [
+    {
+      "correct": "b",
+      "explanation": "Il modello non distingue tra verita e invenzione: genera il testo piu probabile con la stessa sicurezza, rendendo impossibile distinguere errori dalla risposta corretta guardando solo il testo."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il modello riproduce i pattern statistici trovati nei dati di addestramento (testi di Internet), i quali riflettono i pregiudizi della societa."
+    },
+    {
+      "correct": "c",
+      "explanation": "Nell'RLHF, gli esseri umani non scrivono risposte: indicano quale tra due risposte e migliore, e il modello impara da queste preferenze."
+    },
+    {
+      "correct": "d",
+      "explanation": "L'IA e utilissima come strumento, ma le informazioni critiche vanno sempre verificate con fonti indipendenti, perche il modello puo allucinare."
+    },
+    {
+      "correct": "b",
+      "explanation": "Il modello non ha opinioni: riproduce il pattern statistico trovato nei dati. Se nei testi \"chirurgo\" appare piu spesso con pronomi maschili, il modello riflette questo bias."
+    }
+  ],
+  "generazione_immagini": [
+    {
+      "correct": "b",
+      "explanation": "I modelli di diffusione imparano a rimuovere rumore progressivamente: partendo da puro rumore casuale, lo \"ripuliscono\" passo dopo passo fino a ottenere un'immagine coerente."
+    },
+    {
+      "correct": "c",
+      "explanation": "CLIP traduce il testo in un vettore numerico che rappresenta il significato visivo delle parole, guidando il processo di denoising nella direzione giusta."
+    },
+    {
+      "correct": "b",
+      "explanation": "LoRA (Low-Rank Adaptation) permette di insegnare nuovi concetti al modello con solo 5-10 immagini e risorse computazionali limitate, senza riaddestrare l'intero modello."
+    },
+    {
+      "correct": "c",
+      "explanation": "I modelli tendono a riprodurre gli stereotipi dei dati su cui sono addestrati (es. \"un dottore\" generato quasi sempre come uomo bianco), amplificando i pregiudizi sociali."
+    },
+    {
+      "correct": "c",
+      "explanation": "Un modello open source e come avere la ricetta completa di un piatto: puoi scaricarlo, studiarlo e modificarlo liberamente, a differenza dei modelli chiusi accessibili solo tramite le piattaforme dei creatori."
+    }
+  ],
+  "generazione_video": [
+    {
+      "correct": "b",
+      "explanation": "Un video richiede che ogni singolo frame (24-30 al secondo) sia coerente con i precedenti e i successivi: oggetti, luci, ombre e movimenti devono evolvere in modo fluido."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il transformer controlla che ogni pezzo del video sia coerente con i pezzi vicini sia nello spazio che nel tempo, come un revisore che verifica che la trama non abbia buchi."
+    },
+    {
+      "correct": "c",
+      "explanation": "I video generati dall'IA sono a colori; gli artefatti tipici sono mani anomale, testo illeggibile, fisica innaturale e sfarfallio temporale, non la mancanza di colore."
+    },
+    {
+      "correct": "b",
+      "explanation": "Il video e tradizionalmente considerato una \"prova\" affidabile di un evento; un video falso ben fatto puo convincere in modo molto piu efficace di un'immagine manipolata."
+    },
+    {
+      "correct": "c",
+      "explanation": "C2PA (Coalition for Content Provenance and Authenticity) e come un \"certificato di nascita\" digitale che accompagna foto e video, certificandone l'origine e la storia."
+    }
+  ],
+  "reasoning_models": [
+    {
+      "correct": "b",
+      "explanation": "I reasoning models generano \"token di ragionamento\" interni -- passaggi intermedi del pensiero -- prima di produrre la risposta finale, a differenza dei modelli standard che rispondono direttamente."
+    },
+    {
+      "correct": "c",
+      "explanation": "I reasoning models eccellono nei problemi che richiedono ragionamento multi-step (matematica, logica, debugging), dove scomporre il problema in passaggi riduce drasticamente gli errori."
+    },
+    {
+      "correct": "b",
+      "explanation": "Nessuno ha insegnato esplicitamente a DeepSeek-R1 a ragionare passo per passo: la capacita e emersa spontaneamente grazie all'addestramento con RLVR."
+    },
+    {
+      "correct": "c",
+      "explanation": "Un reasoning model puo impiegare 30 secondi invece di 2 e costare 10-50 volte di piu; per domande semplici come traduzioni o riassunti, e uno spreco senza alcun vantaggio."
+    },
+    {
+      "correct": "b",
+      "explanation": "Il test-time compute e la potenza di calcolo investita nel momento della risposta (non dell'addestramento): piu token di ragionamento il modello genera, piu calcolo serve."
+    }
+  ],
+  "modelli_architetture": [
+    {
+      "correct": "c",
+      "explanation": "7 miliardi di parametri x 2 byte ciascuno = 14 miliardi di byte = 14 GB. E un calcolo diretto che permette di stimare quanta VRAM serve."
+    },
+    {
+      "correct": "b",
+      "explanation": "MoE attiva solo alcuni \"esperti\" per ogni domanda: Mixtral ha 47 miliardi di parametri totali ma ne usa solo 13 miliardi alla volta, con prestazioni da modello grande e costi da modello piccolo."
+    },
+    {
+      "correct": "c",
+      "explanation": "Ollama e LM Studio sono progettati per l'utente finale: un'interfaccia semplice che gestisce download e configurazione automaticamente, senza competenze tecniche avanzate."
+    },
+    {
+      "correct": "b",
+      "explanation": "E come la differenza tra costruire un'autostrada (costo enorme, una tantum) e pagare il pedaggio (frazioni di centesimo per ogni passaggio)."
+    },
+    {
+      "correct": "b",
+      "explanation": "Passando da 32 bit a 4 bit per parametro, la memoria si riduce di 8 volte, rendendo possibile far girare modelli grandi su hardware piu accessibile con una perdita di qualita minima."
+    }
+  ],
+  "05_arte_del_prompt": [
+    {
+      "correct": "b",
+      "explanation": "Contiene tutti e quattro gli ingredienti del prompt perfetto: ruolo (professore di storia), contesto (studente di 17 anni), compito specifico (3 cause principali) e formato (con un esempio per ciascuna)."
+    },
+    {
+      "correct": "b",
+      "explanation": "\"Ragiona passo dopo passo\" spinge il modello a costruire un ragionamento strutturato, dove ogni passaggio diventa contesto per il successivo, migliorando la qualita complessiva."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il modello non ha personalita separate: il ruolo orienta la generazione del testo verso un certo stile, vocabolario e livello di approfondimento, perche genera testo coerente con il contesto."
+    },
+    {
+      "correct": "b",
+      "explanation": "Il system prompt e un'istruzione nascosta all'utente che le aziende usano per definire personalita e regole del chatbot; e cio che rende Claude diverso da ChatGPT."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il prompt engineering e iterativo: riformulare con piu contesto e specificita e quasi sempre la strategia migliore prima di arrendersi o cambiare strumento."
+    }
+  ],
+  "06_ia_per_ogni_futuro": [
+    {
+      "correct": "b",
+      "explanation": "Come Excel e passato dall'essere \"roba da contabili\" a strumento universale, l'IA si sta rivelando utile in medicina, arte, legge, economia e ogni altro campo."
+    },
+    {
+      "correct": "c",
+      "explanation": "L'IA non visita il paziente, non sente il suo tono di voce, non coglie le sfumature; il medico deve sempre validare con la propria esperienza professionale e l'esame diretto."
+    },
+    {
+      "correct": "b",
+      "explanation": "I modelli generano il testo piu probabile, non il piu vero: possono inventare fatti, citazioni e numeri presentandoli con totale sicurezza."
+    },
+    {
+      "correct": "c",
+      "explanation": "L'uso corretto e come un dizionario o un manuale: si usa per capire meglio, generare bozze da rielaborare e verificare ragionamenti, ma il pensiero critico finale deve essere proprio."
+    },
+    {
+      "correct": "b",
+      "explanation": "L'IA e un amplificatore: se sapete poco, amplifica poco; se sapete molto, amplifica moltissimo. Senza conoscenza, non potete nemmeno valutare se una risposta e corretta."
+    }
+  ],
+  "strumenti_studenti": [
+    {
+      "correct": "b",
+      "explanation": "A differenza degli assistenti generici, NotebookLM usa la tecnologia RAG per rispondere esclusivamente basandosi sui documenti caricati, riducendo quasi a zero le allucinazioni."
+    },
+    {
+      "correct": "c",
+      "explanation": "Chiedendo all'IA di guidare verso la risposta senza darla direttamente, si attiva un processo di apprendimento socratico che stimola il ragionamento dello studente."
+    },
+    {
+      "correct": "b",
+      "explanation": "Copiando da un compagno si deve almeno capire e rielaborare; con l'IA basta un copia-incolla, senza nessun apprendimento reale e creando una dipendenza pericolosa."
+    },
+    {
+      "correct": "b",
+      "explanation": "Consensus e specializzato nella ricerca di paper scientifici e mostra la percentuale di studi che supportano una determinata tesi, utile per ricerche serie e tesine."
+    },
+    {
+      "correct": "c",
+      "explanation": "Come una persona che vede qualcosa che non c'e, il modello \"vede\" fatti inesistenti e li presenta con sicurezza; e un limite strutturale dei modelli linguistici."
+    }
+  ],
+  "07_il_vostro_ruolo": [
+    {
+      "correct": "b",
+      "explanation": "Non e l'IA a sostituire le persone, ma le persone che sanno usarla a diventare piu produttive, veloci e creative di chi non la usa."
+    },
+    {
+      "correct": "c",
+      "explanation": "Le allucinazioni sono pericolose proprio perche sono scritte in modo convincente, sicuro e autorevole, rendendo impossibile distinguerle dalla verita guardando solo il testo."
+    },
+    {
+      "correct": "b",
+      "explanation": "Un modello locale gira interamente sul proprio computer senza inviare dati a server esterni, garantendo la massima privacy possibile."
+    },
+    {
+      "correct": "b",
+      "explanation": "L'IA amplifica tutto: se sapete scrivere bene, vi aiuta a scrivere ancora meglio; se copiate senza capire, otterrete testi apparentemente perfetti ma potenzialmente sbagliati."
+    },
+    {
+      "correct": "c",
+      "explanation": "L'IA richiede un approccio multidisciplinare: matematici per l'algebra, filosofi per l'etica, linguisti per il linguaggio, neuroscienziati per il cervello, e molte altre competenze."
+    }
+  ],
+  "08_agenti_ia": [
+    {
+      "correct": "b",
+      "explanation": "Un chatbot risponde a domande singole; un agente pianifica, usa strumenti, esegue azioni, verifica i risultati e corregge il tiro autonomamente fino a raggiungere l'obiettivo."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il programmatore non scrive piu ogni riga di codice ma guida l'agente, progetta l'architettura e verifica la qualita del risultato, servendo piu competenze di prima."
+    },
+    {
+      "correct": "b",
+      "explanation": "Il ciclo agente e un processo iterativo: l'agente riceve un obiettivo, pianifica i passi, li esegue, verifica i risultati, e se necessario corregge e riprova."
+    },
+    {
+      "correct": "b",
+      "explanation": "MCP e uno standard aperto che permette agli agenti di collegarsi a qualsiasi strumento esterno (database, file, browser, Slack, GitHub) con un formato comune e universale."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il tempo dedicato alla scrittura di codice scende dal 60% al 20%; il tempo risparmiato va in attivita a piu alto valore: pensiero, progettazione, revisione e comunicazione."
+    }
+  ],
+  "09_il_lavoro_che_cambia": [
+    {
+      "correct": "b",
+      "explanation": "Le rivoluzioni precedenti automatizzavano forza fisica (vapore), produzione (elettricita), calcolo (computer) e distribuzione (internet); l'IA e la prima a toccare il pensiero creativo."
+    },
+    {
+      "correct": "c",
+      "explanation": "In 260 anni di rivoluzioni industriali, il tasso di occupazione e sempre aumentato: i lavori si trasformano e ne nascono di nuovi e spesso migliori."
+    },
+    {
+      "correct": "b",
+      "explanation": "Come negli scacchi dove la squadra umano+computer batte sia l'umano che il computer da soli, il \"centauro\" e il professionista che sa usare l'IA come alleato potente."
+    },
+    {
+      "correct": "c",
+      "explanation": "La stenografia e lo schedario sono spariti, ma il ruolo si e trasformato in \"assistente di direzione\" con competenze piu preziose (organizzazione, relazioni, strategia) e stipendio triplicato."
+    },
+    {
+      "correct": "b",
+      "explanation": "L'automation elimina il compito umano; l'augmentation potenzia il lavoratore: l'IA gestisce i compiti ripetitivi, il professionista si concentra su giudizio, creativita e relazioni."
+    }
+  ],
+  "11_physical_ai": [
+    {
+      "correct": "b",
+      "explanation": "Non si possono rompere un milione di bicchieri per insegnare a un robot come afferrarne uno; la simulazione e sicura, veloce e molto meno costosa."
+    },
+    {
+      "correct": "c",
+      "explanation": "Il mondo e progettato per la forma umana (porte, scale, maniglie, strumenti); un robot umanoide puo usare tutto cio che usiamo noi senza riprogettare gli ambienti."
+    },
+    {
+      "correct": "b",
+      "explanation": "Un robot addestrato in simulazione spesso fatica nel mondo reale perche materiali, illuminazione e attrito non sono mai identici alla simulazione."
+    },
+    {
+      "correct": "b",
+      "explanation": "Con un ritardo di 20 minuti per l'andata e altrettanti per il ritorno del segnale, il rover deve saper decidere autonomamente come evitare ostacoli o reagire a situazioni impreviste."
+    },
+    {
+      "correct": "c",
+      "explanation": "I cobot (robot collaborativi) hanno sensori che rilevano la presenza umana e si fermano automaticamente, permettendo la collaborazione diretta senza barriere di sicurezza."
+    }
+  ],
+  "10_verso_agi": [
+    {
+      "correct": "c",
+      "explanation": "ChatGPT e un esempio perfetto di ANI: e bravissimo nel generare testo e rispondere a domande, ma non sa cucinare, guidare un'auto o fare qualsiasi cosa al di fuori del suo dominio."
+    },
+    {
+      "correct": "b",
+      "explanation": "La singolarita e il punto teorico in cui un'IA abbastanza intelligente migliora il proprio codice, creando una versione migliore che si migliora ancora, in una spirale esponenziale."
+    },
+    {
+      "correct": "c",
+      "explanation": "Se l'IA fara il 90% dei compiti cognitivi, resteranno centrali le competenze piu profondamente umane: decidere cosa e giusto, connettersi con gli altri, creare con visione originale e ispirare."
+    },
+    {
+      "correct": "c",
+      "explanation": "Le due visioni di Dario Amodei, pur differendo nel tono (ottimismo vs cautela), concordano che l'IA sara trasformativa e che servono istituzioni forti e distribuzione equa dei benefici."
+    },
+    {
+      "correct": "b",
+      "explanation": "AlphaFold ha risolto in pochi mesi un problema su cui i biologi lavoravano da 50 anni, prevedendo la struttura 3D di quasi tutte le proteine conosciute e vincendo il Premio Nobel per la Chimica 2024."
+    }
+  ],
+  "attention_memory": [
+    {
+      "correct": "c",
+      "explanation": "La matrice di attenzione è n×n. Con n=8.000, la matrice ha 8.000 × 8.000 = 64.000.000 celle. Questa crescita quadratica è il vincolo fondamentale dei Transformer."
+    },
+    {
+      "correct": "c",
+      "explanation": "I pesi del modello (i miliardi di parametri) vengono caricati una volta e restano fissi indipendentemente dalla lunghezza del contesto. Solo il KV Cache e la matrice di attenzione crescono con n."
+    },
+    {
+      "correct": "c",
+      "explanation": "FlashAttention non cambia la complessità algoritmica (resta O(n²) in FLOPs). Il suo contributo è processare la matrice a blocchi nella SRAM velocissima, evitando di materializzarla nella HBM molto più lenta."
+    },
+    {
+      "correct": "b",
+      "explanation": "Il KV Cache cresce linearmente con n (non quadraticamente), ma il coefficiente è enorme: 2 × 80 layer × 64 head × 128 d_head × 2 byte per ogni token. Con 128K token, il totale supera i 160 GB."
+    },
+    {
+      "correct": "c",
+      "explanation": "La Sliding Window limita l'attenzione ai w token precedenti. Questo la rende efficiente (O(n·w) invece di O(n²)) ma inadatta per compiti che richiedono ragionamento su informazioni distanti nel contesto."
+    }
+  ],
+  "transformer_anatomy": [
+    {
+      "correct": "b",
+      "explanation": "d_model = heads × d_head, quindi d_head = d_model / heads = 8192 / 64 = 128. Questo è il valore tipico usato nei modelli moderni come Llama-3."
+    },
+    {
+      "correct": "b",
+      "explanation": "Le multi-head attention imparano relazioni diverse e complementari: una head può specializzarsi in relazioni grammaticali, un'altra in semantiche, un'altra in dipendenze a lunga distanza. Non è ridondanza, è specializzazione parallela."
+    },
+    {
+      "correct": "b",
+      "explanation": "Ogni layer ha il suo blocco di Multi-Head Attention con vettori K e V propri. Il KV Cache è la somma dei K e V di tutti i layer, quindi cresce proporzionalmente al numero di layer."
+    },
+    {
+      "correct": "c",
+      "explanation": "I layer bassi catturano pattern sintattici locali; i layer intermedi catturano semantica; i layer alti catturano ragionamento complesso e relazioni a lunga distanza. È una proprietà emergente del training."
+    },
+    {
+      "correct": "b",
+      "explanation": "Il KV Cache cresce linearmente con il numero di token. 32K è 4× rispetto a 8K, quindi il KV Cache sarà circa 4 × 20 GB = 80 GB."
+    }
+  ],
+  "kv_cache_invalidation": [
+    {
+      "correct": "c",
+      "explanation": "L'invalidazione si propaga sempre verso destra: ogni token dipende causalmente da tutti quelli che lo precedono. Cambiare un token in posizione i invalida tutto da i in poi, ma i token prima di i restano validi."
+    },
+    {
+      "correct": "c",
+      "explanation": "La regola d'oro è mettere le parti più stabili a sinistra e quelle più variabili a destra. Tutto ciò che sta a sinistra del primo token che cambia è potenzialmente cachabile."
+    },
+    {
+      "correct": "b",
+      "explanation": "Se il system prompt contiene dati dinamici (data, timestamp, ID), cambia ad ogni richiesta. Poiché è all'inizio della sequenza, l'invalidazione si propaga a tutto ciò che segue, azzerando il cache hit rate."
+    },
+    {
+      "correct": "c",
+      "explanation": "In RAG, spesso si fanno molte domande sullo stesso documento. Se il documento precede la domanda, rimane come prefisso stabile e viene cachato. Se la domanda precede il documento, il prefisso cambia ad ogni query."
+    },
+    {
+      "correct": "c",
+      "explanation": "I token cachati con Anthropic costano circa il 10% del prezzo normale dei token di input. Su pipeline con system prompt da 10-50K token, il risparmio totale sui costi di input può essere del 60-80%."
+    }
+  ],
+  "attention_matrix_deep": [
+    {
+      "correct": "c",
+      "explanation": "La matrice di attenzione è una struttura temporanea calcolata durante ogni forward pass. Nel KV Cache vengono conservati solo i vettori Key e Value precalcolati, non gli score di attenzione."
+    },
+    {
+      "correct": "b",
+      "explanation": "Con d_head grande, i dot product tendono ad avere magnitudine alta, portando la softmax a produrre distribuzioni quasi binarie con gradienti quasi zero. La divisione per √d_head normalizza la varianza."
+    },
+    {
+      "correct": "d",
+      "explanation": "La matrice è n×n. Con 4K: 4K² = 16M celle. Con 16K: 16K² = 256M celle. 256M / 16M = 16 volte. In generale, se n si moltiplica per k, la matrice si moltiplica per k²."
+    },
+    {
+      "correct": "b",
+      "explanation": "Nel decode si genera un token alla volta: la \"matrice\" è un vettore 1×n, il calcolo è veloce. Ma per calcolarlo bisogna leggere tutti i K e V dall'HBM, e la bandwidth della memoria diventa il fattore limitante (il modello è \"memory-bound\")."
+    },
+    {
+      "correct": "c",
+      "explanation": "FlashAttention non approssima né riduce le operazioni. Il suo contributo chiave è il tiling: processa la matrice a blocchi nella SRAM (~20MB, ~19 TB/s) evitando di materializzarla nella HBM (~80GB, ~2 TB/s). Il risultato è 3-8x più veloce con la stessa correttezza matematica."
+    }
+  ]
+}

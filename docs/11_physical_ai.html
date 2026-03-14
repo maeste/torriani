@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Physical AI — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#11_physical_ai">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 4</div>
+    <h1>Physical AI: Quando l&rsquo;Intelligenza Artificiale Tocca il Mondo Reale</h1>
+<h2>Dai pixel agli atomi: la storia di un&rsquo;IA che impara a muoversi</h2>
+<p>Immagina di passare tutta la vita chiuso in una stanza, senza mai toccare nulla, senza mai camminare, senza mai sentire il peso di un oggetto in mano. Potresti leggere milioni di libri sulla fisica, guardare miliardi di video di persone che giocano a calcio, studiare ogni singola equazione sul moto dei corpi. Ma la prima volta che qualcuno ti lancia una palla, la faresti cadere. Perche sapere come funziona il mondo e <em>vivere</em> nel mondo sono due cose molto diverse.</p>
+<p>Ecco, questa e esattamente la sfida che l&rsquo;intelligenza artificiale sta affrontando in questo momento. Fino a oggi, l&rsquo;IA ha vissuto &ldquo;dentro lo schermo&rdquo;: ha imparato a scrivere testi, generare immagini, programmare software. Tutto digitale, tutto fatto di bit. Ma ora sta succedendo qualcosa di nuovo e affascinante: l&rsquo;IA sta uscendo dal computer per entrare nel mondo fisico. Questa nuova frontiera si chiama <strong>Physical AI</strong>, e sta cambiando tutto.</p>
+<h3>Come fa un robot a capire il mondo?</h3>
+<p>Pensa a quando eri piccolo. Nessuno ti ha dato un manuale di istruzioni sulla gravita. Hai lasciato cadere il cucchiaio dal seggiolone (probabilmente cento volte, con grande gioia dei tuoi genitori) e hai scoperto da solo che le cose cadono verso il basso. Hai lanciato una palla e hai capito che piu forza metti, piu lontano va. Il tuo cervello ha costruito un <strong>modello del mondo</strong> — un insieme di regole su come funzionano le cose — semplicemente interagendo con la realta.</p>
+<p>I ricercatori di IA stanno cercando di fare la stessa cosa con i robot, usando quelli che chiamano <strong>World Models</strong>. Funziona cosi: l&rsquo;IA guarda milioni di video del mondo reale — persone che camminano, oggetti che cadono, auto che si muovono nel traffico — e da questi video impara le &ldquo;regole&rdquo; della fisica: la gravita, le collisioni, l&rsquo;attrito, come si comportano i liquidi. Poi, quando il robot deve fare qualcosa nel mondo reale, prima lo simula nella sua testa virtuale. &ldquo;Se afferro questo bicchiere con questa angolazione e questa forza, cosa succedera?&rdquo; Il robot prova milioni di scenari in simulazione prima di muovere un solo dito nella realta.</p>
+<p>Perche non provare direttamente nel mondo reale? Semplice: non puoi rompere un milione di bicchieri per insegnare a un robot come afferrarne uno. La simulazione e sicura, veloce e costa molto meno di un magazzino pieno di vetri rotti.</p>
+<p>Aziende come NVIDIA (con il progetto Cosmos), Google DeepMind (con GENIE, che genera mondi 3D interattivi partendo da video) e Tesla (per la guida autonoma) stanno investendo enormemente in questa tecnologia.</p>
+<h3>I robot di oggi: non e fantascienza</h3>
+<p>Se pensi che i robot intelligenti siano roba da film, preparati a ricrederti. Esistono gia, e alcuni stanno gia lavorando.</p>
+<p><strong>Figure 02</strong>, prodotto da Figure AI, e un robot umanoide che lavora davvero nelle fabbriche BMW. Non e un prototipo in un laboratorio: cammina tra le linee di produzione, manipola oggetti e segue istruzioni vocali. Ha un modello linguistico integrato (simile a quelli che abbiamo studiato) che gli permette di capire cosa vede con le telecamere e cosa gli viene chiesto a voce. E il primo robot a combinare visione, linguaggio e manipolazione in un ambiente industriale reale.</p>
+<p><strong>Atlas</strong>, di Boston Dynamics, e probabilmente il robot piu agile del pianeta. Fa parkour, salti mortali, si arrampica e mantiene l&rsquo;equilibrio in situazioni che metterebbero in difficolta molti di noi. La versione nuova e completamente elettrica, il che lo rende piu silenzioso, efficiente e adatto a lavorare vicino alle persone.</p>
+<p><strong>Optimus</strong> e il robot umanoide di Tesla. L&rsquo;idea di Elon Musk e ambiziosa: produrre milioni di robot come si producono le auto, portando il prezzo sotto i 20.000 dollari. Se ci riesce, potremmo avere robot domestici accessibili come un&rsquo;utilitaria.</p>
+<p><strong>Digit</strong>, di Agility Robotics, e gia in fase di test nei magazzini Amazon. E un bipede progettato per la logistica: solleva scatole, naviga tra gli scaffali, e funziona in spazi costruiti per gli esseri umani senza bisogno di modificare nulla.</p>
+<p>Infine, <strong>1X NEO</strong> e un robot pensato per le nostre case, con movimenti fluidi e un design rassicurante — investito anche da OpenAI, punta a essere il primo robot domestico che non mette a disagio le persone.</p>
+<h3>Dove lavora gia la Physical AI</h3>
+<p>L&rsquo;IA fisica non e solo robot umanoidi. E gia presente in molti settori, spesso senza che ce ne accorgiamo.</p>
+<p>Nella <strong>manifattura</strong>, i robot collaborativi (chiamati &ldquo;cobot&rdquo;) lavorano fianco a fianco con gli operai umani. Non stanno piu chiusi in gabbie di sicurezza: sono abbastanza intelligenti da fermarsi se una persona si avvicina troppo. Nel mondo ce ne sono gia oltre 500.000 installati.</p>
+<p>Nella <strong>logistica</strong>, i magazzini Amazon impiegano circa 750.000 robot che spostano merci, organizzano scaffali e preparano pacchi. Il prossimo pacco che riceverai a casa potrebbe essere stato gestito interamente da macchine.</p>
+<p>In <strong>medicina</strong>, il robot chirurgico Da Vinci ha gia eseguito oltre 10 milioni di interventi con una precisione sub-millimetrica, guidato dalle mani esperte di un chirurgo. Esistono protesi intelligenti che imparano i movimenti del paziente e esoscheletri che aiutano nella riabilitazione.</p>
+<p>In <strong>agricoltura</strong>, droni con visione artificiale monitorano lo stato delle colture dall&rsquo;alto, robot specializzati raccolgono frutta delicata riconoscendo il grado di maturazione, e trattori autonomi arano i campi 24 ore su 24, anche di notte.</p>
+<p>Nello <strong>spazio</strong>, i rover su Marte sono dotati di IA autonoma per una ragione molto pratica: un segnale dalla Terra a Marte impiega circa 20 minuti. Se un rover vede un ostacolo, non puo aspettare 40 minuti per ricevere istruzioni. Deve decidere da solo.</p>
+<p>E nel settore <strong>domestico</strong>, siamo passati dai semplici aspirapolvere robot agli assistenti umanoidi che, entro il 2030, potrebbero aiutarci a cucinare, pulire e assistere le persone anziane.</p>
+<h3>Il futuro esce dallo schermo</h3>
+<p>L&rsquo;IA sta compiendo un salto storico: dal mondo dei dati al mondo degli atomi. I robot del futuro non saranno come quelli dei film di fantascienza — non saranno minacciosi o onnipotenti. Saranno collaboratori silenziosi che ci aiuteranno a fare cose che oggi sono impossibili, pericolose o semplicemente noiose. E voi, che crescete in questo momento, sarete la generazione che decidera come usarli.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>Physical AI</strong> significa intelligenza artificiale che agisce nel mondo fisico — robot, veicoli autonomi, droni, dispositivi medici — non solo nel mondo digitale di testi e immagini.</li>
+<li>I <strong>World Models</strong> permettono ai robot di imparare le regole della fisica (gravita, collisioni, attrito) guardando milioni di video, e poi simulare le azioni virtualmente prima di eseguirle nella realta.</li>
+<li>I robot umanoidi come Figure 02, Atlas, Optimus, Digit e 1X NEO non sono fantascienza: esistono oggi e alcuni lavorano gia in fabbriche e magazzini reali.</li>
+<li>La Physical AI e gia applicata in molti settori: manifattura, logistica, medicina, agricoltura, esplorazione spaziale e ambito domestico.</li>
+<li>I robot umanoidi hanno un vantaggio strategico: il mondo e progettato per gli esseri umani (porte, scale, maniglie), quindi un robot con forma umana puo usare tutto cio che usiamo noi senza modificare l&rsquo;ambiente.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Guarda un video di Figure 02 o Atlas in azione</strong> — Cerca su YouTube &ldquo;Figure 02 BMW factory&rdquo; o &ldquo;Boston Dynamics Atlas electric&rdquo; per vedere con i tuoi occhi cosa sanno fare questi robot oggi. Confronta le tue aspettative da film con la realta.</p>
+</li>
+<li>
+<p><strong>Prova a pensare come un World Model</strong> — Scegli un&rsquo;azione quotidiana semplice (versare l&rsquo;acqua in un bicchiere, prendere un uovo dal frigorifero) e prova a elencare tutte le &ldquo;regole fisiche&rdquo; che il tuo cervello applica senza che tu ci pensi. Ti rendera conto di quanta intelligenza serve per gesti che consideriamo banali.</p>
+</li>
+<li>
+<p><strong>Esplora un simulatore di robotica</strong> — Piattaforme gratuite come NVIDIA Isaac Sim o il progetto open-source MuJoCo permettono di vedere come funzionano le simulazioni robotiche. Anche solo guardare i tutorial ti dara un&rsquo;idea concreta di cosa significa &ldquo;sim-to-real transfer&rdquo;.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>I robot ci ruberanno il lavoro?</strong>
+Come in ogni rivoluzione tecnologica, i robot trasformeranno il lavoro piu che eliminarlo. Un robot in fabbrica fa i compiti pericolosi e ripetitivi, mentre l&rsquo;operaio diventa supervisore, programmatore o manutentore — spesso con uno stipendio piu alto e un rischio molto piu basso. Nasceranno anche professioni completamente nuove legate alla robotica.</p>
+<p><strong>Quanto costa un robot umanoide?</strong>
+Dipende molto dal modello. Figure 02 non e ancora in vendita al pubblico, ma si stima un costo di 50.000-100.000 dollari. Tesla punta a portare Optimus sotto i 20.000 dollari. Per fare un confronto: un lavoratore umano costa all&rsquo;azienda 40.000-60.000 euro all&rsquo;anno. Quando il robot costa meno di un anno di stipendio, l&rsquo;adozione accelera rapidamente.</p>
+<p><strong>Perche costruire robot umanoidi e non robot specializzati?</strong>
+Le due cose non si escludono: i bracci robotici industriali sono piu efficienti nel loro compito specifico. Ma il mondo intorno a noi e progettato per la forma umana — porte, scale, maniglie, strumenti, sedie. Un robot umanoide puo usare tutto cio che usiamo noi senza dover riprogettare gli ambienti. Un robot specializzato e il migliore nel suo ambito, ma non puo fare nient&rsquo;altro.</p>
+<p><strong>Cosa sono i &ldquo;cobot&rdquo;?</strong>
+I cobot (robot collaborativi) sono robot progettati per lavorare fianco a fianco con le persone, non in aree recintate. Hanno sensori che rilevano la presenza umana e si fermano automaticamente se qualcuno si avvicina troppo. Sono piu lenti e meno potenti dei robot industriali tradizionali, ma molto piu sicuri e flessibili.</p>
+<p><strong>Cosa succede quando la simulazione non corrisponde alla realta?</strong>
+Questo e il famoso problema del &ldquo;sim-to-real gap&rdquo;, la sfida piu grande della robotica moderna. Un robot addestrato solo in simulazione spesso fallisce nel mondo reale perche i materiali, l&rsquo;illuminazione e l&rsquo;attrito non sono mai identici. Per affrontare questo problema si usa la &ldquo;domain randomization&rdquo;: si variano casualmente i parametri della simulazione (colori, peso degli oggetti, attrito) cosi il robot impara a gestire l&rsquo;imprevisto.</p>
+<p><strong>Le leggi di Asimov valgono per i robot di oggi?</strong>
+Le tre leggi della robotica inventate da Isaac Asimov nel 1942 (non nuocere agli umani, obbedire agli ordini, proteggere se stesso) sono un&rsquo;ottima base filosofica, ma nella pratica non funzionano come regole rigide. Come si definisce &ldquo;nuocere&rdquo;? Un robot chirurgico taglia il paziente per operarlo: sta facendo del bene o del male? La sicurezza nei robot autonomi reali e un problema aperto che viene affrontato con sistemi probabilistici e livelli multipli di protezione.</p>
+<p><strong>Che differenza c&rsquo;e tra un&rsquo;IA &ldquo;con corpo&rdquo; e un&rsquo;IA &ldquo;senza corpo&rdquo;?</strong>
+Un&rsquo;IA senza corpo (come ChatGPT) capisce il mondo leggendo testi e guardando immagini. Un&rsquo;IA con corpo (un robot) capisce il mondo interagendo fisicamente con esso. La teoria dell&rsquo;embodied cognition sostiene che l&rsquo;intelligenza vera emerge proprio dall&rsquo;interazione con l&rsquo;ambiente. Un robot che ha manipolato oggetti &ldquo;capisce&rdquo; la fisica in modo diverso e piu profondo rispetto a un modello linguistico che l&rsquo;ha solo letta nei libri.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Perche i robot usano i World Models invece di imparare direttamente nel mondo reale?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche i World Models sono piu precisi della realta</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche provare milioni di tentativi nel mondo reale sarebbe troppo costoso, lento e distruttivo</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perche i robot non hanno sensori per percepire il mondo reale</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche la realta e troppo semplice per addestrare un robot</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Qual e il vantaggio principale di un robot umanoide rispetto a un robot specializzato?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">E sempre piu veloce ed efficiente in ogni compito</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Costa meno da produrre</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Puo operare in ambienti progettati per gli esseri umani senza doverli modificare</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Non ha bisogno di intelligenza artificiale per funzionare</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Cosa si intende per &quot;sim-to-real gap&quot;?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">La differenza di prezzo tra un robot simulato e uno reale</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Il divario tra le prestazioni di un robot in simulazione e le sue prestazioni nel mondo reale</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Il tempo necessario per costruire un robot dopo averlo progettato al computer</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">La distanza fisica tra il centro di simulazione e la fabbrica</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Perche i rover su Marte hanno bisogno di IA autonoma?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche su Marte non c'e connessione internet</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche i segnali radio tra Terra e Marte impiegano circa 20 minuti, rendendo impossibile il controllo in tempo reale</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perche la NASA non ha abbastanza operatori per controllarli</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche i rover sono troppo vecchi per ricevere aggiornamenti software</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Cosa fanno i &quot;cobot&quot; di diverso rispetto ai robot industriali tradizionali?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Sono completamente autonomi e non richiedono supervisione umana</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Lavorano solo di notte quando non ci sono persone in fabbrica</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Sono progettati per lavorare in sicurezza fianco a fianco con le persone, fermandosi se qualcuno si avvicina troppo</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Sono piu potenti e veloci dei robot industriali tradizionali</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Non si possono rompere un milione di bicchieri per insegnare a un robot come afferrarne uno; la simulazione e sicura, veloce e molto meno costosa."}, "2": {"correct": "c", "explanation": "Il mondo e progettato per la forma umana (porte, scale, maniglie, strumenti); un robot umanoide puo usare tutto cio che usiamo noi senza riprogettare gli ambienti."}, "3": {"correct": "b", "explanation": "Un robot addestrato in simulazione spesso fatica nel mondo reale perche materiali, illuminazione e attrito non sono mai identici alla simulazione."}, "4": {"correct": "b", "explanation": "Con un ritardo di 20 minuti per l'andata e altrettanti per il ritorno del segnale, il rover deve saper decidere autonomamente come evitare ostacoli o reagire a situazioni impreviste."}, "5": {"correct": "c", "explanation": "I cobot (robot collaborativi) hanno sensori che rilevano la presenza umana e si fermano automaticamente, permettendo la collaborazione diretta senza barriere di sicurezza."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

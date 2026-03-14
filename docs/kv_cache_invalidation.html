@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KV Cache — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#kv_cache_invalidation">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Deep Dive</div>
+    <h1>Invalidazione della KV Cache: Come la Struttura del Prompt Influenza i Costi</h1>
+<h2>Perché l&rsquo;ordine delle parole conta per il portafoglio</h2>
+<p>Ogni volta che invii un messaggio a un LLM, il modello deve elaborare l&rsquo;intero input — il system prompt, la cronologia della conversazione, il contesto, la tua domanda — prima di generare una risposta. Questa elaborazione è costosa: richiede tempo e memoria GPU. Ma c&rsquo;è un trucco fondamentale per risparmiare: la <strong>KV Cache</strong>, che permette di riutilizzare calcoli già fatti nelle richieste precedenti.</p>
+<p>Il problema è che la KV Cache è estremamente fragile. Se cambi anche un solo token nell&rsquo;input, tutto ciò che viene dopo quel token deve essere ricalcolato da zero. Capire questa meccanica è essenziale per chiunque progetti pipeline LLM, agenti, o architetture RAG.</p>
+<h3>Due fasi: Prefill e Decode</h3>
+<p>L&rsquo;inferenza di un LLM si divide in due fasi distinte:</p>
+<p><strong>Prefill</strong>: l&rsquo;intero input viene elaborato in parallelo. Il modello calcola, per ogni token, i vettori Key (K) e Value (V) in ogni layer, e li salva nella KV Cache. Questa fase ha complessità O(n²) — è costosa, ma viene fatta una sola volta.</p>
+<p><strong>Decode</strong>: il modello genera un token alla volta. Per ogni nuovo token, usa i vettori K e V già calcolati nella cache, senza doverli ricalcolare. Ogni step di generazione ha complessità O(n), ma viene ripetuto per ogni token generato.</p>
+<p>La KV Cache è ciò che rende il decode efficiente: senza di essa, il modello dovrebbe rielaborare l&rsquo;intero contesto ad ogni singolo token generato.</p>
+<h3>Come funziona l&rsquo;invalidazione</h3>
+<p>La KV Cache funziona solo se la sequenza di input è <strong>identica</strong> al prefisso già in cache. Se un token cambia — anche uno solo, anche nel mezzo della sequenza — tutti i vettori K e V successivi diventano matematicamente non più validi e devono essere ricalcolati.</p>
+<p>L&rsquo;analogia più efficace è quella del libro copiato a mano. Se qualcuno cambia una parola a pagina 5, devi rileggere e riscrivere tutto da pagina 5 in poi — anche se il testo delle pagine successive è identico. Il senso delle frasi precedenti influenza come si comprendono e si elaborano quelle successive.</p>
+<p>L&rsquo;invalidazione si propaga <strong>sempre verso destra, mai verso sinistra</strong>. Ogni token dipende causalmente da tutti quelli che lo precedono, tramite la causal mask dell&rsquo;attention. Cambia un token in posizione i → invalidi tutto da i in poi, non importa quanto identico sia il testo successivo.</p>
+<h3>Scenari pratici: dove si spreca e dove si risparmia</h3>
+<p><strong>Scenario 1 — Prefix Cache Hit (hit rate ~80%)</strong>
+La conversazione continua normalmente: system prompt fisso, cronologia, nuova domanda. Il prefisso fino alla nuova domanda è già in cache → il modello ricalcola solo la nuova domanda. Questo è il caso &ldquo;felice&rdquo;, il massimo risparmio.</p>
+<p><strong>Scenario 2 — Modifica nel system prompt (hit rate ~28%)</strong>
+Si cambia un token nel system prompt. Tutto ciò che segue va ricalcolato, anche se identico al turno precedente. Questo scenario è più comune di quanto si pensi: qualsiasi system prompt che contiene variabili dinamiche (timestamp, ID utente, data corrente) invalida l&rsquo;intera cache ad ogni richiesta.</p>
+<blockquote>
+<p>Se metti <code>Oggi è {date}</code> nel system prompt, ogni giorno il KV Cache parte da zero. Su un&rsquo;API con 100.000 richieste al giorno, il costo aggiuntivo può essere significativo.</p>
+</blockquote>
+<p><strong>Scenario 3 — System prompt stabile (hit rate ~50%)</strong>
+Il system prompt non cambia mai → rimane in cache come prefisso. Solo la nuova domanda viene ricalcolata. Questa è la base del <strong>Prompt Caching</strong> di Anthropic e del prefix caching di vLLM.</p>
+<p><strong>Scenario 4 — RAG con documento prima della domanda (hit rate ~66%)</strong>
+Se usi lo stesso documento di contesto per più domande diverse, mettere il documento <em>prima</em> della domanda permette di cacharlo. La domanda cambia, il documento no → risparmio massiccio nelle pipeline RAG.</p>
+<h3>La regola d&rsquo;oro: ordine di stabilità</h3>
+<p>L&rsquo;ordine ottimale di un prompt è:</p>
+<pre><code>[System Prompt fisso] → [Documento/Contesto] → [Chat History] → [Nuovo Turno]
+←──── più stabile ─────────────────────────────── più variabile ────→
+</code></pre>
+<p>Metti le parti più stabili a sinistra e quelle più variabili a destra. Tutto ciò che sta a sinistra del primo token che cambia è potenzialmente cachabile.</p>
+<p><strong>Pattern da seguire</strong>:
+- System prompt fisso in cima — base di tutto, non inserire mai dati dinamici
+- RAG: documento prima della domanda — se il documento è lo stesso per più query, si cacha gratis
+- Few-shot examples stabili — esempi identici ad ogni chiamata si cachano come parte del prefix</p>
+<p><strong>Pattern da evitare</strong>:
+- System prompt con timestamp o data — invalida tutto ad ogni richiesta
+- Documento dopo la domanda in RAG — il prefisso cambia ad ogni query, il documento non si cacha mai</p>
+<h3>Prompt Caching nelle API</h3>
+<p>Anthropic ha reso esplicito il prompt caching nella sua API. Si aggiunge <code>cache_control: ephemeral</code> sui blocchi che si vogliono cachare. I token cachati costano circa il 10% del costo normale in input. Su pipeline con system prompt da 10-50K token, il risparmio può essere del 60-80% sui costi totali di input.</p>
+<p>Anche altri sistemi implementano il prefix caching in modo automatico: vLLM, per esempio, cacha automaticamente i prefissi identici tra richieste diverse senza bisogno di annotazioni esplicite.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>La KV Cache è fragile</strong>: basta cambiare un solo token per invalidare tutti i calcoli successivi. L&rsquo;invalidazione si propaga sempre verso destra, mai verso sinistra.</li>
+<li><strong>L&rsquo;ordine del prompt conta economicamente</strong>: mettere le parti stabili all&rsquo;inizio e quelle variabili alla fine massimizza il riutilizzo della cache e riduce i costi.</li>
+<li><strong>Non mettere dati dinamici nel system prompt</strong>: timestamp, date, ID utente nel system prompt invalidano l&rsquo;intera cache ad ogni richiesta.</li>
+<li><strong>In RAG, il documento va prima della domanda</strong>: se il documento non cambia tra una query e l&rsquo;altra, mettendolo prima della domanda si cacha automaticamente.</li>
+<li><strong>Il Prompt Caching può ridurre i costi del 60-80%</strong>: le API moderne permettono di cachare esplicitamente i blocchi stabili, con costi fino al 90% inferiori per i token cachati.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Analizza i tuoi prompt</strong>: prendi un prompt che usi regolarmente con un LLM e identifica quali parti cambiano tra una richiesta e l&rsquo;altra. Riordinalo mettendo le parti stabili all&rsquo;inizio. Se hai variabili dinamiche nel system prompt, spostale alla fine.</p>
+</li>
+<li>
+<p><strong>Calcola il risparmio potenziale</strong>: se usi API LLM (OpenAI, Anthropic), calcola quanto spendi in token di input al mese. Poi stima quanto potresti risparmiare con il prompt caching, considerando che i token cachati costano circa il 10% del prezzo normale.</p>
+</li>
+<li>
+<p><strong>Sperimenta con il Prompt Caching di Anthropic</strong>: se hai accesso all&rsquo;API, prova ad aggiungere <code>cache_control: ephemeral</code> al tuo system prompt e confronta i costi prima e dopo su un batch di richieste identiche.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Il KV Cache è condiviso tra richieste diverse di utenti diversi?</strong>
+Dipende dall&rsquo;implementazione. Nel Prompt Caching di Anthropic e in server come vLLM con prefix caching, il cache del system prompt può essere condiviso tra utenti che usano lo stesso prompt. I messaggi utente restano sempre privati.</p>
+<p><strong>Quanto dura il KV Cache in memoria?</strong>
+Nell&rsquo;API di Anthropic, i blocchi con <code>cache_control: ephemeral</code> durano circa 5 minuti dall&rsquo;ultimo utilizzo. Altri sistemi hanno policy diverse. In Ollama o LM Studio, la cache dura per tutta la sessione attiva.</p>
+<p><strong>In sviluppo locale (Ollama, LM Studio) funziona lo stesso?</strong>
+Sì, tutti i server di inferenza basati su llama.cpp o vLLM implementano il prefix caching. L&rsquo;ottimizzazione sull&rsquo;ordine del prompt è valida sempre, indipendentemente dall&rsquo;infrastruttura.</p>
+<p><strong>Perché non si può cachare il testo dopo il punto di modifica, anche se è identico?</strong>
+Perché nel Transformer ogni token dipende causalmente da tutti quelli che lo precedono. Anche se il testo successivo è identico lettera per lettera, il suo significato contestuale — e quindi i vettori K e V — cambia se qualcosa prima di esso è stato modificato.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Cosa succede quando un singolo token nel mezzo di un prompt viene modificato?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Solo quel token viene ricalcolato</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Tutti i token del prompt vengono ricalcolati</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Tutti i token da quel punto in poi vengono ricalcolati, quelli prima restano in cache</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">La cache viene completamente svuotata e il modello riparte da zero</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Qual è l'ordine ottimale dei componenti in un prompt per massimizzare il cache hit?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Domanda → System prompt → Documento → Cronologia</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Cronologia → Domanda → System prompt → Documento</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">System prompt fisso → Documento/Contesto → Cronologia → Nuovo turno</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">L'ordine non influenza la cache</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Perché mettere `Oggi è {data}` nel system prompt è problematico per la cache?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perché le date occupano troppa memoria</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perché il system prompt cambia ogni giorno, invalidando tutta la cache ad ogni richiesta</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perché i LLM non capiscono le date</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perché le date non possono essere tokenizzate</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. In una pipeline RAG, perché è meglio mettere il documento prima della domanda?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perché i LLM leggono da sinistra a destra e capiscono meglio il contesto</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perché il documento è più lungo e deve essere elaborato per primo</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Perché se il documento non cambia tra query diverse, mettendolo prima della domanda si cacha come parte del prefisso stabile</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perché le API richiedono questo ordine specifico</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Il Prompt Caching di Anthropic riduce i costi dei token cachati di circa:</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">10% rispetto al prezzo normale</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">50% rispetto al prezzo normale</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">90% rispetto al prezzo normale (i token cachati costano ~10% del prezzo normale)</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">100% — i token cachati sono gratuiti</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "c", "explanation": "L'invalidazione si propaga sempre verso destra: ogni token dipende causalmente da tutti quelli che lo precedono. Cambiare un token in posizione i invalida tutto da i in poi, ma i token prima di i restano validi."}, "2": {"correct": "c", "explanation": "La regola d'oro è mettere le parti più stabili a sinistra e quelle più variabili a destra. Tutto ciò che sta a sinistra del primo token che cambia è potenzialmente cachabile."}, "3": {"correct": "b", "explanation": "Se il system prompt contiene dati dinamici (data, timestamp, ID), cambia ad ogni richiesta. Poiché è all'inizio della sequenza, l'invalidazione si propaga a tutto ciò che segue, azzerando il cache hit rate."}, "4": {"correct": "c", "explanation": "In RAG, spesso si fanno molte domande sullo stesso documento. Se il documento precede la domanda, rimane come prefisso stabile e viene cachato. Se la domanda precede il documento, il prefisso cambia ad ogni query."}, "5": {"correct": "c", "explanation": "I token cachati con Anthropic costano circa il 10% del prezzo normale dei token di input. Su pipeline con system prompt da 10-50K token, il risparmio totale sui costi di input può essere del 60-80%."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

@@ -1,374 +1,105 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LLM per le Scuole Superiori — Slide Interattive</title>
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/prop-types@15/prop-types.min.js" crossorigin></script>
-  <script src="https://unpkg.com/recharts@2.15.3/umd/Recharts.js" crossorigin></script>
-  <script src="https://unpkg.com/@babel/standalone@7.26.10/babel.min.js"></script>
-  <script>
-    // Expose everything as globals immediately after libs load
-    window.useState = React.useState;
-    window.useMemo = React.useMemo;
-    window.useCallback = React.useCallback;
-    window.useRef = React.useRef;
-    window.useEffect = React.useEffect;
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #060912; color: #e2e8f0; font-family: 'IBM Plex Sans', -apple-system, sans-serif; }
-    #nav {
-      position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
-      background: #0a0e1a; border-right: 1px solid #1e2d4a;
-      overflow-y: auto; z-index: 100; padding: 20px 0;
-      transition: transform 0.3s ease;
+    body {
+      background: #060912; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 40px 24px;
     }
-    #nav.collapsed { transform: translateX(-280px); }
-    #nav h2 {
-      color: #00d4ff; font-size: 13px; letter-spacing: 2px;
-      text-transform: uppercase; padding: 0 20px; margin-bottom: 16px;
+    .hero {
+      text-align: center; max-width: 700px; margin-bottom: 48px;
+    }
+    .hero-icon { font-size: 64px; margin-bottom: 16px; }
+    .hero h1 {
+      color: #00d4ff; font-size: 2.4rem; font-weight: 700;
+      margin-bottom: 12px; line-height: 1.2;
+    }
+    .hero p {
+      color: #94a3b8; font-size: 1.1rem; line-height: 1.6;
+      max-width: 560px; margin: 0 auto;
+    }
+    .cards {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 24px; max-width: 700px; width: 100%;
+    }
+    .card {
+      background: #0a0e1a; border: 1px solid #1e2d4a;
+      border-radius: 16px; padding: 32px; text-decoration: none;
+      transition: all 0.3s ease; display: flex;
+      flex-direction: column; align-items: center; text-align: center;
+    }
+    .card:hover {
+      border-color: #00d4ff; transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+    }
+    .card-icon { font-size: 48px; margin-bottom: 16px; }
+    .card h2 {
+      color: #e2e8f0; font-size: 1.3rem; font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: #64748b; font-size: 0.95rem; line-height: 1.5;
+    }
+    .card-badge {
+      display: inline-block; margin-top: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px; color: #00d4ff;
+      background: #0f1729; border: 1px solid #1e2d4a;
+      padding: 4px 12px; border-radius: 20px;
+    }
+    footer {
+      margin-top: 64px; text-align: center;
+      color: #475569; font-size: 13px;
       font-family: 'JetBrains Mono', monospace;
     }
-    #nav .section-label {
-      color: #64748b; font-size: 11px; letter-spacing: 1.5px;
-      text-transform: uppercase; padding: 16px 20px 6px;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .nav-item {
-      display: block; width: 100%; text-align: left; background: none;
-      border: none; color: #e2e8f0; padding: 10px 20px; cursor: pointer;
-      font-size: 14px; transition: all 0.2s; border-left: 3px solid transparent;
-    }
-    .nav-item:hover { background: #0f1729; border-left-color: #00d4ff44; }
-    .nav-item.active { background: #0f1729; border-left-color: #00d4ff; color: #00d4ff; }
-    .nav-item .slide-num {
-      color: #64748b; font-family: 'JetBrains Mono', monospace;
-      font-size: 11px; margin-right: 8px;
-    }
-    #nav-toggle {
-      position: fixed; top: 12px; left: 12px; z-index: 200;
-      background: #0f1729; border: 1px solid #1e2d4a; color: #00d4ff;
-      width: 40px; height: 40px; border-radius: 8px; cursor: pointer;
-      font-size: 20px; display: flex; align-items: center; justify-content: center;
-      transition: left 0.3s ease;
-    }
-    #nav-toggle.shifted { left: 292px; }
-    #content {
-      margin-left: 280px; min-height: 100vh;
-      transition: margin-left 0.3s ease;
-    }
-    #content.expanded { margin-left: 0; }
-    #status {
-      display: none; align-items: center; justify-content: center;
-      height: 100vh; color: #64748b; font-size: 16px;
-      flex-direction: column; gap: 12px;
-    }
-    .spinner {
-      width: 24px; height: 24px; border: 3px solid #1e2d4a;
-      border-top-color: #00d4ff; border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .error-box {
-      background: #1a0a0a; border: 1px solid #ff6b3544;
-      border-radius: 12px; padding: 24px; margin: 40px auto;
-      max-width: 600px; text-align: center;
-    }
-    .error-box h3 { color: #ff6b35; margin-bottom: 8px; }
-    .error-box p { color: #64748b; font-size: 14px; margin-top: 8px; }
-    .error-box code { color: #00d4ff; }
-    #keyboard-hint {
-      position: fixed; bottom: 16px; right: 16px; z-index: 200;
-      background: #0f1729; border: 1px solid #1e2d4a; border-radius: 8px;
-      padding: 8px 14px; font-size: 12px; color: #64748b;
-      font-family: 'JetBrains Mono', monospace;
-    }
-    #keyboard-hint kbd {
-      background: #1e2d4a; border-radius: 3px; padding: 2px 6px;
-      color: #e2e8f0; margin: 0 2px;
+    footer a { color: #64748b; text-decoration: none; }
+    footer a:hover { color: #00d4ff; }
+    @media (max-width: 600px) {
+      .cards { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.8rem; }
+      body { padding: 32px 16px; }
     }
   </style>
 </head>
 <body>
 
-<button id="nav-toggle" class="shifted" onclick="toggleNav()">☰</button>
-
-<nav id="nav">
-  <h2>🤖 LLM per le Scuole</h2>
-  <div class="section-label">Sessione 1 — Come Funziona l'IA</div>
-  <button class="nav-item active" data-slide="00_la_quinta_rivoluzione">
-    <span class="slide-num">01</span> La Quinta Rivoluzione
-  </button>
-  <button class="nav-item" data-slide="01_dalle_parole_ai_numeri">
-    <span class="slide-num">02</span> Dalle parole ai numeri
-  </button>
-  <button class="nav-item" data-slide="02_come_impara_una_macchina">
-    <span class="slide-num">03</span> Come impara una macchina
-  </button>
-  <button class="nav-item" data-slide="03_attenzione">
-    <span class="slide-num">04</span> L'attenzione
-  </button>
-  <button class="nav-item" data-slide="scaling_laws">
-    <span class="slide-num">05</span> Il paper che ha cambiato tutto
-  </button>
-  <button class="nav-item" data-slide="reinforcement_learning">
-    <span class="slide-num">06</span> Imparare giocando
-  </button>
-  <button class="nav-item" data-slide="04_limiti">
-    <span class="slide-num">07</span> I limiti
-  </button>
-  <div class="section-label">Sessione 2 — L'IA Oltre il Testo</div>
-  <button class="nav-item" data-slide="generazione_immagini">
-    <span class="slide-num">08</span> Creare con l'IA: Immagini
-  </button>
-  <button class="nav-item" data-slide="generazione_video">
-    <span class="slide-num">09</span> Creare con l'IA: Video
-  </button>
-  <button class="nav-item" data-slide="reasoning_models">
-    <span class="slide-num">10</span> Quando l'IA ragiona
-  </button>
-  <button class="nav-item" data-slide="modelli_architetture">
-    <span class="slide-num">11</span> Sotto il cofano
-  </button>
-  <div class="section-label">Sessione 3 — Usare l'IA</div>
-  <button class="nav-item" data-slide="05_arte_del_prompt">
-    <span class="slide-num">12</span> L'arte del prompt
-  </button>
-  <button class="nav-item" data-slide="06_ia_per_ogni_futuro">
-    <span class="slide-num">13</span> L'IA per ogni futuro
-  </button>
-  <button class="nav-item" data-slide="strumenti_studenti">
-    <span class="slide-num">14</span> La cassetta degli attrezzi
-  </button>
-  <button class="nav-item" data-slide="07_il_vostro_ruolo">
-    <span class="slide-num">15</span> Il vostro ruolo
-  </button>
-  <div class="section-label">Sessione 4 — Il Futuro</div>
-  <button class="nav-item" data-slide="08_agenti_ia">
-    <span class="slide-num">16</span> Gli agenti IA
-  </button>
-  <button class="nav-item" data-slide="09_il_lavoro_che_cambia">
-    <span class="slide-num">17</span> Il lavoro che cambia
-  </button>
-  <button class="nav-item" data-slide="11_physical_ai">
-    <span class="slide-num">18</span> Physical AI
-  </button>
-  <button class="nav-item" data-slide="10_verso_agi">
-    <span class="slide-num">19</span> Verso l'AGI
-  </button>
-  <div class="section-label">Deep Dive</div>
-  <button class="nav-item" data-slide="attention_memory">
-    <span class="slide-num">DD</span> Memoria &amp; Contesto
-  </button>
-  <button class="nav-item" data-slide="transformer_anatomy">
-    <span class="slide-num">DD</span> Anatomia Transformer
-  </button>
-  <button class="nav-item" data-slide="kv_cache_invalidation">
-    <span class="slide-num">DD</span> KV Cache
-  </button>
-  <button class="nav-item" data-slide="attention_matrix_deep">
-    <span class="slide-num">DD</span> Attention Matrix Deep
-  </button>
-</nav>
-
-<div id="content">
-  <div id="status">
-    <div class="spinner"></div>
-    <span id="status-text">Caricamento...</span>
+  <div class="hero">
+    <div class="hero-icon">🤖</div>
+    <h1>LLM per le Scuole Superiori</h1>
+    <p>Un'introduzione interattiva all'Intelligenza Artificiale e ai Large Language Model, pensata per gli studenti delle scuole superiori italiane.</p>
   </div>
-  <div id="root"></div>
-</div>
 
-<div id="keyboard-hint">
-  <kbd>←</kbd> <kbd>→</kbd> cambia slide &nbsp; <kbd>M</kbd> menu
-</div>
+  <div class="cards">
+    <a class="card" href="slides.html">
+      <div class="card-icon">🎯</div>
+      <h2>Slide Interattive</h2>
+      <p>19 slide + 4 deep dive con visualizzazioni interattive, grafici e animazioni per esplorare il mondo dei LLM.</p>
+      <span class="card-badge">23 slide</span>
+    </a>
+    <a class="card" href="docs/index.html">
+      <div class="card-icon">📚</div>
+      <h2>Documenti per lo Studio</h2>
+      <p>Materiali di approfondimento per ogni argomento: spiegazioni, takeaway, esercizi e quiz per verificare la comprensione.</p>
+      <span class="card-badge">24 documenti</span>
+    </a>
+  </div>
 
-<script>
-(function() {
-  // Expose all Recharts components as globals
-  if (window.Recharts) {
-    var keys = Object.keys(Recharts);
-    for (var i = 0; i < keys.length; i++) {
-      window[keys[i]] = Recharts[keys[i]];
-    }
-  }
-
-  var SLIDES = [
-    '00_la_quinta_rivoluzione', '01_dalle_parole_ai_numeri',
-    '02_come_impara_una_macchina', '03_attenzione',
-    'scaling_laws', 'reinforcement_learning', '04_limiti',
-    'generazione_immagini', 'generazione_video',
-    'reasoning_models', 'modelli_architetture',
-    '05_arte_del_prompt', '06_ia_per_ogni_futuro',
-    'strumenti_studenti', '07_il_vostro_ruolo',
-    '08_agenti_ia', '09_il_lavoro_che_cambia',
-    '11_physical_ai', '10_verso_agi',
-    'attention_memory', 'transformer_anatomy', 'kv_cache_invalidation',
-    'attention_matrix_deep'
-  ];
-
-  var currentSlideIndex = 0;
-  var sourceCache = {};
-  var transpiledCache = {};
-
-  window.toggleNav = function() {
-    document.getElementById('nav').classList.toggle('collapsed');
-    document.getElementById('content').classList.toggle('expanded');
-    document.getElementById('nav-toggle').classList.toggle('shifted');
-  };
-
-  function showStatus(msg) {
-    var el = document.getElementById('status');
-    el.style.display = 'flex';
-    document.getElementById('status-text').textContent = msg;
-  }
-
-  function hideStatus() {
-    document.getElementById('status').style.display = 'none';
-  }
-
-  function showError(slideName, errMsg) {
-    hideStatus();
-    document.getElementById('root').innerHTML =
-      '<div class="error-box">' +
-      '<h3>Errore nel caricamento</h3>' +
-      '<p>File: <strong>' + slideName + '.jsx</strong></p>' +
-      '<p style="color:#ff6b35;font-family:monospace;font-size:12px;margin-top:12px;white-space:pre-wrap">' +
-      errMsg + '</p>' +
-      '<p>Apri la console del browser (F12) per dettagli.</p>' +
-      '<p>Assicurati di usare: <code>python3 -m http.server 8000</code></p>' +
-      '</div>';
-  }
-
-  function loadSlide(slideName) {
-    currentSlideIndex = SLIDES.indexOf(slideName);
-    window.location.hash = slideName;
-
-    // Update active nav
-    document.querySelectorAll('.nav-item').forEach(function(b) {
-      b.classList.toggle('active', b.dataset.slide === slideName);
-    });
-
-    var rootEl = document.getElementById('root');
-
-    // Unmount previous React tree
-    ReactDOM.unmountComponentAtNode(rootEl);
-    rootEl.innerHTML = '';
-
-    showStatus('Caricamento ' + slideName + '...');
-
-    // Check transpiled cache first
-    if (transpiledCache[slideName]) {
-      renderComponent(transpiledCache[slideName], slideName);
-      return;
-    }
-
-    // Fetch source
-    if (sourceCache[slideName]) {
-      processSource(sourceCache[slideName], slideName);
-      return;
-    }
-
-    fetch('transformer_intro/' + slideName + '.jsx')
-      .then(function(resp) {
-        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-        return resp.text();
-      })
-      .then(function(jsxCode) {
-        sourceCache[slideName] = jsxCode;
-        processSource(jsxCode, slideName);
-      })
-      .catch(function(err) {
-        console.error(err);
-        showError(slideName, err.message);
-      });
-  }
-
-  // Preamble that pulls all needed globals into local scope for new Function
-  var PREAMBLE =
-    'var useState = React.useState, useMemo = React.useMemo, ' +
-    'useCallback = React.useCallback, useRef = React.useRef, useEffect = React.useEffect;\n' +
-    'var _R = window.Recharts || {};\n' +
-    'var LineChart=_R.LineChart, Line=_R.Line, XAxis=_R.XAxis, YAxis=_R.YAxis, ' +
-    'CartesianGrid=_R.CartesianGrid, Tooltip=_R.Tooltip, Legend=_R.Legend, ' +
-    'ResponsiveContainer=_R.ResponsiveContainer, AreaChart=_R.AreaChart, Area=_R.Area, ' +
-    'BarChart=_R.BarChart, Bar=_R.Bar, Cell=_R.Cell, ' +
-    'ScatterChart=_R.ScatterChart, Scatter=_R.Scatter, ComposedChart=_R.ComposedChart, ' +
-    'PieChart=_R.PieChart, Pie=_R.Pie, ' +
-    'RadarChart=_R.RadarChart, Radar=_R.Radar, PolarGrid=_R.PolarGrid, ' +
-    'PolarAngleAxis=_R.PolarAngleAxis, PolarRadiusAxis=_R.PolarRadiusAxis, ' +
-    'ReferenceLine=_R.ReferenceLine, ReferenceArea=_R.ReferenceArea;\n';
-
-  function processSource(jsxCode, slideName) {
-    try {
-      // Strip imports and transform export default
-      var code = jsxCode
-        .replace(/^\s*import\s+\{[\s\S]*?\}\s+from\s+['"][^'"]*['"];?\s*$/gm, '')
-        .replace(/^\s*import\s+\w+\s+from\s+['"][^'"]*['"];?\s*$/gm, '')
-        .replace(/export\s+default\s+function\s+App/g, 'function __SLIDE_APP__');
-
-      // Transpile
-      var result = Babel.transform(code, {
-        presets: ['react'],
-        filename: slideName + '.jsx',
-      });
-
-      // Wrap with preamble that provides all globals as local vars
-      var factory = new Function(PREAMBLE + result.code + '\nreturn __SLIDE_APP__;');
-
-      transpiledCache[slideName] = factory;
-      renderComponent(factory, slideName);
-    } catch (err) {
-      console.error('Transpile error for ' + slideName + ':', err);
-      showError(slideName, err.message);
-    }
-  }
-
-  function renderComponent(factory, slideName) {
-    try {
-      var AppComponent = factory();
-      if (typeof AppComponent !== 'function') {
-        throw new Error('App component not found');
-      }
-      hideStatus();
-      var rootEl = document.getElementById('root');
-      ReactDOM.render(React.createElement(AppComponent), rootEl);
-    } catch (err) {
-      console.error('Render error for ' + slideName + ':', err);
-      showError(slideName, err.message);
-    }
-  }
-
-  // Nav button clicks
-  document.querySelectorAll('.nav-item').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      loadSlide(btn.dataset.slide);
-    });
-  });
-
-  // Keyboard navigation
-  document.addEventListener('keydown', function(e) {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (currentSlideIndex < SLIDES.length - 1) loadSlide(SLIDES[currentSlideIndex + 1]);
-    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (currentSlideIndex > 0) loadSlide(SLIDES[currentSlideIndex - 1]);
-    } else if (e.key === 'm' || e.key === 'M') {
-      toggleNav();
-    }
-  });
-
-  // Initial load
-  var hash = window.location.hash.replace('#', '');
-  var initial = SLIDES.indexOf(hash) >= 0 ? hash : SLIDES[0];
-  loadSlide(initial);
-})();
-</script>
+  <footer>
+    <p>Corso di Intelligenza Artificiale per le Scuole Superiori</p>
+    <p style="margin-top: 8px;">
+      <a href="https://github.com/maeste/iis_ai">GitHub</a>
+    </p>
+  </footer>
 
 </body>
 </html>

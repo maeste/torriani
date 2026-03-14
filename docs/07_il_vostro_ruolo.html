@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Il Vostro Ruolo — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#07_il_vostro_ruolo">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 3</div>
+    <h1>Il Vostro Ruolo nella Quinta Rivoluzione</h1>
+<h2>Da spettatori a protagonisti: perche questa lezione vi riguarda da vicino</h2>
+<p>Immaginate di essere nel 1995. Internet esiste gia da qualche anno, ma la maggior parte delle persone lo considera un giocattolo per smanettoni. &ldquo;A cosa serve mandare messaggi con il computer quando posso telefonare?&rdquo; dicevano in molti. Poi, nel giro di dieci anni, Internet ha cambiato tutto: il modo di lavorare, di studiare, di conoscere persone, di comprare le cose, di informarsi. Chi aveva iniziato a capirlo per primo si e trovato con un vantaggio enorme. Chi lo aveva ignorato ha dovuto rincorrere.</p>
+<p>Ecco, con l&rsquo;intelligenza artificiale sta succedendo qualcosa di simile, ma piu veloce. Molto piu veloce. E voi siete esattamente nel punto giusto della storia per decidere da che parte stare.</p>
+<h3>La frase che conta</h3>
+<p>C&rsquo;e una frase che vale la pena di portarsi a casa da tutto il percorso che abbiamo fatto insieme:</p>
+<blockquote>
+<p><strong>Chi usa l&rsquo;IA sostituira chi non la usa.</strong></p>
+</blockquote>
+<p>Non e una minaccia. Non e catastrofismo. E un&rsquo;osservazione pratica. Non e l&rsquo;intelligenza artificiale che &ldquo;ruba il lavoro&rdquo; alle persone. Sono le persone che sanno usare l&rsquo;IA a diventare piu produttive, piu veloci e piu creative di quelle che non la usano. Se due persone si candidano per lo stesso lavoro e una delle due sa trasformare un&rsquo;idea confusa in un piano dettagliato in cinque minuti grazie a un prompt ben scritto, chi pensate che avra un vantaggio?</p>
+<p>Ma attenzione: usare l&rsquo;IA non significa premere un bottone e aspettare che faccia tutto lei. Significa sapere <em>come</em> interagire con questi strumenti. E qui entrano in gioco tre concetti fondamentali, tre pilastri su cui costruire il vostro rapporto con questa tecnologia.</p>
+<h3>Primo pilastro: proteggete i vostri dati</h3>
+<p>Ogni volta che scrivete qualcosa in ChatGPT, in Claude o in qualsiasi altro chatbot, quel testo finisce su un server da qualche parte nel mondo. Nella maggior parte dei casi, l&rsquo;azienda che gestisce il servizio puo usare i vostri messaggi per migliorare il modello, cioe per &ldquo;addestrarlo&rdquo; ulteriormente. Questo significa che le vostre parole potrebbero, in teoria, influenzare le risposte future del sistema.</p>
+<p>La regola pratica e semplice: <strong>se non lo postereste su Instagram, non scrivetelo in un chatbot.</strong> Mai inserire dati personali sensibili come nome completo, indirizzo, numeri di documenti o foto di carte d&rsquo;identita. Mai.</p>
+<p>La buona notizia e che esistono alternative. Strumenti come ChatGPT e Claude offrono opzioni per disattivare l&rsquo;uso dei vostri dati per il training: basta andare nelle impostazioni e attivare la modalita corrispondente. E se la privacy e davvero importante per voi, sappiate che esistono modelli che funzionano interamente sul vostro computer, senza inviare nulla a nessun server. Si chiamano modelli <em>locali</em>: Llama (di Meta) e Mistral sono tra i piu noti. Li scaricate, li fate girare sul vostro PC, e tutto resta li. Nessun dato esce di casa vostra.</p>
+<h3>Secondo pilastro: non smettete mai di pensare</h3>
+<p>Questo e forse il punto piu importante. L&rsquo;intelligenza artificiale e un amplificatore straordinario, ma amplifica tutto, sia il buono che il cattivo.</p>
+<p>Se sapete gia scrivere bene, l&rsquo;IA vi aiutera a scrivere ancora meglio, piu velocemente, con piu sfumature. Se capite la matematica, vi aiutera a risolvere problemi piu complessi. Ma se copiate una risposta senza capirla, otterrete un testo che <em>sembra</em> perfetto ma potrebbe essere completamente sbagliato. E il problema e che le risposte sbagliate dell&rsquo;IA sono scritte benissimo. Suonano convincenti, sicure, autorevoli. Proprio per questo sono pericolose.</p>
+<p>I modelli di linguaggio soffrono di un difetto chiamato &ldquo;allucinazione&rdquo;: possono inventare fatti, citazioni, date, nomi di libri che non esistono, e presentarli con totale sicurezza. Non lo fanno per ingannarvi: e il modo in cui funzionano. Generano il testo piu probabile, non il testo piu vero.</p>
+<p>La regola d&rsquo;oro e questa: <strong>se non capite la risposta dell&rsquo;IA, non potete valutarla. E se non potete valutarla, non potete fidarvi.</strong> Verificate sempre le fonti. Controllate i fatti. Usate l&rsquo;IA come un copilota formidabile, ma ricordatevi che il pilota siete voi. Non e un pilota automatico.</p>
+<h3>Terzo pilastro: il vantaggio che nessuno ha mai avuto prima</h3>
+<p>E adesso la parte bella. Voi avete qualcosa che nessuna generazione prima di voi ha mai avuto: l&rsquo;accesso a strumenti di intelligenza artificiale potentissimi, fin dal primo giorno. Dal primo giorno di universita, dal primo giorno di lavoro, da <em>adesso</em>.</p>
+<p>Le generazioni precedenti hanno dovuto adattarsi a queste tecnologie mentre erano gia nel pieno della carriera. Voi invece potete partire con un vantaggio. Chi inizia a sperimentare oggi, a capire come funzionano questi strumenti, a integrarli nel proprio modo di studiare e lavorare, avra un vantaggio enorme domani.</p>
+<p>E non serve essere programmatori. Non serve essere geni della matematica. L&rsquo;interfaccia dell&rsquo;IA e il linguaggio naturale: se sapete parlare e scrivere in italiano, sapete usare l&rsquo;IA. L&rsquo;unico ingrediente davvero necessario e la curiosita. La voglia di provare, di sperimentare, di sbagliare e riprovare.</p>
+<h3>La missione per stasera</h3>
+<p>Vi lascio con qualcosa di concreto. Aprite ChatGPT, Claude o qualsiasi strumento vi piaccia, e incollate questo prompt (sostituite le parti tra parentesi con le vostre informazioni):</p>
+<blockquote>
+<p><em>Sei il mio tutor personale per [MATERIA]. Ho un esame tra 2 settimane. Crea un piano di studio personalizzato partendo dagli argomenti che trovo piu difficili: [LISTA ARGOMENTI]. Per ogni argomento, suggerisci: 1) un&rsquo;analogia per capirlo meglio, 2) una domanda che potrebbe uscire all&rsquo;esame, 3) un trucco per ricordarlo.</em></p>
+</blockquote>
+<p>Quello che otterrete e un piano di studio costruito su misura per voi, in trenta secondi. Provatelo. Vi sorprendera.</p>
+<h3>Guardare oltre: il futuro dell&rsquo;IA</h3>
+<p>Per chi e curioso di sapere dove sta andando tutto questo: si parla molto di AGI, Artificial General Intelligence, cioe un&rsquo;intelligenza artificiale capace di fare <em>qualsiasi</em> compito intellettuale umano. Non solo scrivere testi o generare immagini, ma ragionare, pianificare, inventare. Quanto manca? La risposta onesta e che nessuno lo sa: le stime vanno da 5 a 50 anni, e i migliori ricercatori del mondo sono in totale disaccordo.</p>
+<p>C&rsquo;e poi una grande battaglia in corso tra modelli <em>open source</em> (come Llama di Meta e Mistral, che potete scaricare e modificare liberamente) e modelli <em>closed source</em> (come GPT di OpenAI, Claude di Anthropic e Gemini di Google, accessibili solo attraverso le loro piattaforme). Il risultato di questa battaglia determinera chi controllera l&rsquo;IA del futuro, e questa e probabilmente una delle domande piu importanti del nostro secolo.</p>
+<p>E se tutto questo vi ha incuriosito, sappiate che per costruire il futuro dell&rsquo;intelligenza artificiale non servono solo informatici. Servono matematici per l&rsquo;algebra lineare, fisici per l&rsquo;hardware, filosofi per l&rsquo;etica, linguisti per capire il linguaggio, neuroscienziati per capire il cervello. Alcuni dei lavori piu richiesti in questo campo, come ML Engineer, Prompt Engineer, AI Ethics Researcher, non esistevano nemmeno cinque anni fa. Alcuni dei lavori che farete voi non esistono ancora.</p>
+<p>La quinta rivoluzione e iniziata. Voi decidete come usarla.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li><strong>Chi usa l&rsquo;IA sostituira chi non la usa</strong>: il vantaggio competitivo non e avere l&rsquo;IA, ma saperla usare con consapevolezza e spirito critico.</li>
+<li><strong>Proteggete sempre i vostri dati</strong>: non inserite mai informazioni personali sensibili nei chatbot, e attivate le opzioni di privacy disponibili. Per la massima riservatezza, usate modelli locali come Llama o Mistral.</li>
+<li><strong>L&rsquo;IA amplifica, non sostituisce</strong>: amplifica le vostre competenze se le avete, ma amplifica anche le vostre lacune. Se non capite una risposta, non fidatevi ciecamente.</li>
+<li><strong>Verificate sempre le fonti</strong>: i modelli possono &ldquo;allucinare&rdquo;, cioe inventare fatti con totale sicurezza. Il pensiero critico e la vostra arma migliore.</li>
+<li><strong>Siete la prima generazione con questo vantaggio</strong>: avete accesso a strumenti potentissimi fin da subito. La curiosita e l&rsquo;unico requisito per iniziare.</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li><strong>Provate il prompt tutor stasera</strong>: aprite ChatGPT o Claude, incollate il prompt della &ldquo;missione&rdquo; sostituendo materia e argomenti con i vostri, e valutate il risultato. Confrontatelo con il vostro metodo di studio attuale.</li>
+<li><strong>Attivate le impostazioni di privacy</strong>: andate nelle impostazioni del vostro strumento di IA preferito e disabilitate l&rsquo;uso dei vostri dati per il training. Su ChatGPT si trova in Impostazioni &gt; Controlli dati. Su Claude, nelle impostazioni sulla privacy.</li>
+<li><strong>Sperimentate con un modello locale</strong>: scaricate Ollama (ollama.com), installatelo, e provate a far girare un modello come Llama direttamente sul vostro computer. E gratuito, e tutto resta sul vostro PC.</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>L&rsquo;IA mi rubera il lavoro?</strong>
+La storia delle rivoluzioni tecnologiche ci insegna che nascono piu lavori di quanti ne scompaiano. Molti lavori cambieranno profondamente, alcuni spariranno, ma ne nasceranno di nuovi che oggi non riusciamo nemmeno a immaginare. Il rischio reale non e l&rsquo;IA in se: e non saperla usare mentre gli altri imparano.</p>
+<p><strong>Quale strumento di IA e il migliore per iniziare?</strong>
+Non esiste un &ldquo;migliore&rdquo; in assoluto. ChatGPT e il piu diffuso e ha un piano gratuito generoso. Claude e particolarmente forte nel ragionamento e nella scrittura. Gemini si integra bene con i servizi Google. Per iniziare, scegliete quello che vi e piu comodo e cominciate a sperimentare.</p>
+<p><strong>Devo saper programmare per usare l&rsquo;IA?</strong>
+Assolutamente no. L&rsquo;interfaccia dei chatbot moderni e il linguaggio naturale: scrivete in italiano come parlereste a una persona. Le competenze di programmazione servono se volete <em>costruire</em> sistemi di IA, non per <em>usarli</em>.</p>
+<p><strong>Come faccio a capire se l&rsquo;IA sta inventando qualcosa?</strong>
+Purtroppo non c&rsquo;e un segnale evidente: le allucinazioni sono scritte con la stessa sicurezza delle informazioni corrette. La strategia migliore e verificare sempre i fatti importanti con fonti indipendenti (libri di testo, siti autorevoli, enciclopedie). Se l&rsquo;IA cita un articolo o un libro, controllate che esista davvero.</p>
+<p><strong>Cosa significa &ldquo;modello locale&rdquo; e perche dovrebbe interessarmi?</strong>
+Un modello locale e un&rsquo;IA che gira interamente sul vostro computer, senza inviare dati a server esterni. Questo garantisce la massima privacy: nessuno puo leggere i vostri prompt. Strumenti come Ollama rendono l&rsquo;installazione semplice, e modelli come Llama e Mistral sono gratuiti. Lo svantaggio e che richiedono un computer abbastanza potente e non sono sempre al livello dei modelli cloud.</p>
+<p><strong>Cosa sono le &ldquo;allucinazioni&rdquo; dell&rsquo;IA?</strong>
+Sono risposte che sembrano corrette e convincenti ma contengono informazioni false, inventate dal modello. Possono essere nomi di libri inesistenti, citazioni mai dette, date sbagliate o fatti completamente fabbricati. Succede perche il modello genera il testo statisticamente piu probabile, non necessariamente quello vero.</p>
+<p><strong>Cos&rsquo;e l&rsquo;AGI e dovrei preoccuparmene?</strong>
+AGI sta per Artificial General Intelligence: un&rsquo;IA capace di svolgere qualsiasi compito intellettuale umano. Oggi non esiste ancora, e nessuno sa con certezza quando arrivera. Non e qualcosa di cui preoccuparsi nell&rsquo;immediato, ma e utile sapere che la ricerca in questa direzione e molto attiva e che il dibattito sul suo impatto e uno dei piu importanti nel mondo tecnologico.</p>
+<p><strong>Open source e closed source: cosa cambia per me?</strong>
+I modelli open source (come Llama e Mistral) sono pubblici: potete scaricarli, studiarli, modificarli. I modelli closed source (come GPT e Claude) sono accessibili solo attraverso le piattaforme delle aziende che li hanno creati. Per un utente normale, la differenza principale e nella privacy e nel controllo: con un modello open source avete il pieno controllo dei vostri dati.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Perche la frase &quot;chi usa l'IA sostituira chi non la usa&quot; e importante?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Perche l'IA eliminera tutti i lavori entro pochi anni</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Perche le persone che sanno usare l'IA saranno piu produttive e competitive rispetto a chi non la usac) Perche solo i programmatori potranno lavorare in futuro</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Perche le aziende assumeranno solo robot</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Qual e il rischio principale delle &quot;allucinazioni&quot; dell'IA?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Il computer si surriscalda e si blocca</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">L'IA smette di funzionare dopo troppe domande</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Le risposte false sembrano scritte con la stessa sicurezza di quelle vere, rendendo difficile distinguerled) Le allucinazioni avvengono solo con modelli vecchi e non sono piu un problema</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Quale di queste azioni protegge meglio la vostra privacy quando usate un chatbot?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Usare un nickname invece del vostro nome nel prompt</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Usare un modello locale come Llama tramite Ollama, cosi nessun dato lascia il vostro computerc) Cancellare la cronologia delle chat ogni sera</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Usare la modalita in incognito del browser</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Cosa si intende quando si dice che &quot;l'IA amplifica, non sostituisce&quot;?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Che l'IA rende il suono piu forte, come un amplificatore musicale</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Che l'IA potenzia le competenze che gia avete, ma potenzia anche le lacune se non capite quello che fatec) Che l'IA copia sempre le risposte da Internet senza aggiungere nulla</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Che l'IA funziona solo se avete gia tutte le risposte</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Per costruire il futuro dell'intelligenza artificiale servono:</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Solo informatici e programmatori</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Solo matematici e fisici</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Competenze diverse: informatica, matematica, filosofia, linguistica, neuroscienze e altre disciplined) Nessuna competenza specifica, basta saper usare un computer</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Non e l'IA a sostituire le persone, ma le persone che sanno usarla a diventare piu produttive, veloci e creative di chi non la usa."}, "2": {"correct": "c", "explanation": "Le allucinazioni sono pericolose proprio perche sono scritte in modo convincente, sicuro e autorevole, rendendo impossibile distinguerle dalla verita guardando solo il testo."}, "3": {"correct": "b", "explanation": "Un modello locale gira interamente sul proprio computer senza inviare dati a server esterni, garantendo la massima privacy possibile."}, "4": {"correct": "b", "explanation": "L'IA amplifica tutto: se sapete scrivere bene, vi aiuta a scrivere ancora meglio; se copiate senza capire, otterrete testi apparentemente perfetti ma potenzialmente sbagliati."}, "5": {"correct": "c", "explanation": "L'IA richiede un approccio multidisciplinare: matematici per l'algebra, filosofi per l'etica, linguisti per il linguaggio, neuroscienziati per il cervello, e molte altre competenze."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

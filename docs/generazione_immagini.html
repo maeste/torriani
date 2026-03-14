@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Creare con l'IA: Immagini — LLM per le Scuole Superiori</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0e1a; color: #e2e8f0;
+      font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+      line-height: 1.7; padding: 0;
+    }
+    .top-bar {
+      position: sticky; top: 0; z-index: 100;
+      background: #060912; border-bottom: 1px solid #1e2d4a;
+      padding: 12px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .top-bar a {
+      color: #00d4ff; text-decoration: none; font-size: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 14px; border: 1px solid #1e2d4a;
+      border-radius: 6px; transition: all 0.2s;
+    }
+    .top-bar a:hover { background: #0f1729; border-color: #00d4ff; }
+    .container {
+      max-width: 800px; margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 {
+      color: #00d4ff; font-size: 2rem; font-weight: 700;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+    h2 {
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-top: 48px; margin-bottom: 16px;
+      padding-bottom: 8px; border-bottom: 1px solid #1e2d4a;
+    }
+    h3 {
+      color: #a855f7; font-size: 1.15rem; font-weight: 600;
+      margin-top: 32px; margin-bottom: 12px;
+    }
+    h4 {
+      color: #e2e8f0; font-size: 1rem; font-weight: 600;
+      margin-top: 24px; margin-bottom: 8px;
+    }
+    p { margin-bottom: 16px; }
+    a { color: #00d4ff; text-decoration: underline; }
+    a:hover { color: #38bdf8; }
+    strong { color: #f1f5f9; font-weight: 600; }
+    em { color: #cbd5e1; font-style: italic; }
+    ul, ol {
+      margin-bottom: 16px; padding-left: 24px;
+    }
+    li { margin-bottom: 8px; }
+    blockquote {
+      border-left: 3px solid #a855f7;
+      background: #0f1729; padding: 16px 20px;
+      margin: 16px 0; border-radius: 0 8px 8px 0;
+      color: #cbd5e1; font-style: italic;
+    }
+    blockquote p { margin-bottom: 0; }
+    code {
+      background: #1e293b; color: #00d4ff;
+      padding: 2px 6px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.9em;
+    }
+    pre {
+      background: #0f1729; border: 1px solid #1e2d4a;
+      border-radius: 8px; padding: 20px; overflow-x: auto;
+      margin: 16px 0;
+    }
+    pre code {
+      background: none; padding: 0; color: #e2e8f0;
+      font-size: 0.85em; line-height: 1.6;
+    }
+    table {
+      width: 100%; border-collapse: collapse;
+      margin: 16px 0; font-size: 0.95em;
+    }
+    th {
+      background: #0f1729; color: #00d4ff;
+      padding: 10px 14px; text-align: left;
+      border: 1px solid #1e2d4a;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85em;
+    }
+    td {
+      padding: 10px 14px; border: 1px solid #1e2d4a;
+    }
+    tr:nth-child(even) { background: #0a0e1a; }
+    tr:nth-child(odd) { background: #0d1220; }
+    hr {
+      border: none; border-top: 1px solid #1e2d4a;
+      margin: 40px 0;
+    }
+    .session-badge {
+      display: inline-block; font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .quiz-container {{
+      margin-top: 48px; padding-top: 8px;
+      border-top: 1px solid #1e2d4a;
+    }}
+    .quiz-container h2 {{
+      color: #ff6b35; font-size: 1.4rem; font-weight: 600;
+      margin-bottom: 8px; padding-bottom: 8px;
+      border-bottom: 1px solid #1e2d4a;
+    }}
+    .quiz-intro {{
+      color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
+    }}
+    .quiz-question {{
+      background: #0d1220; border: 1px solid #1e2d4a;
+      border-radius: 12px; padding: 20px; margin-bottom: 16px;
+      transition: border-color 0.3s;
+    }}
+    .quiz-question.correct {{ border-color: #22c55e; }}
+    .quiz-question.incorrect {{ border-color: #ef4444; }}
+    .quiz-question.unanswered {{ border-color: #f59e0b; }}
+    .quiz-q-text {{
+      margin-bottom: 12px; font-size: 1rem;
+    }}
+    .quiz-option {{
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 14px; margin: 4px 0;
+      border-radius: 8px; cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s;
+    }}
+    .quiz-option:hover {{
+      background: #0f1729; border-color: #1e2d4a;
+    }}
+    .quiz-option input[type="radio"] {{
+      margin-top: 4px; accent-color: #00d4ff;
+      flex-shrink: 0;
+    }}
+    .quiz-letter {{
+      color: #64748b; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85em; flex-shrink: 0; min-width: 20px;
+    }}
+    .quiz-opt-text {{ color: #e2e8f0; }}
+    .quiz-option.is-correct {{
+      background: #052e16; border-color: #22c55e;
+    }}
+    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
+    .quiz-option.is-wrong {{
+      background: #2a0a0a; border-color: #ef4444;
+    }}
+    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
+    .quiz-feedback {{
+      margin-top: 10px; padding: 10px 14px;
+      border-radius: 8px; font-size: 0.9rem;
+      display: none; line-height: 1.5;
+    }}
+    .quiz-feedback.show {{ display: block; }}
+    .quiz-feedback.fb-correct {{
+      background: #052e16; border: 1px solid #22c55e33; color: #86efac;
+    }}
+    .quiz-feedback.fb-wrong {{
+      background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
+    }}
+    .quiz-feedback.fb-skip {{
+      background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
+    }}
+    .quiz-submit {{
+      display: block; width: 100%; padding: 14px;
+      margin-top: 24px; background: #00d4ff; color: #060912;
+      border: none; border-radius: 10px; font-size: 1rem;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
+    .quiz-submit:disabled {{
+      background: #1e2d4a; color: #64748b; cursor: default;
+      transform: none;
+    }}
+    .quiz-score {{
+      display: none; text-align: center; margin-top: 20px;
+      padding: 20px; border-radius: 12px; font-size: 1.1rem;
+      font-weight: 600;
+    }}
+    .quiz-score.show {{ display: block; }}
+    .quiz-score.perfect {{
+      background: #052e16; border: 1px solid #22c55e;
+      color: #86efac;
+    }}
+    .quiz-score.good {{
+      background: #0f1729; border: 1px solid #00d4ff;
+      color: #00d4ff;
+    }}
+    .quiz-score.needs-work {{
+      background: #1a1500; border: 1px solid #f59e0b;
+      color: #fcd34d;
+    }}
+    .quiz-retry {{
+      display: none; width: 100%; padding: 12px;
+      margin-top: 12px; background: transparent;
+      color: #00d4ff; border: 1px solid #1e2d4a;
+      border-radius: 10px; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.2s;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }}
+    .quiz-retry.show {{ display: block; }}
+    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+
+    @media (max-width: 640px) {
+      .container { padding: 24px 16px 60px; }
+      h1 { font-size: 1.5rem; }
+      h2 { font-size: 1.2rem; }
+      pre { padding: 12px; font-size: 0.8em; }
+      table { font-size: 0.85em; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <a href="../slides.html#generazione_immagini">← Torna alle Slide</a>
+    <a href="index.html">📚 Indice Documenti</a>
+  </div>
+  <div class="container">
+    <div class="session-badge">Sessione 2</div>
+    <h1>Creare con l&rsquo;IA: Le Immagini</h1>
+<h2>Dall&rsquo;immaginazione al pixel: come l&rsquo;intelligenza artificiale trasforma le parole in immagini</h2>
+<p>Immagina di avere uno scultore personale. Gli descrivi a parole cosa vuoi — &ldquo;un gatto rosso seduto su un tetto al tramonto&rdquo; — e lui, partendo da un blocco di marmo informe, inizia a lavorare. Colpo dopo colpo, il superfluo cade via, e dal caos emerge esattamente quello che avevi in mente. Ecco, i modelli di intelligenza artificiale che generano immagini funzionano proprio cosi. Solo che il loro &ldquo;blocco di marmo&rdquo; non e pietra: e rumore. Rumore digitale, puro caos di pixel colorati a caso, come la neve sulle vecchie televisioni analogiche.</p>
+<p>Questa famiglia di modelli si chiama <strong>diffusion models</strong> (modelli di diffusione), e il loro funzionamento e tanto elegante quanto controintuitivo. Il trucco sta nell&rsquo;imparare a fare una cosa apparentemente inutile: <em>rovinare immagini</em>. Durante l&rsquo;addestramento, il modello prende milioni di foto reali e le corrompe gradualmente, aggiungendo rumore un po&rsquo; alla volta, fino a trasformarle in macchie casuali irriconoscibili. Poi impara il processo inverso: dato un passo di rumore, il modello impara a prevedere quale rumore togliere per tornare indietro di un passo verso l&rsquo;immagine originale. Quando vuoi generare un&rsquo;immagine nuova, il modello parte da rumore completamente casuale e applica questo processo di &ldquo;pulizia&rdquo; ripetutamente — tipicamente per decine o centinaia di passi — fino a far emergere un&rsquo;immagine nitida e coerente.</p>
+<p>Ma come fa il modello a sapere <em>cosa</em> disegnare a partire dalla tua descrizione testuale? Qui entra in gioco un componente fondamentale chiamato <strong>CLIP</strong> (Contrastive Language-Image Pre-training), sviluppato da OpenAI nel 2021. CLIP e stato addestrato su centinaia di milioni di coppie testo-immagine raccolte dal web, e ha imparato a creare una sorta di &ldquo;dizionario universale&rdquo; che collega parole e immagini. Quando scrivi &ldquo;gatto rosso su un tetto al tramonto&rdquo;, CLIP traduce questa frase in una serie di numeri (un vettore) che rappresenta il significato visivo di quelle parole. Questo vettore guida il processo di denoising, dicendo al modello: &ldquo;non scolpire una scultura qualsiasi, scolpine una che assomigli a <em>questo</em>.&rdquo;</p>
+<p>I modelli moderni come Stable Diffusion e Flux hanno un altro asso nella manica: lavorano in uno <strong>spazio latente</strong>. Invece di manipolare direttamente i pixel dell&rsquo;immagine (che possono essere milioni), comprimono tutto in una rappresentazione molto piu piccola. E come se lo scultore, invece di lavorare su una statua a grandezza naturale, scolpisse prima un modellino in miniatura perfetto, e poi lo ingrandisse alla dimensione finale. Questo rende il processo enormemente piu veloce e accessibile: un&rsquo;immagine che richiederebbe ore da calcolare sui pixel puo essere generata in pochi secondi nello spazio latente.</p>
+<h3>Gli strumenti a disposizione</h3>
+<p>Oggi il panorama degli strumenti per generare immagini e ricco e variegato. <strong>Midjourney</strong> e il preferito degli artisti: produce immagini di qualita estetica straordinaria e si usa attraverso Discord, un&rsquo;app che probabilmente conosci gia. <strong>DALL-E 3</strong> di OpenAI e integrato direttamente in ChatGPT, il che lo rende facilissimo da usare — basta descrivere quello che vuoi in linguaggio naturale. <strong>Stable Diffusion</strong> e il campione del mondo open source: puoi scaricarlo gratuitamente e farlo girare sul tuo computer, a patto di avere una scheda grafica decente. <strong>Flux</strong>, creato dagli stessi ricercatori che hanno sviluppato Stable Diffusion, rappresenta la nuova generazione open source con un&rsquo;architettura ancora piu moderna. Infine <strong>Ideogram</strong> ha risolto uno dei problemi piu ostici: generare testo leggibile all&rsquo;interno delle immagini, perfetto per loghi e poster.</p>
+<p>Una distinzione importante e quella tra modelli <strong>chiusi</strong> (come Midjourney e DALL-E, che si usano a pagamento tramite i servizi dei creatori) e <strong>aperti</strong> (come Stable Diffusion e Flux, che puoi scaricare, studiare e modificare liberamente). Entrambi gli approcci hanno vantaggi: i modelli chiusi offrono facilita d&rsquo;uso e qualita costante, quelli aperti danno liberta totale e trasparenza.</p>
+<p>Un concetto affascinante del mondo open source e <strong>LoRA</strong> (Low-Rank Adaptation): una tecnica che permette di personalizzare un modello con pochissime immagini — anche solo cinque o dieci — e risorse computazionali limitate. Vuoi che il modello impari il tuo stile artistico, o che sappia disegnare il tuo gatto? Con LoRA puoi &ldquo;insegnargli&rdquo; nuovi concetti senza dover riaddestrare miliardi di parametri. Il file risultante pesa appena qualche decina di megabyte, contro i gigabyte del modello completo.</p>
+<h3>Le applicazioni sono ovunque</h3>
+<p>Le possibilita creative sono esplose: dall&rsquo;arte digitale e le illustrazioni per libri, al design di prodotti e interfacce, dall&rsquo;architettura (visualizzare un edificio prima di costruirlo) alla moda (progettare collezioni con infinite variazioni istantanee), dal marketing (creare campagne visive senza servizi fotografici) all&rsquo;educazione (illustrare concetti complessi in modo visivo). La democratizzazione creativa e reale: oggi chiunque, anche senza saper disegnare, puo trasformare un&rsquo;idea in un&rsquo;immagine professionale.</p>
+<h3>I rischi: il lato oscuro della medaglia</h3>
+<p>Ma come ogni tecnologia potente, anche questa ha un lato oscuro, e va affrontato con onesta. Il rischio piu immediato e viscerale sono i <strong>deepfake</strong>: immagini false di persone reali, cosi convincenti da ingannare chiunque. Nel 2023 un&rsquo;immagine falsa del Papa con un piumino Balenciaga e diventata virale, ingannando milioni di persone. Ma i deepfake non sono solo curiosita: vengono usati per cyberbullismo, truffe, manipolazione politica. In Italia, creare deepfake non consensuali puo configurare reati come la diffamazione o il trattamento illecito di dati personali.</p>
+<p>C&rsquo;e poi la questione del <strong>copyright</strong>: se un modello si e addestrato sulle opere di migliaia di artisti senza il loro consenso, chi possiede le immagini generate? E una domanda a cui i tribunali di tutto il mondo stanno cercando di rispondere. Getty Images ha citato in giudizio Stability AI proprio per questo motivo, e il caso potrebbe ridefinire il futuro legale dell&rsquo;IA generativa.</p>
+<p>Non dimentichiamo il <strong>bias visivo</strong>: i modelli tendono a riprodurre gli stereotipi presenti nei dati su cui sono stati addestrati. Se chiedi &ldquo;un dottore&rdquo;, l&rsquo;IA genera quasi sempre un uomo bianco. Questo non e un dettaglio tecnico: e un problema sociale che l&rsquo;IA rischia di amplificare.</p>
+<p>Con grande potere viene grande responsabilita. E non e solo una citazione da Spider-Man: e la sfida concreta di questa generazione.</p>
+<hr>
+<h2>5 Cose da Ricordare</h2>
+<ul>
+<li>
+<p><strong>I modelli di diffusione partono dal rumore e arrivano all&rsquo;immagine</strong>: come uno scultore che toglie il superfluo dal marmo, il modello rimuove rumore passo dopo passo, guidato dalla descrizione testuale dell&rsquo;utente.</p>
+</li>
+<li>
+<p><strong>CLIP e il ponte tra parole e immagini</strong>: traduce il testo in una rappresentazione numerica che il modello usa per sapere <em>cosa</em> generare, grazie all&rsquo;addestramento su centinaia di milioni di coppie testo-immagine.</p>
+</li>
+<li>
+<p><strong>Esistono modelli chiusi e aperti</strong>: Midjourney e DALL-E sono servizi a pagamento; Stable Diffusion e Flux sono open source e scaricabili gratuitamente. Entrambi gli approcci hanno vantaggi.</p>
+</li>
+<li>
+<p><strong>LoRA permette di personalizzare i modelli con poche risorse</strong>: bastano poche immagini e un computer normale per insegnare al modello nuovi stili o concetti specifici.</p>
+</li>
+<li>
+<p><strong>I rischi sono reali e vanno conosciuti</strong>: deepfake, violazioni di copyright, bias visivi e manipolazione dell&rsquo;informazione sono sfide concrete che richiedono consapevolezza e regolamentazione.</p>
+</li>
+</ul>
+<hr>
+<h2>3 Cose da Fare</h2>
+<ol>
+<li>
+<p><strong>Prova a generare un&rsquo;immagine</strong>: usa la versione gratuita di uno strumento come Ideogram, Microsoft Copilot o la versione free di DALL-E in Bing. Scrivi una descrizione dettagliata e osserva come cambia il risultato modificando le parole. Nota cosa il modello interpreta bene e dove invece fatica.</p>
+</li>
+<li>
+<p><strong>Fai un esperimento sul bias</strong>: chiedi allo stesso strumento di generare &ldquo;un medico&rdquo;, &ldquo;un ingegnere&rdquo; e &ldquo;un insegnante&rdquo; senza specificare genere o etnia. Osserva i risultati: quali stereotipi emergono? Discutine con i tuoi compagni.</p>
+</li>
+<li>
+<p><strong>Esplora il mondo open source</strong>: cerca &ldquo;Stable Diffusion online&rdquo; o &ldquo;Flux online&rdquo; per trovare interfacce web gratuite che ti permettono di sperimentare senza installare nulla. Prova a generare la stessa immagine con strumenti diversi e confronta i risultati.</p>
+</li>
+</ol>
+<hr>
+<h2>Domande Frequenti</h2>
+<p><strong>Come fa l&rsquo;IA a &ldquo;capire&rdquo; cosa disegnare dal testo?</strong>
+Usa un modello chiamato CLIP che ha imparato le corrispondenze tra testo e immagini analizzando centinaia di milioni di coppie dal web. CLIP traduce la tua descrizione in numeri che guidano il processo di generazione, come un navigatore GPS che indica allo scultore digitale la direzione giusta.</p>
+<p><strong>L&rsquo;immagine generata e mia o dell&rsquo;IA?</strong>
+Dipende dal servizio e dal paese. In USA, il Copyright Office ha stabilito che le immagini generate puramente da IA non sono proteggibili. In Europa la situazione e ancora in evoluzione. Servizi come Midjourney e DALL-E concedono diritti commerciali agli utenti paganti, ma il dibattito legale e tutt&rsquo;altro che chiuso.</p>
+<p><strong>Un artista puo impedire che la sua arte venga usata per addestrare l&rsquo;IA?</strong>
+E una questione legale aperta. Alcuni artisti usano strumenti come Glaze per &ldquo;avvelenare&rdquo; le loro immagini online, rendendole inutilizzabili per l&rsquo;addestramento. Cause legali importanti come Stability AI vs Getty Images potrebbero definire nuove regole.</p>
+<p><strong>Si possono creare deepfake di chiunque?</strong>
+Tecnicamente si, ed e un problema serio. Deepfake vengono gia usati per cyberbullismo, truffe e manipolazione politica. In Italia, creare deepfake non consensuali puo costituire reato. Molti paesi stanno introducendo leggi specifiche per regolamentare questa pratica.</p>
+<p><strong>Cosa vuol dire che un modello e &ldquo;open source&rdquo;?</strong>
+Significa che il codice e i pesi del modello sono pubblici: chiunque puo scaricarli, studiarli, modificarli e usarli senza pagare. E come avere la ricetta completa di un piatto, non solo il piatto pronto al ristorante.</p>
+<p><strong>Perche le IA faticano a scrivere testo nelle immagini?</strong>
+I modelli di diffusione lavorano sui pattern visivi, non sulla comprensione linguistica. Le lettere richiedono precisione al pixel che il processo di denoising fatica a garantire. Ideogram ha affrontato questo problema specifico con tecniche dedicate, diventando il migliore in questa nicchia.</p>
+<p><strong>Cosa significa &ldquo;spazio latente&rdquo;?</strong>
+E una rappresentazione compressa dell&rsquo;immagine: invece di lavorare su milioni di pixel, il modello opera su una versione molto piu piccola e densa di informazione. E come lavorare sulla bozza di un progetto prima di realizzare il disegno tecnico definitivo — molto piu veloce e pratico.</p>
+<p><strong>Quanto costa generare immagini con l&rsquo;IA?</strong>
+Va dal completamente gratuito (Stable Diffusion sul proprio PC, versioni free di vari servizi) a circa 10-60 euro al mese per i servizi premium. Serve pero una scheda grafica discreta per far girare i modelli open source in locale.</p>
+<hr>
+<div class="quiz-container" id="quiz">
+  <h2>Mettiti alla Prova</h2>
+  <p class="quiz-intro">Seleziona una risposta per ogni domanda, poi clicca "Verifica" per controllare.</p>
+  <div class="quiz-question" data-q="1">
+    <p class="quiz-q-text"><strong>1. Come funziona il processo di generazione nei modelli di diffusione?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q1" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">L'IA copia pezzi di immagini esistenti e li incolla insieme</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q1" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">L'IA parte da rumore casuale e lo trasforma gradualmente in un'immagine, guidata dal testo</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q1" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">L'IA disegna l'immagine pixel per pixel da sinistra a destra, come una stampante</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q1" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">L'IA cerca l'immagine piu simile alla descrizione in un database di foto</span>
+    </label>
+    <div class="quiz-feedback" id="fb-1"></div>
+  </div>
+  <div class="quiz-question" data-q="2">
+    <p class="quiz-q-text"><strong>2. Qual e il ruolo di CLIP nel processo di generazione delle immagini?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q2" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Aggiunge filtri artistici all'immagine finale</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q2" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Comprime l'immagine per ridurne le dimensioni</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q2" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Collega il significato del testo alla rappresentazione visiva, guidando la generazione</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q2" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Controlla che l'immagine non contenga contenuti inappropriati</span>
+    </label>
+    <div class="quiz-feedback" id="fb-2"></div>
+  </div>
+  <div class="quiz-question" data-q="3">
+    <p class="quiz-q-text"><strong>3. Cosa permette di fare la tecnica LoRA?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q3" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">Generare immagini in altissima risoluzione</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q3" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Personalizzare un modello con poche immagini e risorse limitate</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q3" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">Eliminare completamente il bias dalle immagini generate</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q3" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Proteggere le immagini dal copyright</span>
+    </label>
+    <div class="quiz-feedback" id="fb-3"></div>
+  </div>
+  <div class="quiz-question" data-q="4">
+    <p class="quiz-q-text"><strong>4. Quale tra queste affermazioni sui rischi dell'IA generativa e CORRETTA?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q4" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">I deepfake sono facili da riconoscere grazie a errori evidenti nelle immagini</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q4" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">Il bias visivo e un problema minore che riguarda solo pochi modelli obsoleti</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q4" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">L'IA puo riprodurre e amplificare stereotipi presenti nei dati di addestramento</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q4" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">Il copyright delle immagini generate e stato definito in modo chiaro e uniforme a livello mondiale</span>
+    </label>
+    <div class="quiz-feedback" id="fb-4"></div>
+  </div>
+  <div class="quiz-question" data-q="5">
+    <p class="quiz-q-text"><strong>5. Qual e la differenza principale tra un modello chiuso e uno open source?</strong></p>
+    <label class="quiz-option" data-letter="a">
+      <input type="radio" name="q5" value="a">
+      <span class="quiz-letter">a)</span>
+      <span class="quiz-opt-text">I modelli chiusi generano immagini migliori in ogni caso</span>
+    </label>
+    <label class="quiz-option" data-letter="b">
+      <input type="radio" name="q5" value="b">
+      <span class="quiz-letter">b)</span>
+      <span class="quiz-opt-text">I modelli open source richiedono sempre una connessione internet</span>
+    </label>
+    <label class="quiz-option" data-letter="c">
+      <input type="radio" name="q5" value="c">
+      <span class="quiz-letter">c)</span>
+      <span class="quiz-opt-text">I modelli open source permettono di scaricare, studiare e modificare liberamente il codice e i pesi del modello</span>
+    </label>
+    <label class="quiz-option" data-letter="d">
+      <input type="radio" name="q5" value="d">
+      <span class="quiz-letter">d)</span>
+      <span class="quiz-opt-text">I modelli chiusi sono gratuiti, quelli open source sono a pagamento</span>
+    </label>
+    <div class="quiz-feedback" id="fb-5"></div>
+  </div>
+  <button class="quiz-submit" onclick="checkQuiz()">Verifica Risposte</button>
+  <div class="quiz-score" id="quiz-score"></div>
+  <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
+</div>
+<script>
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "I modelli di diffusione imparano a rimuovere rumore progressivamente: partendo da puro rumore casuale, lo \"ripuliscono\" passo dopo passo fino a ottenere un'immagine coerente."}, "2": {"correct": "c", "explanation": "CLIP traduce il testo in un vettore numerico che rappresenta il significato visivo delle parole, guidando il processo di denoising nella direzione giusta."}, "3": {"correct": "b", "explanation": "LoRA (Low-Rank Adaptation) permette di insegnare nuovi concetti al modello con solo 5-10 immagini e risorse computazionali limitate, senza riaddestrare l'intero modello."}, "4": {"correct": "c", "explanation": "I modelli tendono a riprodurre gli stereotipi dei dati su cui sono addestrati (es. \"un dottore\" generato quasi sempre come uomo bianco), amplificando i pregiudizi sociali."}, "5": {"correct": "c", "explanation": "Un modello open source e come avere la ricetta completa di un piatto: puoi scaricarlo, studiarlo e modificarlo liberamente, a differenza dei modelli chiusi accessibili solo tramite le piattaforme dei creatori."}};
+
+function checkQuiz() {
+  var total = Object.keys(QUIZ_ANSWERS).length;
+  var correct = 0;
+  var answered = 0;
+
+  for (var qNum in QUIZ_ANSWERS) {
+    var ans = QUIZ_ANSWERS[qNum];
+    var qDiv = document.querySelector('.quiz-question[data-q="' + qNum + '"]');
+    var selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+    var fb = document.getElementById('fb-' + qNum);
+
+    // Reset classes
+    qDiv.classList.remove('correct', 'incorrect', 'unanswered');
+    qDiv.querySelectorAll('.quiz-option').forEach(function(opt) {
+      opt.classList.remove('is-correct', 'is-wrong');
+    });
+
+    if (!selected) {
+      qDiv.classList.add('unanswered');
+      fb.className = 'quiz-feedback show fb-skip';
+      fb.textContent = '⚠ Seleziona una risposta';
+      continue;
+    }
+
+    answered++;
+    var userAnswer = selected.value;
+    var correctLetter = ans.correct;
+
+    // Highlight correct option
+    var correctOpt = qDiv.querySelector('.quiz-option[data-letter="' + correctLetter + '"]');
+    if (correctOpt) correctOpt.classList.add('is-correct');
+
+    if (userAnswer === correctLetter) {
+      correct++;
+      qDiv.classList.add('correct');
+      fb.className = 'quiz-feedback show fb-correct';
+      fb.innerHTML = '✅ Corretto!' + (ans.explanation ? ' — ' + ans.explanation : '');
+    } else {
+      qDiv.classList.add('incorrect');
+      // Highlight wrong selection
+      var wrongOpt = selected.closest('.quiz-option');
+      if (wrongOpt) wrongOpt.classList.add('is-wrong');
+      fb.className = 'quiz-feedback show fb-wrong';
+      fb.innerHTML = '❌ La risposta corretta è <strong>' + correctLetter + ')</strong>' +
+        (ans.explanation ? ' — ' + ans.explanation : '');
+    }
+
+    // Disable inputs after check
+    qDiv.querySelectorAll('input[type="radio"]').forEach(function(r) { r.disabled = true; });
+  }
+
+  // Show score
+  var scoreDiv = document.getElementById('quiz-score');
+  scoreDiv.className = 'quiz-score show';
+  if (correct === total) {
+    scoreDiv.className += ' perfect';
+    scoreDiv.innerHTML = '🏆 Perfetto! ' + correct + '/' + total + ' risposte corrette!';
+  } else if (correct >= total * 0.6) {
+    scoreDiv.className += ' good';
+    scoreDiv.innerHTML = '👍 ' + correct + '/' + total + ' risposte corrette. Buon lavoro!';
+  } else {
+    scoreDiv.className += ' needs-work';
+    scoreDiv.innerHTML = '📚 ' + correct + '/' + total + ' risposte corrette. Rileggi il capitolo e riprova!';
+  }
+
+  // Disable submit, show retry
+  document.querySelector('.quiz-submit').disabled = true;
+  document.getElementById('quiz-retry').className = 'quiz-retry show';
+}
+
+function resetQuiz() {
+  document.querySelectorAll('.quiz-question').forEach(function(q) {
+    q.classList.remove('correct', 'incorrect', 'unanswered');
+    q.querySelectorAll('.quiz-option').forEach(function(o) {
+      o.classList.remove('is-correct', 'is-wrong');
+    });
+    q.querySelectorAll('input[type="radio"]').forEach(function(r) {
+      r.disabled = false;
+      r.checked = false;
+    });
+  });
+  document.querySelectorAll('.quiz-feedback').forEach(function(f) {
+    f.className = 'quiz-feedback';
+  });
+  document.getElementById('quiz-score').className = 'quiz-score';
+  document.querySelector('.quiz-submit').disabled = false;
+  document.getElementById('quiz-retry').className = 'quiz-retry';
+}
+
+</script>
+  </div>
+</body>
+</html>

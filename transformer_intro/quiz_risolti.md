@@ -932,3 +932,199 @@ d) Sono piu potenti e veloci dei robot industriali tradizionali
 - D) Perche' ha sostituito tutti i ricercatori nei laboratori di biologia
 
 > AlphaFold ha risolto in pochi mesi un problema su cui i biologi lavoravano da 50 anni, prevedendo la struttura 3D di quasi tutte le proteine conosciute e vincendo il Premio Nobel per la Chimica 2024.
+
+---
+
+## Deep Dive: Memoria e Contesto nei Transformer
+
+**1. Se un modello ha un contesto di 8.000 token, quante celle ha la matrice di attenzione per un singolo layer e una singola head?**
+
+a) 8.000
+b) 16.000
+**c) 64.000.000** ✅
+d) 8.000.000
+
+> La matrice di attenzione è n×n. Con n=8.000, la matrice ha 8.000 × 8.000 = 64.000.000 celle. Questa crescita quadratica è il vincolo fondamentale dei Transformer.
+
+**2. Quale componente della memoria GPU NON cresce con il numero di token nel contesto?**
+
+a) Il KV Cache
+b) La matrice di attenzione
+**c) I pesi del modello** ✅
+d) Tutti crescono con il contesto
+
+> I pesi del modello (i miliardi di parametri) vengono caricati una volta e restano fissi indipendentemente dalla lunghezza del contesto. Solo il KV Cache e la matrice di attenzione crescono con n.
+
+**3. FlashAttention migliora le prestazioni principalmente perché:**
+
+a) Riduce il numero di operazioni matematiche da O(n²) a O(n)
+b) Elimina la necessità del KV Cache
+**c) Minimizza i trasferimenti di dati tra memoria principale (HBM) e cache on-chip (SRAM)** ✅
+d) Usa meno head di attenzione
+
+> FlashAttention non cambia la complessità algoritmica (resta O(n²) in FLOPs). Il suo contributo è processare la matrice a blocchi nella SRAM velocissima, evitando di materializzarla nella HBM molto più lenta.
+
+**4. Perché il KV Cache di Llama-3 70B con 128K token occupa più memoria del modello stesso?**
+
+a) Perché il KV Cache include anche i pesi del modello
+**b) Perché i vettori K e V devono essere memorizzati per ogni token, per ogni layer, per ogni head** ✅
+c) Perché il KV Cache usa fp32 mentre il modello usa fp16
+d) Perché il KV Cache cresce in modo quadratico
+
+> Il KV Cache cresce linearmente con n (non quadraticamente), ma il coefficiente è enorme: 2 × 80 layer × 64 head × 128 d_head × 2 byte per ogni token. Con 128K token, il totale supera i 160 GB.
+
+**5. Qual è il principale svantaggio della Sliding Window Attention?**
+
+a) Non è compatibile con i modelli decoder-only
+b) Richiede più memoria della full attention
+**c) Ogni token può guardare solo un numero limitato di token precedenti, perdendo informazioni distanti** ✅
+d) Funziona solo durante il training, non durante l'inferenza
+
+> La Sliding Window limita l'attenzione ai w token precedenti. Questo la rende efficiente (O(n·w) invece di O(n²)) ma inadatta per compiti che richiedono ragionamento su informazioni distanti nel contesto.
+
+---
+
+## Deep Dive: Anatomia del Transformer — Layers, Heads e d_head
+
+**1. Se un modello ha d_model = 8192 e 64 head di attenzione, qual è il valore di d_head?**
+
+a) 64
+**b) 128** ✅
+c) 256
+d) 512
+
+> d_model = heads × d_head, quindi d_head = d_model / heads = 8192 / 64 = 128. Questo è il valore tipico usato nei modelli moderni come Llama-3.
+
+**2. Perché i Transformer usano molte head di attenzione invece di una sola?**
+
+a) Per risparmiare memoria durante l'inferenza
+**b) Perché ogni head si specializza nel catturare un tipo diverso di relazione tra token** ✅
+c) Perché una sola head sarebbe troppo lenta da calcolare
+d) Per compatibilità con le GPU moderne
+
+> Le multi-head attention imparano relazioni diverse e complementari: una head può specializzarsi in relazioni grammaticali, un'altra in semantiche, un'altra in dipendenze a lunga distanza. Non è ridondanza, è specializzazione parallela.
+
+**3. Quale componente del Transformer è direttamente responsabile della crescita del KV Cache con il numero di layer?**
+
+a) Il positional encoding, che deve essere ricalcolato per ogni layer
+**b) Il fatto che ogni layer ha il suo blocco di attention con K e V indipendenti** ✅
+c) La funzione softmax, che richiede più memoria con più layer
+d) La concatenazione finale delle head
+
+> Ogni layer ha il suo blocco di Multi-Head Attention con vettori K e V propri. Il KV Cache è la somma dei K e V di tutti i layer, quindi cresce proporzionalmente al numero di layer.
+
+**4. In un Transformer, cosa catturano tipicamente i layer più profondi (alti)?**
+
+a) Le relazioni grammaticali tra parole adiacenti
+b) Il positional encoding dei token
+**c) Il ragionamento complesso e le relazioni a lunga distanza nel contesto** ✅
+d) La pronuncia e la fonetica delle parole
+
+> I layer bassi catturano pattern sintattici locali; i layer intermedi catturano semantica; i layer alti catturano ragionamento complesso e relazioni a lunga distanza. È una proprietà emergente del training.
+
+**5. Se il KV Cache di Llama-3 70B occupa 20 GB con 8K token, quanto occuperà approssimativamente con 32K token?**
+
+a) 40 GB
+**b) 80 GB** ✅
+c) 160 GB
+d) 320 GB
+
+> Il KV Cache cresce linearmente con il numero di token. 32K è 4× rispetto a 8K, quindi il KV Cache sarà circa 4 × 20 GB = 80 GB.
+
+---
+
+## Deep Dive: Invalidazione della KV Cache
+
+**1. Cosa succede quando un singolo token nel mezzo di un prompt viene modificato?**
+
+a) Solo quel token viene ricalcolato
+b) Tutti i token del prompt vengono ricalcolati
+**c) Tutti i token da quel punto in poi vengono ricalcolati, quelli prima restano in cache** ✅
+d) La cache viene completamente svuotata e il modello riparte da zero
+
+> L'invalidazione si propaga sempre verso destra: ogni token dipende causalmente da tutti quelli che lo precedono. Cambiare un token in posizione i invalida tutto da i in poi, ma i token prima di i restano validi.
+
+**2. Qual è l'ordine ottimale dei componenti in un prompt per massimizzare il cache hit?**
+
+a) Domanda → System prompt → Documento → Cronologia
+b) Cronologia → Domanda → System prompt → Documento
+**c) System prompt fisso → Documento/Contesto → Cronologia → Nuovo turno** ✅
+d) L'ordine non influenza la cache
+
+> La regola d'oro è mettere le parti più stabili a sinistra e quelle più variabili a destra. Tutto ciò che sta a sinistra del primo token che cambia è potenzialmente cachabile.
+
+**3. Perché mettere `Oggi è {data}` nel system prompt è problematico per la cache?**
+
+a) Perché le date occupano troppa memoria
+**b) Perché il system prompt cambia ogni giorno, invalidando tutta la cache ad ogni richiesta** ✅
+c) Perché i LLM non capiscono le date
+d) Perché le date non possono essere tokenizzate
+
+> Se il system prompt contiene dati dinamici (data, timestamp, ID), cambia ad ogni richiesta. Poiché è all'inizio della sequenza, l'invalidazione si propaga a tutto ciò che segue, azzerando il cache hit rate.
+
+**4. In una pipeline RAG, perché è meglio mettere il documento prima della domanda?**
+
+a) Perché i LLM leggono da sinistra a destra e capiscono meglio il contesto
+b) Perché il documento è più lungo e deve essere elaborato per primo
+**c) Perché se il documento non cambia tra query diverse, mettendolo prima della domanda si cacha come parte del prefisso stabile** ✅
+d) Perché le API richiedono questo ordine specifico
+
+> In RAG, spesso si fanno molte domande sullo stesso documento. Se il documento precede la domanda, rimane come prefisso stabile e viene cachato. Se la domanda precede il documento, il prefisso cambia ad ogni query.
+
+**5. Il Prompt Caching di Anthropic riduce i costi dei token cachati di circa:**
+
+a) 10% rispetto al prezzo normale
+b) 50% rispetto al prezzo normale
+**c) 90% rispetto al prezzo normale (i token cachati costano ~10% del prezzo normale)** ✅
+d) 100% — i token cachati sono gratuiti
+
+> I token cachati con Anthropic costano circa il 10% del prezzo normale dei token di input. Su pipeline con system prompt da 10-50K token, il risparmio totale sui costi di input può essere del 60-80%.
+
+---
+
+## Deep Dive: Attention Matrix — Dove Vive, Come Funziona, Perché Costa
+
+**1. La matrice di attenzione viene conservata nel KV Cache per essere riutilizzata?**
+
+a) Sì, è la parte principale del KV Cache
+b) Sì, ma solo durante il training
+**c) No, viene calcolata al volo e poi scartata; nel KV Cache si conservano solo K e V** ✅
+d) Dipende dall'implementazione del modello
+
+> La matrice di attenzione è una struttura temporanea calcolata durante ogni forward pass. Nel KV Cache vengono conservati solo i vettori Key e Value precalcolati, non gli score di attenzione.
+
+**2. Perché nella formula dell'attenzione si divide per √d_head?**
+
+a) Per ridurre la complessità da O(n²) a O(n)
+**b) Per normalizzare la varianza dei dot product e impedire che la softmax saturi** ✅
+c) Per ridurre la dimensione della matrice risultante
+d) Per rendere il calcolo compatibile con la GPU
+
+> Con d_head grande, i dot product tendono ad avere magnitudine alta, portando la softmax a produrre distribuzioni quasi binarie con gradienti quasi zero. La divisione per √d_head normalizza la varianza.
+
+**3. Se un modello ha un contesto di 16K token, quante volte è più grande la sua matrice di attenzione rispetto a un contesto di 4K token?**
+
+a) 2 volte
+b) 4 volte
+c) 8 volte
+**d) 16 volte** ✅
+
+> La matrice è n×n. Con 4K: 4K² = 16M celle. Con 16K: 16K² = 256M celle. 256M / 16M = 16 volte. In generale, se n si moltiplica per k, la matrice si moltiplica per k².
+
+**4. Durante la fase di decode (generazione token per token), qual è il principale collo di bottiglia?**
+
+a) Il calcolo della matrice di attenzione n×n completa
+**b) La lettura dei vettori K e V del KV Cache dalla HBM** ✅
+c) La funzione softmax
+d) La proiezione Q, K, V
+
+> Nel decode si genera un token alla volta: la "matrice" è un vettore 1×n, il calcolo è veloce. Ma per calcolarlo bisogna leggere tutti i K e V dall'HBM, e la bandwidth della memoria diventa il fattore limitante (il modello è "memory-bound").
+
+**5. FlashAttention migliora le prestazioni del calcolo di attenzione principalmente perché:**
+
+a) Usa meno head di attenzione
+b) Approssima il risultato del prodotto Q·Kᵀ con meno operazioni
+**c) Processa la matrice a blocchi nella SRAM on-chip, riducendo i trasferimenti da/verso la HBM** ✅
+d) Elimina la necessità della causal mask
+
+> FlashAttention non approssima né riduce le operazioni. Il suo contributo chiave è il tiling: processa la matrice a blocchi nella SRAM (~20MB, ~19 TB/s) evitando di materializzarla nella HBM (~80GB, ~2 TB/s). Il risultato è 3-8x più veloce con la stessa correttezza matematica.
