@@ -79,7 +79,7 @@ const CycleBox = ({ label, icon, color, active, onClick, description }) => (
 
 /* ── Arrow connector ── */
 const CycleArrow = ({ direction = "right", color = COLORS.accent }) => {
-  const arrows = { right: "\u2192", down: "\u2193", left: "\u2190", up: "\u2191" };
+  const arrows = { right: "→", down: "↓", left: "←", up: "↑" };
   return (
     <div style={{
       display: "flex",
@@ -209,28 +209,28 @@ export default function App() {
     {
       id: "agente",
       label: "Agente",
-      icon: "\uD83E\uDD16",
+      icon: "🤖",
       color: COLORS.accent,
       description: "Chi decide cosa fare. Puo essere un cane, un algoritmo, un modello di IA. Osserva lo stato dell'ambiente e sceglie un'azione.",
     },
     {
       id: "azione",
       label: "Azione",
-      icon: "\uD83C\uDFAF",
+      icon: "🎯",
       color: COLORS.accent2,
       description: "Quello che l'agente decide di fare: sedersi, muovere un pezzo sulla scacchiera, generare una risposta.",
     },
     {
       id: "ambiente",
       label: "Ambiente",
-      icon: "\uD83C\uDF0D",
+      icon: "🌍",
       color: COLORS.accent3,
       description: "Il mondo in cui l'agente agisce. Reagisce all'azione e cambia stato. Puo essere un gioco, una conversazione, il mondo reale.",
     },
     {
       id: "ricompensa",
       label: "Ricompensa",
-      icon: "\u2B50",
+      icon: "⭐",
       color: COLORS.highlight,
       description: "Il feedback: +1 se va bene, -1 se va male. Il cane riceve un biscotto, il modello un punteggio. L'agente impara a massimizzare questa ricompensa.",
     },
@@ -260,25 +260,25 @@ export default function App() {
   const rabbitHoles = [
     {
       id: "reward-hacking",
-      title: "\uD83C\uDFAE Reward Hacking",
+      title: "🎮 Reward Hacking",
       color: COLORS.accent2,
       content: "Il modello trova scorciatoie per massimizzare la ricompensa senza fare davvero cio che vogliamo. Esempio classico: un agente RL per un gioco di barche impara a girare in cerchio raccogliendo bonus invece di finire la gara. Nei LLM, il modello puo imparare a scrivere risposte che 'sembrano' buone senza esserlo davvero.",
     },
     {
       id: "constitutional",
-      title: "\uD83D\uDCDC Constitutional AI (Anthropic)",
+      title: "📜 Constitutional AI (Anthropic)",
       color: COLORS.accent3,
       content: "Invece di far valutare ogni risposta a umani, Anthropic ha creato un sistema dove l'IA segue principi scritti (una 'costituzione'). L'IA critica le proprie risposte basandosi su questi principi, poi si auto-migliora. Meno dipendenza da feedback umano, piu scalabile e coerente.",
     },
     {
       id: "alignment",
-      title: "\u26A0\uFE0F Il Problema dell'Allineamento",
+      title: "⚠️ Il Problema dell'Allineamento",
       color: COLORS.highlight,
       content: "Come ci assicuriamo che un'IA superintelligente faccia quello che VOGLIAMO e non solo quello che le DICIAMO? Se chiedi 'massimizza la felicita umana', potrebbe decidere di drogarci tutti. Il problema dell'allineamento e considerato uno dei piu importanti della nostra epoca.",
     },
     {
       id: "multiagent",
-      title: "\uD83E\uDD3C Multi-Agent Self-Play",
+      title: "🤼 Multi-Agent Self-Play",
       color: COLORS.accent4,
       content: "Piu agenti IA che competono e collaborano tra loro, scoprendo strategie emergenti che nessun umano ha mai pensato. OpenAI ha mostrato agenti che in hide-and-seek hanno inventato l'uso di strumenti e la costruzione di strutture, senza che nessuno gliel'abbia insegnato.",
     },
@@ -332,7 +332,7 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           SEZIONE 1: Il Rinforzo
       ══════════════════════════════════════════════════════════════════ */}
-      <Section title="Il Rinforzo \u2014 Come un Cane Impara 'Seduto'" accent={COLORS.accent}>
+      <Section title="Il Rinforzo — Come un Cane Impara 'Seduto'" accent={COLORS.accent}>
         <p style={{ color: COLORS.text, fontSize: 14, lineHeight: 1.7, marginBottom: 16 }}>
           Il <strong style={{ color: COLORS.accent }}>Reinforcement Learning</strong> (apprendimento per rinforzo)
           e il modo piu intuitivo di imparare: <em>provi qualcosa, vedi se funziona, e aggiusti il tiro</em>.
@@ -385,7 +385,7 @@ export default function App() {
           marginTop: 16,
         }}>
           <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.7 }}>
-            <strong style={{ color: COLORS.accent }}>\uD83D\uDCA1 L'intuizione chiave:</strong>{" "}
+            <strong style={{ color: COLORS.accent }}>💡 L'intuizione chiave:</strong>{" "}
             Nessuno dice al cane <em>come</em> sedersi. Lui prova, riceve feedback, e migliora.
             Lo stesso vale per l'IA: non le diamo le regole, le diamo solo un <strong>obiettivo</strong> e
             un sistema di <strong>ricompense</strong>.
@@ -396,7 +396,7 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           SEZIONE 2: AlphaGo
       ══════════════════════════════════════════════════════════════════ */}
-      <Section title="AlphaGo \u2014 La Macchina che ha Battuto 3000 Anni di Strategia" accent={COLORS.accent2}>
+      <Section title="AlphaGo — La Macchina che ha Battuto 3000 Anni di Strategia" accent={COLORS.accent2}>
         <p style={{ color: COLORS.text, fontSize: 14, lineHeight: 1.7, marginBottom: 8 }}>
           <strong style={{ color: COLORS.accent2 }}>Marzo 2016, Seoul.</strong>{" "}
           Lee Sedol, il piu grande giocatore di Go al mondo, si siede davanti a una macchina di Google DeepMind.
@@ -413,21 +413,21 @@ export default function App() {
         {/* Human vs AlphaZero comparison */}
         <div style={{ display: "flex", gap: 16, marginBottom: 24, flexWrap: "wrap" }}>
           <StatCard
-            icon="\uD83E\uDDD1\u200D\uD83C\uDF93"
+            icon="🧑‍🎓"
             label="Giocatore Umano"
             value="10+ anni"
             subtext="Studio costante, maestri, migliaia di partite analizzate"
             color={COLORS.muted}
           />
           <StatCard
-            icon="\u26A1"
+            icon="⚡"
             label="AlphaZero"
             value="40 ore"
             subtext="Da zero conoscenza a miglior giocatore di Go della storia"
             color={COLORS.accent2}
           />
           <StatCard
-            icon="\uD83C\uDFAF"
+            icon="🎯"
             label="Mossa 37"
             value="P(umano) < 1/10.000"
             subtext="Probabilita che un professionista la giocasse. L'IA l'ha trovata da sola."
@@ -486,7 +486,7 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           SEZIONE 3: RLHF
       ══════════════════════════════════════════════════════════════════ */}
-      <Section title="RLHF \u2014 Rendere gli LLM Educati" accent={COLORS.accent3}>
+      <Section title="RLHF — Rendere gli LLM Educati" accent={COLORS.accent3}>
         <p style={{ color: COLORS.text, fontSize: 14, lineHeight: 1.7, marginBottom: 8 }}>
           GPT-3 era potentissimo, ma aveva un problema: rispondeva in modo imprevedibile,
           a volte offensivo, spesso inutile. Come trasformarlo nel ChatGPT che conosciamo?
@@ -555,7 +555,7 @@ export default function App() {
             letterSpacing: 2,
             marginBottom: 12,
           }}>
-            {showAfterRLHF ? "\u2705 Dopo RLHF \u2014 ChatGPT" : "\u26A0\uFE0F Prima di RLHF \u2014 GPT-3 base"}
+            {showAfterRLHF ? "✅ Dopo RLHF — ChatGPT" : "⚠️ Prima di RLHF — GPT-3 base"}
           </div>
 
           <div style={{
@@ -618,7 +618,7 @@ export default function App() {
         <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
           <PipelineStep
             label="Pre-training"
-            icon="\uD83D\uDCDA"
+            icon="📚"
             color={COLORS.accent}
             active={activePipeline === "pre"}
             description="Il modello legge internet. Impara la lingua, i fatti, i pattern. Ma non sa essere utile."
@@ -627,12 +627,12 @@ export default function App() {
             onClick={() => setActivePipeline(activePipeline === "pre" ? null : "pre")}
             style={{ cursor: "pointer", color: COLORS.accent, fontSize: 18 }}
           >
-            \u2192
+            →
           </div>
 
           <PipelineStep
             label="SFT"
-            icon="\uD83C\uDF93"
+            icon="🎓"
             color={COLORS.accent3}
             active={activePipeline === "sft"}
             description="Supervised Fine-Tuning: umani scrivono risposte 'perfette' come esempio. Il modello impara il formato."
@@ -641,12 +641,12 @@ export default function App() {
             onClick={() => setActivePipeline(activePipeline === "sft" ? null : "sft")}
             style={{ cursor: "pointer", color: COLORS.accent3, fontSize: 18 }}
           >
-            \u2192
+            →
           </div>
 
           <PipelineStep
             label="RLHF"
-            icon="\uD83D\uDC4D"
+            icon="👍"
             color={COLORS.accent4}
             active={activePipeline === "rlhf"}
             description="Umani votano le risposte. Un 'reward model' impara i gusti umani. Il LLM si ottimizza per piacere di piu."
@@ -692,7 +692,7 @@ export default function App() {
       {/* ══════════════════════════════════════════════════════════════════
           SEZIONE 4: RLVR
       ══════════════════════════════════════════════════════════════════ */}
-      <Section title="RLVR \u2014 Verificatori Automatici" accent={COLORS.accent4}>
+      <Section title="RLVR — Verificatori Automatici" accent={COLORS.accent4}>
         <p style={{ color: COLORS.text, fontSize: 14, lineHeight: 1.7, marginBottom: 8 }}>
           RLHF funziona, ma ha un limite: gli umani sono <strong>lenti</strong>,{" "}
           <strong>costosi</strong> e <strong>soggettivi</strong>. Se chiedi a 10 persone di valutare una risposta,
@@ -764,7 +764,7 @@ export default function App() {
             transition: "all 0.4s ease",
             boxShadow: !showRLVR ? `0 0 16px ${COLORS.accent3}22` : "none",
           }}>
-            <div style={{ fontSize: 22, textAlign: "center", marginBottom: 8 }}>{"\uD83D\uDC65"}</div>
+            <div style={{ fontSize: 22, textAlign: "center", marginBottom: 8 }}>{"👥"}</div>
             <div style={{
               fontSize: 14,
               fontWeight: 700,
@@ -776,10 +776,10 @@ export default function App() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {[
-                { icon: "\uD83D\uDCB0", text: "Costoso: serve pagare valutatori" },
-                { icon: "\u23F3", text: "Lento: gli umani hanno i loro tempi" },
-                { icon: "\uD83C\uDFAD", text: "Soggettivo: opinioni diverse" },
-                { icon: "\u2705", text: "Ottimo per: tono, stile, sicurezza" },
+                { icon: "💰", text: "Costoso: serve pagare valutatori" },
+                { icon: "⏳", text: "Lento: gli umani hanno i loro tempi" },
+                { icon: "🎭", text: "Soggettivo: opinioni diverse" },
+                { icon: "✅", text: "Ottimo per: tono, stile, sicurezza" },
               ].map((item, i) => (
                 <div key={i} style={{ display: "flex", gap: 8, fontSize: 12, color: COLORS.text, alignItems: "flex-start" }}>
                   <span style={{ fontSize: 14 }}>{item.icon}</span>
@@ -800,7 +800,7 @@ export default function App() {
             transition: "all 0.4s ease",
             boxShadow: showRLVR ? `0 0 16px ${COLORS.accent4}22` : "none",
           }}>
-            <div style={{ fontSize: 22, textAlign: "center", marginBottom: 8 }}>{"\u2699\uFE0F"}</div>
+            <div style={{ fontSize: 22, textAlign: "center", marginBottom: 8 }}>{"⚙️"}</div>
             <div style={{
               fontSize: 14,
               fontWeight: 700,
@@ -812,10 +812,10 @@ export default function App() {
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {[
-                { icon: "\uD83D\uDCB8", text: "Economico: nessun costo umano" },
-                { icon: "\u26A1", text: "Veloce: feedback in millisecondi" },
-                { icon: "\uD83C\uDFAF", text: "Oggettivo: giusto o sbagliato" },
-                { icon: "\u2705", text: "Ottimo per: matematica, codice, logica" },
+                { icon: "💸", text: "Economico: nessun costo umano" },
+                { icon: "⚡", text: "Veloce: feedback in millisecondi" },
+                { icon: "🎯", text: "Oggettivo: giusto o sbagliato" },
+                { icon: "✅", text: "Ottimo per: matematica, codice, logica" },
               ].map((item, i) => (
                 <div key={i} style={{ display: "flex", gap: 8, fontSize: 12, color: COLORS.text, alignItems: "flex-start" }}>
                   <span style={{ fontSize: 14 }}>{item.icon}</span>
@@ -833,8 +833,8 @@ export default function App() {
           padding: "14px 18px",
         }}>
           <div style={{ fontSize: 13, color: COLORS.text, lineHeight: 1.7 }}>
-            <strong style={{ color: COLORS.accent4 }}>\uD83D\uDCA1 Esempio concreto:</strong>{" "}
-            Il modello prova a risolvere "Quanto fa 847 \u00D7 293?" &mdash; se la risposta e 248.171, il verificatore
+            <strong style={{ color: COLORS.accent4 }}>💡 Esempio concreto:</strong>{" "}
+            Il modello prova a risolvere "Quanto fa 847 × 293?" &mdash; se la risposta e 248.171, il verificatore
             automatico da ricompensa +1. Se sbaglia, -1. Nessun umano necessario, feedback istantaneo,
             migliaia di problemi al secondo.
           </div>
@@ -865,7 +865,7 @@ export default function App() {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 22 }}>{"\uD83D\uDC07"}</span>
+            <span style={{ fontSize: 22 }}>{"🐇"}</span>
             <div>
               <h2 style={{
                 color: COLORS.highlight,
@@ -888,7 +888,7 @@ export default function App() {
             transition: "transform 0.3s ease",
             transform: rabbitHoleOpen ? "rotate(180deg)" : "rotate(0deg)",
           }}>
-            {"\u25BC"}
+            {"▼"}
           </div>
         </div>
 
@@ -944,7 +944,7 @@ export default function App() {
               marginTop: 16,
             }}>
               <div style={{ fontSize: 12, color: COLORS.muted, lineHeight: 1.6 }}>
-                <strong style={{ color: COLORS.highlight }}>{"\uD83E\uDD14"} Domanda per voi:</strong>{" "}
+                <strong style={{ color: COLORS.highlight }}>{"🤔"} Domanda per voi:</strong>{" "}
                 Se un'IA puo imparare a giocare a Go meglio di qualsiasi umano in 40 ore,
                 cosa succedera quando applicheremo le stesse tecniche alla scoperta di farmaci,
                 alla ricerca scientifica o alla progettazione di nuovi materiali?

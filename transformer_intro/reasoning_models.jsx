@@ -65,7 +65,7 @@ const REASONING_MODELS = [
     feature: "Ragionamento integrato nell'ecosistema Google. Pensiero strutturato con accesso a strumenti.",
     released: "Dic 2024",
     open: false,
-    details: "Gemini 2.0 Flash Thinking integra il ragionamento in un modello veloce. Combina il pensiero strutturato con la capacit\u00e0 di usare strumenti (ricerca, codice, ecc.). Approccio multimodale: pu\u00f2 ragionare anche su immagini e video.",
+    details: "Gemini 2.0 Flash Thinking integra il ragionamento in un modello veloce. Combina il pensiero strutturato con la capacità di usare strumenti (ricerca, codice, ecc.). Approccio multimodale: può ragionare anche su immagini e video.",
   },
 ];
 
@@ -103,7 +103,7 @@ const TASK_CATEGORIES = [
     label: "Scrittura creativa",
     emoji: "✍️",
     recommendation: "standard",
-    reason: "La creativit\u00e0 fluisce meglio senza vincoli di ragionamento rigido.",
+    reason: "La creatività fluisce meglio senza vincoli di ragionamento rigido.",
   },
   {
     id: "translate",
@@ -124,7 +124,7 @@ const TASK_CATEGORIES = [
     label: "Riassunto di un testo",
     emoji: "📝",
     recommendation: "standard",
-    reason: "Riassumere \u00e8 una capacit\u00e0 base dei modelli linguistici.",
+    reason: "Riassumere è una capacità base dei modelli linguistici.",
   },
 ];
 
@@ -260,7 +260,7 @@ export default function App() {
               <div style={{ width: "100%", textAlign: "center", marginTop: 12 }}>
                 <Tag color={COLORS.accent3}>Deliberato</Tag>
                 <Tag color={COLORS.highlight}>Ragionamento multi-step</Tag>
-                <Tag color={COLORS.accent4}>Pi\u00f9 accurato</Tag>
+                <Tag color={COLORS.accent4}>Più accurato</Tag>
               </div>
             </div>
           )}
@@ -484,7 +484,7 @@ export default function App() {
       {/* SECTION 4: WHEN TO USE */}
       <Section title="Quando Usarlo? — Guida Interattiva" accent={COLORS.accent4}>
         <p style={{ fontSize: 15, color: COLORS.muted, marginBottom: 20, lineHeight: 1.6 }}>
-          Il ragionamento non serve sempre! Seleziona un tipo di attivit\u00e0 per scoprire se conviene
+          Il ragionamento non serve sempre! Seleziona un tipo di attività per scoprire se conviene
           usare un modello <Tag color={COLORS.accent3}>reasoning</Tag> o <Tag color={COLORS.accent}>standard</Tag>.
         </p>
 
@@ -596,7 +596,7 @@ export default function App() {
             <span style={{ fontSize: 22 }}>🐇</span>
             <div style={{ textAlign: "left" }}>
               <div style={{ fontSize: 15, fontWeight: 700, color: COLORS.accent2 }}>
-                Rabbit Hole — Per i pi\u00f9 curiosi
+                Rabbit Hole — Per i più curiosi
               </div>
               <div style={{ fontSize: 12, color: COLORS.muted }}>
                 Test-time compute, RLVR, benchmark, e i limiti del ragionamento
@@ -649,9 +649,9 @@ export default function App() {
               </h3>
               <p style={{ fontSize: 14, color: COLORS.muted, lineHeight: 1.7, margin: 0 }}>
                 Ricordate il <strong style={{ color: COLORS.accent4 }}>Reinforcement Learning</strong> della slide precedente?
-                DeepSeek-R1 ha dimostrato qualcosa di straordinario: usando <strong style={{ color: COLORS.highlight }}>ricompense verificabili</strong> (la risposta matematica \u00e8 giusta o sbagliata),
+                DeepSeek-R1 ha dimostrato qualcosa di straordinario: usando <strong style={{ color: COLORS.highlight }}>ricompense verificabili</strong> (la risposta matematica è giusta o sbagliata),
                 il modello ha <em>spontaneamente sviluppato</em> la catena di pensiero. Nessuno glielo ha insegnato esplicitamente:
-                il ragionamento \u00e8 <strong style={{ color: COLORS.accent2 }}>emerso</strong> dall'addestramento RL.
+                il ragionamento è <strong style={{ color: COLORS.accent2 }}>emerso</strong> dall'addestramento RL.
               </p>
             </div>
 
@@ -684,12 +684,12 @@ export default function App() {
                 🤔 I Modelli Ragionano Davvero?
               </h3>
               <p style={{ fontSize: 14, color: COLORS.muted, lineHeight: 1.7, margin: "0 0 12px 0" }}>
-                Questa \u00e8 la grande domanda. Ci sono due posizioni:
+                Questa è la grande domanda. Ci sono due posizioni:
               </p>
               <div style={{ display: "flex", gap: 16 }}>
                 <div style={{ flex: 1, padding: 14, background: `${COLORS.accent4}10`, border: `1px solid ${COLORS.accent4}33`, borderRadius: 8 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.accent4, marginBottom: 8 }}>
-                    "S\u00ec, \u00e8 ragionamento"
+                    "Sì, è ragionamento"
                   </div>
                   <ul style={{ fontSize: 12, color: COLORS.muted, margin: 0, paddingLeft: 16, lineHeight: 1.6 }}>
                     <li>Risolvono problemi mai visti</li>
@@ -699,7 +699,7 @@ export default function App() {
                 </div>
                 <div style={{ flex: 1, padding: 14, background: `${COLORS.accent2}10`, border: `1px solid ${COLORS.accent2}33`, borderRadius: 8 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: COLORS.accent2, marginBottom: 8 }}>
-                    "No, \u00e8 simulazione"
+                    "No, è simulazione"
                   </div>
                   <ul style={{ fontSize: 12, color: COLORS.muted, margin: 0, paddingLeft: 16, lineHeight: 1.6 }}>
                     <li>Pattern matching sofisticato</li>
@@ -717,10 +717,10 @@ export default function App() {
               </h3>
               <p style={{ fontSize: 14, color: COLORS.muted, lineHeight: 1.7, margin: 0 }}>
                 I reasoning models sono un passo verso l'<strong style={{ color: COLORS.accent3 }}>AGI</strong>?
-                Alcuni ricercatori pensano di s\u00ec: il ragionamento \u00e8 la capacit\u00e0 cognitiva chiave che mancava.
+                Alcuni ricercatori pensano di sì: il ragionamento è la capacità cognitiva chiave che mancava.
                 Altri sono scettici: risolvere problemi di matematica non equivale a comprendere il mondo.
-                Una cosa \u00e8 certa: la distanza tra IA ristretta e IA generale si sta riducendo, e modelli come o3
-                segnano <strong style={{ color: COLORS.highlight }}>i punteggi pi\u00f9 alti mai visti</strong> su benchmark
+                Una cosa è certa: la distanza tra IA ristretta e IA generale si sta riducendo, e modelli come o3
+                segnano <strong style={{ color: COLORS.highlight }}>i punteggi più alti mai visti</strong> su benchmark
                 progettati per misurare l'intelligenza generale (come ARC-AGI).
               </p>
             </div>

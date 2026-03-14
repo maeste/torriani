@@ -725,7 +725,7 @@ function RabbitHole() {
               <tbody>
                 {[
                   ["Pesi del modello", "Costante", "7B parametri (fissi)"],
-                  ["Matrice di attenzione", "Quadratica O(n\u00B2)", "1M valori per layer"],
+                  ["Matrice di attenzione", "Quadratica O(n²)", "1M valori per layer"],
                   ["KV Cache", "Lineare O(n)", "~0.5 MB per layer"],
                   ["Embedding", "Lineare O(n)", "4 MB"],
                 ].map(([comp, scale, example], i) => (

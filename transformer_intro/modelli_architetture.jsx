@@ -51,7 +51,7 @@ const MODEL_CATEGORIES = [
     range: "1 — 7B",
     params: 4,
     color: COLORS.accent4,
-    icon: "\ud83d\udcf1",
+    icon: "📱",
     hardware: "Telefono / Laptop",
     examples: ["Phi-3 (3.8B)", "Gemma-2 (2B)", "Llama-3.2 (3B)"],
     useCases: "Chatbot locali, riassunti, classificazione testi, assistenti personali offline",
@@ -63,7 +63,7 @@ const MODEL_CATEGORIES = [
     range: "7 — 70B",
     params: 35,
     color: COLORS.accent2,
-    icon: "\ud83d\udda5\ufe0f",
+    icon: "🖥️",
     hardware: "1-2 GPU dedicate",
     examples: ["Llama-3 70B", "Mixtral 8x7B", "Qwen-72B"],
     useCases: "Coding assistant, analisi documenti, traduzione professionale, RAG aziendale",
@@ -75,7 +75,7 @@ const MODEL_CATEGORIES = [
     range: "70B — 1.8T+",
     params: 900,
     color: COLORS.accent3,
-    icon: "\u2601\ufe0f",
+    icon: "☁️",
     hardware: "Cluster cloud / Data center",
     examples: ["GPT-4 (~1.8T)", "Claude 3.5", "Gemini Ultra"],
     useCases: "Ragionamento complesso, ricerca, creativita' avanzata, agenti autonomi",
@@ -94,7 +94,7 @@ const LOCAL_TOOLS = [
   {
     id: "ollama",
     name: "Ollama",
-    icon: "\ud83e\uddec",
+    icon: "🧬",
     color: COLORS.accent4,
     difficulty: "Facile",
     desc: "Il modo piu' semplice. Un comando nel terminale e sei pronto.",
@@ -105,7 +105,7 @@ const LOCAL_TOOLS = [
   {
     id: "lmstudio",
     name: "LM Studio",
-    icon: "\ud83d\udda5\ufe0f",
+    icon: "🖥️",
     color: COLORS.accent,
     difficulty: "Facilissimo",
     desc: "Interfaccia grafica completa. Scarica, clicca, chatta.",
@@ -116,7 +116,7 @@ const LOCAL_TOOLS = [
   {
     id: "llamacpp",
     name: "llama.cpp",
-    icon: "\u26a1",
+    icon: "⚡",
     color: COLORS.accent2,
     difficulty: "Avanzato",
     desc: "Prestazioni massime. Scritto in C++, il piu' veloce e flessibile.",
@@ -127,12 +127,12 @@ const LOCAL_TOOLS = [
 ];
 
 const TRADEOFF_ROWS = [
-  { label: "Costo", icon: "\ud83d\udcb0" },
-  { label: "Privacy", icon: "\ud83d\udd12" },
-  { label: "Qualita'", icon: "\u2b50" },
-  { label: "Velocita'", icon: "\u26a1" },
-  { label: "Offline", icon: "\ud83d\udcf4" },
-  { label: "Personalizzazione", icon: "\ud83d\udd27" },
+  { label: "Costo", icon: "💰" },
+  { label: "Privacy", icon: "🔒" },
+  { label: "Qualita'", icon: "⭐" },
+  { label: "Velocita'", icon: "⚡" },
+  { label: "Offline", icon: "📴" },
+  { label: "Personalizzazione", icon: "🔧" },
 ];
 
 const TRADEOFF_COLS = [
@@ -350,7 +350,7 @@ export default function App() {
             border: `1px solid ${COLORS.accent2}44`,
             flexShrink: 0,
           }}>
-            {"\ud83d\udd33"}
+            {"🔳"}
           </div>
           <div style={{ flex: 1, minWidth: 200 }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: COLORS.accent2, marginBottom: 6 }}>
@@ -420,10 +420,10 @@ export default function App() {
         {/* Why it matters */}
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 20 }}>
           {[
-            { icon: "\ud83d\udd12", text: "Privacy totale" },
-            { icon: "\ud83d\udcf4", text: "Funziona offline" },
-            { icon: "\ud83d\udcb0", text: "Zero costi" },
-            { icon: "\ud83c\udf93", text: "Impari come funziona" },
+            { icon: "🔒", text: "Privacy totale" },
+            { icon: "📴", text: "Funziona offline" },
+            { icon: "💰", text: "Zero costi" },
+            { icon: "🎓", text: "Impari come funziona" },
           ].map((item, i) => (
             <div key={i} style={{
               background: `${COLORS.accent4}11`,
@@ -511,7 +511,7 @@ export default function App() {
                       marginBottom: terminalVisible ? 8 : 0,
                     }}
                   >
-                    {terminalVisible ? "\u25bc" : "\u25b6"} Vedi nel terminale
+                    {terminalVisible ? "▼" : "▶"} Vedi nel terminale
                   </button>
                   {terminalVisible && (
                     <div style={{
@@ -523,7 +523,7 @@ export default function App() {
                       border: `1px solid ${COLORS.border}`,
                     }}>
                       <div style={{ color: COLORS.muted, marginBottom: 6 }}>$ {tool.command}</div>
-                      <div style={{ color: COLORS.accent4 }}>{"\u2588"} Modello in esecuzione...</div>
+                      <div style={{ color: COLORS.accent4 }}>{"█"} Modello in esecuzione...</div>
                       <div style={{ color: COLORS.text, marginTop: 8 }}>
                         {">"} Ciao! Sono un modello locale. Come posso aiutarti?
                       </div>
@@ -655,9 +655,9 @@ export default function App() {
             textTransform: "uppercase",
           }}
         >
-          <span>{"\ud83d\udc07"} Rabbit Hole — Tecniche Avanzate</span>
+          <span>{"🐇"} Rabbit Hole — Tecniche Avanzate</span>
           <span style={{ fontSize: 18, transition: "transform 0.3s ease", transform: rabbitHoleOpen ? "rotate(180deg)" : "rotate(0)" }}>
-            {"\u25bc"}
+            {"▼"}
           </span>
         </button>
 
@@ -702,7 +702,7 @@ export default function App() {
                         boxShadow: isActive ? `0 0 12px ${COLORS.accent3}33` : "none",
                       }}
                     >
-                      {isActive ? "\ud83d\udfe2" : "\u26ab"} {expert}
+                      {isActive ? "🟢" : "⚫"} {expert}
                     </div>
                   );
                 })}
@@ -847,10 +847,10 @@ export default function App() {
                   padding: "12px 16px",
                   textAlign: "center",
                 }}>
-                  <div style={{ fontSize: 24 }}>{"\ud83e\udde0"}</div>
+                  <div style={{ fontSize: 24 }}>{"🧠"}</div>
                   <div style={{ fontSize: 12, color: COLORS.accent3, fontFamily: "'JetBrains Mono', monospace" }}>Maestro (400B)</div>
                 </div>
-                <div style={{ fontSize: 24, color: COLORS.highlight }}>{"\u27a1"}</div>
+                <div style={{ fontSize: 24, color: COLORS.highlight }}>{"➡"}</div>
                 <div style={{
                   background: `${COLORS.highlight}22`,
                   border: `1px solid ${COLORS.highlight}44`,
@@ -861,7 +861,7 @@ export default function App() {
                   <div style={{ fontSize: 11, color: COLORS.muted, marginBottom: 2 }}>Dati generati</div>
                   <div style={{ fontSize: 12, color: COLORS.highlight, fontFamily: "'JetBrains Mono', monospace" }}>milioni di esempi</div>
                 </div>
-                <div style={{ fontSize: 24, color: COLORS.highlight }}>{"\u27a1"}</div>
+                <div style={{ fontSize: 24, color: COLORS.highlight }}>{"➡"}</div>
                 <div style={{
                   background: `${COLORS.accent4}22`,
                   border: `1px solid ${COLORS.accent4}44`,
@@ -869,7 +869,7 @@ export default function App() {
                   padding: "12px 16px",
                   textAlign: "center",
                 }}>
-                  <div style={{ fontSize: 20 }}>{"\ud83c\udf31"}</div>
+                  <div style={{ fontSize: 20 }}>{"🌱"}</div>
                   <div style={{ fontSize: 12, color: COLORS.accent4, fontFamily: "'JetBrains Mono', monospace" }}>Allievo (7B)</div>
                 </div>
               </div>
