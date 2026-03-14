@@ -45,9 +45,7 @@ SLIDES = [
     ("attention_matrix_deep", "Attention Matrix Deep Dive", "Deep Dive"),
 ]
 
-EXTRA_DOCS = [
-    ("quiz_risolti", "Quiz Risolti — Tutte le Risposte"),
-]
+EXTRA_DOCS = []
 
 # ---------------------------------------------------------------------------
 # Quiz answer extraction from quiz_risolti.md
@@ -620,12 +618,6 @@ INDEX_TEMPLATE = """\
     <h1>📚 Documenti per lo Studio</h1>
     <p class="subtitle">Tutti i materiali di approfondimento del corso "LLM per le Scuole Superiori"</p>
     {sections}
-    <div class="extra-section">
-      <div class="session-title">📝 Extra</div>
-      <ul class="doc-list">
-        <li><a href="quiz_risolti.html"><span class="doc-num">✅</span> Quiz Risolti — Tutte le Risposte</a></li>
-      </ul>
-    </div>
   </div>
 </body>
 </html>
