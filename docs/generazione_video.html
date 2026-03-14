@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -281,21 +281,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Qual e la differenza tra generare un&rsquo;immagine e generare un video con l&rsquo;IA?</strong>
+<p><strong>Qual e la differenza tra generare un&rsquo;immagine e generare un video con l&rsquo;IA?</strong><br>
 Un&rsquo;immagine e un singolo frame che deve essere coerente solo con se stesso. Un video e una sequenza di frame (24-30 al secondo) dove ogni frame deve essere coerente con tutti gli altri nel tempo: oggetti, luci, ombre, movimenti devono evolvere in modo fluido e naturale. Questo rende la generazione video enormemente piu complessa.</p>
-<p><strong>Sora puo creare video di qualsiasi cosa?</strong>
+<p><strong>Sora puo creare video di qualsiasi cosa?</strong><br>
 In teoria si, ma in pratica ha molte restrizioni. OpenAI blocca la generazione di volti di persone reali, contenuti violenti e materiale inappropriato. Tuttavia, essendo una tecnologia in rapida evoluzione, altri strumenti meno regolamentati potrebbero non avere le stesse limitazioni.</p>
-<p><strong>Quanto costa generare un video con l&rsquo;IA?</strong>
+<p><strong>Quanto costa generare un video con l&rsquo;IA?</strong><br>
 Dipende dallo strumento. Pika offre un piano gratuito con limiti, Runway parte da circa 12 dollari al mese, e ci sono piani professionali piu costosi. I costi computazionali dietro le quinte sono elevati: generare un minuto di video puo richiedere diversi minuti di calcolo su hardware molto costoso (GPU specializzate).</p>
-<p><strong>I film del futuro saranno fatti interamente dall&rsquo;IA?</strong>
+<p><strong>I film del futuro saranno fatti interamente dall&rsquo;IA?</strong><br>
 Probabilmente no, almeno non nel prossimo futuro. E piu realistico pensare all&rsquo;IA come a uno strumento nelle mani dei creativi: per la pre-visualizzazione delle scene, gli effetti speciali, le colonne sonore, lo storyboarding. Il regista e la visione creativa umana restano fondamentali.</p>
-<p><strong>Come posso capire se un video che vedo online e stato generato dall&rsquo;IA?</strong>
+<p><strong>Come posso capire se un video che vedo online e stato generato dall&rsquo;IA?</strong><br>
 Oggi puoi cercare artefatti visivi: mani con dita strane, testo illeggibile, fisica che non torna, dettagli che cambiano tra un frame e l&rsquo;altro. Puoi anche usare strumenti di rilevamento come TrueMedia.org e verificare la fonte del video. In futuro, standard come C2PA integreranno metadati verificabili nei contenuti autentici.</p>
-<p><strong>Cosa sono i &ldquo;world model&rdquo; e perche sono importanti?</strong>
+<p><strong>Cosa sono i &ldquo;world model&rdquo; e perche sono importanti?</strong><br>
 I modelli piu avanzati, come Veo 2 di Google, non si limitano a generare pixel: cercano di costruire una rappresentazione interna del mondo fisico. Capiscono (almeno in parte) la gravita, le ombre, i riflessi, la prospettiva. Non &ldquo;capiscono&rdquo; davvero la fisica come un essere umano, ma producono risultati sempre piu realistici. E un passo verso un&rsquo;IA che modella il mondo, non solo lo imita.</p>
-<p><strong>Il deepfake e illegale?</strong>
+<p><strong>Il deepfake e illegale?</strong><br>
 La legislazione e ancora in evoluzione. In molti paesi e illegale creare deepfake per diffamazione, frode o molestie. L&rsquo;Unione Europea, con l&rsquo;AI Act, sta introducendo regole che richiedono di dichiarare quando un contenuto e generato dall&rsquo;IA. Tuttavia, l&rsquo;applicazione di queste leggi e ancora una sfida.</p>
-<p><strong>Cosa significa C2PA e come funziona?</strong>
+<p><strong>Cosa significa C2PA e come funziona?</strong><br>
 C2PA sta per Coalition for Content Provenance and Authenticity. E uno standard aperto, supportato da Adobe, Microsoft, Google, BBC e altri, che permette di incorporare in ogni contenuto digitale dei metadati verificabili: chi lo ha creato, quando, con quale strumento, se e stato modificato. Pensalo come un certificato di nascita digitale che accompagna foto e video dalla creazione alla condivisione.</p>
 <hr>
 <div class="quiz-container" id="quiz">

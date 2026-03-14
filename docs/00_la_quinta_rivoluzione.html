@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -277,21 +277,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>L&rsquo;IA eliminera posti di lavoro?</strong>
+<p><strong>L&rsquo;IA eliminera posti di lavoro?</strong><br>
 Come ogni rivoluzione precedente, l&rsquo;IA trasformera i lavori piu che eliminarli. I compiti ripetitivi verranno automatizzati, ma quelli creativi, strategici e relazionali diventeranno piu importanti. Nasceranno anche professioni completamente nuove, come e successo con internet (youtuber, social media manager, data scientist: nessuno di questi lavori esisteva trent&rsquo;anni fa).</p>
-<p><strong>Perche si dice che siamo &ldquo;nel 1995 di internet&rdquo;?</strong>
+<p><strong>Perche si dice che siamo &ldquo;nel 1995 di internet&rdquo;?</strong><br>
 Perche il lancio di ChatGPT nel 2022 e stato per l&rsquo;IA quello che Netscape e stato per internet nel 1995: il momento in cui la tecnologia e diventata accessibile a tutti. Siamo all&rsquo;inizio di una curva di crescita esponenziale, e il grosso dei cambiamenti deve ancora arrivare.</p>
-<p><strong>I Luddisti avevano ragione a distruggere le macchine?</strong>
+<p><strong>I Luddisti avevano ragione a distruggere le macchine?</strong><br>
 Avevano ragione nel sentirsi minacciati: molti lavori artigianali sono effettivamente scomparsi. Ma ne sono nati di nuovi e spesso migliori. Distruggere le macchine non ha fermato il progresso, ha solo ritardato l&rsquo;adattamento di chi lo faceva. La lezione e che resistere al cambiamento non funziona; guidarlo, si.</p>
-<p><strong>Quanto e potente l&rsquo;IA rispetto al cervello umano?</strong>
+<p><strong>Quanto e potente l&rsquo;IA rispetto al cervello umano?</strong><br>
 Il confronto e complicato perche un neurone biologico e molto piu complesso di un parametro artificiale. Come ordine di grandezza: GPT-4 ha circa 1.800 miliardi di parametri, il cervello umano ha circa 100.000 miliardi di sinapsi. I modelli sono molto piu piccoli, eppure mostrano capacita sorprendenti. Perche funzionino cosi bene resta una domanda aperta della ricerca.</p>
-<p><strong>Cosa sono le &ldquo;scaling laws&rdquo;?</strong>
+<p><strong>Cosa sono le &ldquo;scaling laws&rdquo;?</strong><br>
 Sono leggi scoperte dai ricercatori (Kaplan e colleghi, 2020) che mostrano come le prestazioni dei modelli di IA migliorano in modo prevedibile quando si aumentano tre cose: il numero di parametri, la quantita di dati di addestramento e la potenza di calcolo usata. In pratica: modelli piu grandi, addestrati su piu dati, funzionano meglio, e questo miglioramento segue regole matematiche precise.</p>
-<p><strong>Cosa sono le &ldquo;capacita emergenti&rdquo;?</strong>
+<p><strong>Cosa sono le &ldquo;capacita emergenti&rdquo;?</strong><br>
 Sono abilita che i modelli di IA mostrano solo quando diventano abbastanza grandi. Per esempio, un modello piccolo non sa fare ragionamento matematico, ma uno molto grande improvvisamente ci riesce, senza essere stato programmato specificamente per quello. E un fenomeno affascinante e ancora non completamente spiegato dalla scienza.</p>
-<p><strong>Devo avere paura dell&rsquo;IA?</strong>
+<p><strong>Devo avere paura dell&rsquo;IA?</strong><br>
 La paura e una reazione naturale davanti a qualcosa di nuovo e potente. Ma la storia ci insegna che la strategia migliore non e mai stata evitare la tecnologia, bensi imparare a usarla in modo consapevole e critico. Capire come funziona l&rsquo;IA ti mette in una posizione di forza, non di debolezza.</p>
-<p><strong>L&rsquo;IA puo davvero &ldquo;pensare&rdquo; come un essere umano?</strong>
+<p><strong>L&rsquo;IA puo davvero &ldquo;pensare&rdquo; come un essere umano?</strong><br>
 No, almeno non nel senso in cui lo intendiamo noi. I modelli attuali sono bravissimi a riconoscere pattern nel linguaggio e a generare risposte coerenti, ma non hanno coscienza, emozioni o comprensione profonda del mondo. Sono strumenti molto sofisticati, non menti artificiali. La differenza e importante.</p>
 <hr>
 <div class="quiz-container" id="quiz">

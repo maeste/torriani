@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -280,21 +280,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Ma allora non serve piu imparare a programmare?</strong>
+<p><strong>Ma allora non serve piu imparare a programmare?</strong><br>
 Al contrario, serve ancora di piu. Per guidare un agente IA devi capire cosa stai facendo. Un agente puo scrivere codice, ma sei tu a decidere l&rsquo;architettura, a valutare la qualita, a definire i requisiti. E come dire &ldquo;non serve imparare a guidare perche esiste il navigatore&rdquo;: il navigatore ti dice dove andare, ma devi saper guidare tu.</p>
-<p><strong>Questi strumenti sono gratuiti?</strong>
+<p><strong>Questi strumenti sono gratuiti?</strong><br>
 Molti hanno versioni gratuite con limitazioni. GitHub Copilot e gratuito per gli studenti. ChatGPT e Claude offrono piani free. I piani a pagamento costano circa 20 euro al mese, piu o meno come un abbonamento a Netflix.</p>
-<p><strong>Posso usare l&rsquo;IA per i compiti di scuola?</strong>
+<p><strong>Posso usare l&rsquo;IA per i compiti di scuola?</strong><br>
 Puoi usarla per <em>imparare</em>, non per <em>copiare</em>. La differenza e fondamentale: usare l&rsquo;IA per capire un concetto che non ti e chiaro e come avere un tutor privato. Farle fare il compito al posto tuo e come copiare dal compagno: non impari nulla, e prima o poi si nota.</p>
-<p><strong>Qual e la differenza tra Claude e ChatGPT?</strong>
+<p><strong>Qual e la differenza tra Claude e ChatGPT?</strong><br>
 Sono come iPhone e Android: fanno cose simili ma con filosofie diverse. Claude tende a essere piu preciso e riflessivo su testi lunghi e ragionamento complesso. ChatGPT e piu versatile con immagini e voce e ha un ecosistema di plugin enorme. La cosa migliore e provarli entrambi e scegliere in base alle tue esigenze.</p>
-<p><strong>Come fa un agente a &ldquo;usare strumenti&rdquo;?</strong>
+<p><strong>Come fa un agente a &ldquo;usare strumenti&rdquo;?</strong><br>
 L&rsquo;agente non esegue le azioni direttamente. Genera una richiesta strutturata (ad esempio: &ldquo;cerca il meteo a Milano&rdquo;) che il sistema esterno esegue. Poi riceve il risultato e lo usa per continuare il suo ragionamento. E come quando un manager delega un compito: non lo fa personalmente, ma dice a qualcuno cosa fare e poi usa il risultato.</p>
-<p><strong>Gli agenti IA possono sbagliare?</strong>
+<p><strong>Gli agenti IA possono sbagliare?</strong><br>
 Assolutamente si. Possono entrare in cicli infiniti, &ldquo;allucinare&rdquo; (inventare informazioni), o prendere decisioni sbagliate. Per questo la supervisione umana resta essenziale. Un agente IA e potente ma non infallibile, esattamente come un assistente umano molto veloce ma a volte distratto.</p>
-<p><strong>Cos&rsquo;e MCP, il &ldquo;Model Context Protocol&rdquo;?</strong>
+<p><strong>Cos&rsquo;e MCP, il &ldquo;Model Context Protocol&rdquo;?</strong><br>
 E uno standard aperto creato da Anthropic che funziona come una &ldquo;presa USB universale&rdquo; per l&rsquo;IA. Permette agli agenti di collegarsi a qualsiasi strumento esterno (database, file, browser, Slack, GitHub) usando un formato comune. Prima ogni collegamento richiedeva un&rsquo;integrazione personalizzata; con MCP basta un unico connettore.</p>
-<p><strong>L&rsquo;IA ruber il lavoro ai programmatori?</strong>
+<p><strong>L&rsquo;IA ruber il lavoro ai programmatori?</strong><br>
 Piu che rubare lavoro, lo sta trasformando. Il programmatore spende meno tempo a scrivere codice ripetitivo e piu tempo a pensare, progettare e verificare. E un po&rsquo; come e successo con le calcolatrici: non hanno eliminato i matematici, hanno reso possibile risolvere problemi molto piu complessi.</p>
 <hr>
 <div class="quiz-container" id="quiz">

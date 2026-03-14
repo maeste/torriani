@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -275,21 +275,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Il modello capisce davvero chi e &ldquo;era&rdquo; nella frase?</strong>
+<p><strong>Il modello capisce davvero chi e &ldquo;era&rdquo; nella frase?</strong><br>
 Non nel senso umano del termine. Il modello non ha comprensione: ha imparato pattern statistici da miliardi di frasi. Quando vede &ldquo;X si sedette&hellip; perche era stanco&rdquo;, riconosce un pattern che associa il soggetto dell&rsquo;azione a &ldquo;era&rdquo;. E riconoscimento di pattern, non comprensione.</p>
-<p><strong>Perche il modello non puo guardare le parole successive?</strong>
+<p><strong>Perche il modello non puo guardare le parole successive?</strong><br>
 Perche genera testo da sinistra a destra, una parola alla volta. Quando sta generando la terza parola, la quarta non esiste ancora. La maschera causale impone questa regola. Esistono pero modelli come BERT che <em>possono</em> guardare in entrambe le direzioni, perche il loro compito non e generare testo ma analizzarlo.</p>
-<p><strong>Come fa il modello a sapere che &ldquo;gatto&rdquo; e piu rilevante di &ldquo;tappeto&rdquo; per la parola &ldquo;era&rdquo;?</strong>
+<p><strong>Come fa il modello a sapere che &ldquo;gatto&rdquo; e piu rilevante di &ldquo;tappeto&rdquo; per la parola &ldquo;era&rdquo;?</strong><br>
 Lo ha imparato durante il training, leggendo miliardi di frasi. Ha visto che aggettivi come &ldquo;stanco&rdquo; si associano piu spesso a esseri viventi che a oggetti. I pesi di attenzione non vengono programmati: emergono dall&rsquo;addestramento.</p>
-<p><strong>Se non e sicuro al 100%, come sceglie la parola giusta?</strong>
+<p><strong>Se non e sicuro al 100%, come sceglie la parola giusta?</strong><br>
 In realta non sceglie sempre &ldquo;la migliore&rdquo; in senso assoluto: campiona dalle probabilita. Con la temperatura bassa tende a scegliere la parola piu probabile; con temperatura alta esplora scelte meno ovvie. Per questo le risposte possono variare ad ogni richiesta.</p>
-<p><strong>Cosa sono le &ldquo;teste&rdquo; (head) di attenzione?</strong>
+<p><strong>Cosa sono le &ldquo;teste&rdquo; (head) di attenzione?</strong><br>
 Il modello non ha un unico meccanismo di attenzione, ma molti che lavorano in parallelo. Ogni &ldquo;testa&rdquo; si specializza in un tipo diverso di relazione: una potrebbe catturare relazioni grammaticali (soggetto-verbo), un&rsquo;altra la coreferenza (a chi si riferisce &ldquo;era&rdquo;?), un&rsquo;altra le relazioni di vicinanza. Llama-3 8B ne ha 1.024 in totale.</p>
-<p><strong>Cosa significano Query, Key e Value?</strong>
+<p><strong>Cosa significano Query, Key e Value?</strong><br>
 Sono tre &ldquo;trasformazioni&rdquo; che ogni parola subisce. La Query e la domanda che una parola fa (&ldquo;cosa cerco?&rdquo;), la Key e l&rsquo;etichetta che offre (&ldquo;cosa posso offrire?&rdquo;), il Value e il contenuto informativo effettivo. L&rsquo;attenzione confronta le Query con le Key per decidere quanto leggere di ogni Value. Pensala come cercare un libro in biblioteca: la tua domanda e la Query, i titoli dei libri sono le Key, il contenuto dei libri e il Value.</p>
-<p><strong>Perche si chiama &ldquo;Transformer&rdquo;?</strong>
+<p><strong>Perche si chiama &ldquo;Transformer&rdquo;?</strong><br>
 Il nome viene dal paper &ldquo;Attention Is All You Need&rdquo; del 2017 di Vaswani e colleghi. L&rsquo;idea e che il modello &ldquo;trasforma&rdquo; la rappresentazione di ogni parola attraverso molteplici layer di attenzione, arricchendola progressivamente con informazioni sul contesto. Ogni layer aggiunge un po&rsquo; di comprensione in piu.</p>
-<p><strong>Perche i modelli hanno un limite di token?</strong>
+<p><strong>Perche i modelli hanno un limite di token?</strong><br>
 Perche il numero di calcoli dell&rsquo;attenzione cresce con il quadrato della lunghezza del testo. Con 1.000 token servono 1 milione di confronti; con 100.000 token ne servono 10 miliardi. Questo rende i contesti molto lunghi estremamente costosi in termini di memoria e di tempo.</p>
 <hr>
 <div class="quiz-container" id="quiz">

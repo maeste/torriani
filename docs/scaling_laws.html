@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -284,21 +284,21 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>Cosa sono esattamente i &ldquo;parametri&rdquo; di un modello?</strong>
+<p><strong>Cosa sono esattamente i &ldquo;parametri&rdquo; di un modello?</strong><br>
 Sono numeri (pesi) all&rsquo;interno della rete neurale che vengono regolati durante l&rsquo;addestramento. Ogni parametro rappresenta una piccola &ldquo;decisione&rdquo; che il modello impara a prendere. Piu parametri ha, piu relazioni complesse riesce a catturare nel linguaggio.</p>
-<p><strong>Perche le RNN sono state sostituite dai Transformer?</strong>
+<p><strong>Perche le RNN sono state sostituite dai Transformer?</strong><br>
 Le RNN elaborano le parole una alla volta, in sequenza. Questo le rende lente e le fa &ldquo;dimenticare&rdquo; le parole lontane. I Transformer, usando il meccanismo di attenzione, guardano tutte le parole contemporaneamente e possono essere addestrati molto piu velocemente sulle GPU.</p>
-<p><strong>Quanto costa addestrare un modello come GPT-4?</strong>
+<p><strong>Quanto costa addestrare un modello come GPT-4?</strong><br>
 Le stime parlano di circa 100 milioni di dollari solo per il calcolo. Ma il costo totale, includendo ricercatori, dati e infrastruttura, potrebbe superare il miliardo. Per questo solo poche grandi aziende possono costruire modelli alla frontiera.</p>
-<p><strong>Se basta rendere il modello piu grande, perche non lo fanno tutti?</strong>
+<p><strong>Se basta rendere il modello piu grande, perche non lo fanno tutti?</strong><br>
 Perche servono risorse enormi: miliardi di dollari, decine di migliaia di GPU, e dati su scala web. Inoltre, la scala da sola non basta &ndash; servono anche innovazioni nell&rsquo;architettura e nella qualita dei dati.</p>
-<p><strong>Cosa vuol dire &ldquo;legge di potenza&rdquo;?</strong>
+<p><strong>Cosa vuol dire &ldquo;legge di potenza&rdquo;?</strong><br>
 E una relazione matematica in cui raddoppiare una variabile (ad esempio i parametri) produce un miglioramento costante ma non proporzionale. Raddoppiare i parametri non raddoppia le prestazioni, ma le migliora di circa il 5%. E lo stesso tipo di legge che governa fenomeni naturali come i terremoti.</p>
-<p><strong>Perche tutti gli autori del paper originale hanno lasciato Google?</strong>
+<p><strong>Perche tutti gli autori del paper originale hanno lasciato Google?</strong><br>
 Hanno capito il potenziale di cio che avevano creato e hanno voluto costruire aziende proprie o guidare progetti con maggiore autonomia. Alcuni hanno fondato startup come Cohere ed Essential AI, altri sono passati ad aziende come OpenAI.</p>
-<p><strong>Cosa significa che GPT-3 era &ldquo;sotto-addestrato&rdquo;?</strong>
+<p><strong>Cosa significa che GPT-3 era &ldquo;sotto-addestrato&rdquo;?</strong><br>
 Lo studio Chinchilla di DeepMind ha dimostrato che GPT-3, pur avendo moltissimi parametri, non era stato addestrato su abbastanza dati. Per ottenere il massimo da un modello, parametri e dati devono crescere in modo proporzionale.</p>
-<p><strong>L&rsquo;IA continuera a migliorare per sempre?</strong>
+<p><strong>L&rsquo;IA continuera a migliorare per sempre?</strong><br>
 Questa e la grande domanda. Le scaling laws suggeriscono un miglioramento continuo, ma ci sono limiti pratici: i dati di qualita sono finiti, l&rsquo;energia necessaria e enorme, e i costi crescono rapidamente. Per questo i ricercatori stanno esplorando nuove strade oltre la pura scala.</p>
 <hr>
 <div class="quiz-container" id="quiz">

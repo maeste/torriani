@@ -103,111 +103,111 @@
       color: #64748b; letter-spacing: 1px;
       text-transform: uppercase; margin-bottom: 8px;
     }
-    .quiz-container {{
+    .quiz-container {
       margin-top: 48px; padding-top: 8px;
       border-top: 1px solid #1e2d4a;
-    }}
-    .quiz-container h2 {{
+    }
+    .quiz-container h2 {
       color: #ff6b35; font-size: 1.4rem; font-weight: 600;
       margin-bottom: 8px; padding-bottom: 8px;
       border-bottom: 1px solid #1e2d4a;
-    }}
-    .quiz-intro {{
+    }
+    .quiz-intro {
       color: #64748b; font-size: 0.9rem; margin-bottom: 24px;
-    }}
-    .quiz-question {{
+    }
+    .quiz-question {
       background: #0d1220; border: 1px solid #1e2d4a;
       border-radius: 12px; padding: 20px; margin-bottom: 16px;
       transition: border-color 0.3s;
-    }}
-    .quiz-question.correct {{ border-color: #22c55e; }}
-    .quiz-question.incorrect {{ border-color: #ef4444; }}
-    .quiz-question.unanswered {{ border-color: #f59e0b; }}
-    .quiz-q-text {{
+    }
+    .quiz-question.correct { border-color: #22c55e; }
+    .quiz-question.incorrect { border-color: #ef4444; }
+    .quiz-question.unanswered { border-color: #f59e0b; }
+    .quiz-q-text {
       margin-bottom: 12px; font-size: 1rem;
-    }}
-    .quiz-option {{
+    }
+    .quiz-option {
       display: flex; align-items: flex-start; gap: 10px;
       padding: 10px 14px; margin: 4px 0;
       border-radius: 8px; cursor: pointer;
       border: 1px solid transparent;
       transition: all 0.2s;
-    }}
-    .quiz-option:hover {{
+    }
+    .quiz-option:hover {
       background: #0f1729; border-color: #1e2d4a;
-    }}
-    .quiz-option input[type="radio"] {{
+    }
+    .quiz-option input[type="radio"] {
       margin-top: 4px; accent-color: #00d4ff;
       flex-shrink: 0;
-    }}
-    .quiz-letter {{
+    }
+    .quiz-letter {
       color: #64748b; font-family: 'JetBrains Mono', monospace;
       font-size: 0.85em; flex-shrink: 0; min-width: 20px;
-    }}
-    .quiz-opt-text {{ color: #e2e8f0; }}
-    .quiz-option.is-correct {{
+    }
+    .quiz-opt-text { color: #e2e8f0; }
+    .quiz-option.is-correct {
       background: #052e16; border-color: #22c55e;
-    }}
-    .quiz-option.is-correct .quiz-opt-text {{ color: #86efac; }}
-    .quiz-option.is-wrong {{
+    }
+    .quiz-option.is-correct .quiz-opt-text { color: #86efac; }
+    .quiz-option.is-wrong {
       background: #2a0a0a; border-color: #ef4444;
-    }}
-    .quiz-option.is-wrong .quiz-opt-text {{ color: #fca5a5; }}
-    .quiz-feedback {{
+    }
+    .quiz-option.is-wrong .quiz-opt-text { color: #fca5a5; }
+    .quiz-feedback {
       margin-top: 10px; padding: 10px 14px;
       border-radius: 8px; font-size: 0.9rem;
       display: none; line-height: 1.5;
-    }}
-    .quiz-feedback.show {{ display: block; }}
-    .quiz-feedback.fb-correct {{
+    }
+    .quiz-feedback.show { display: block; }
+    .quiz-feedback.fb-correct {
       background: #052e16; border: 1px solid #22c55e33; color: #86efac;
-    }}
-    .quiz-feedback.fb-wrong {{
+    }
+    .quiz-feedback.fb-wrong {
       background: #2a0a0a; border: 1px solid #ef444433; color: #fca5a5;
-    }}
-    .quiz-feedback.fb-skip {{
+    }
+    .quiz-feedback.fb-skip {
       background: #1a1500; border: 1px solid #f59e0b33; color: #fcd34d;
-    }}
-    .quiz-submit {{
+    }
+    .quiz-submit {
       display: block; width: 100%; padding: 14px;
       margin-top: 24px; background: #00d4ff; color: #060912;
       border: none; border-radius: 10px; font-size: 1rem;
       font-weight: 600; cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-submit:hover {{ background: #38bdf8; transform: translateY(-1px); }}
-    .quiz-submit:disabled {{
+    }
+    .quiz-submit:hover { background: #38bdf8; transform: translateY(-1px); }
+    .quiz-submit:disabled {
       background: #1e2d4a; color: #64748b; cursor: default;
       transform: none;
-    }}
-    .quiz-score {{
+    }
+    .quiz-score {
       display: none; text-align: center; margin-top: 20px;
       padding: 20px; border-radius: 12px; font-size: 1.1rem;
       font-weight: 600;
-    }}
-    .quiz-score.show {{ display: block; }}
-    .quiz-score.perfect {{
+    }
+    .quiz-score.show { display: block; }
+    .quiz-score.perfect {
       background: #052e16; border: 1px solid #22c55e;
       color: #86efac;
-    }}
-    .quiz-score.good {{
+    }
+    .quiz-score.good {
       background: #0f1729; border: 1px solid #00d4ff;
       color: #00d4ff;
-    }}
-    .quiz-score.needs-work {{
+    }
+    .quiz-score.needs-work {
       background: #1a1500; border: 1px solid #f59e0b;
       color: #fcd34d;
-    }}
-    .quiz-retry {{
+    }
+    .quiz-retry {
       display: none; width: 100%; padding: 12px;
       margin-top: 12px; background: transparent;
       color: #00d4ff; border: 1px solid #1e2d4a;
       border-radius: 10px; font-size: 0.95rem;
       cursor: pointer; transition: all 0.2s;
       font-family: 'IBM Plex Sans', sans-serif;
-    }}
-    .quiz-retry.show {{ display: block; }}
-    .quiz-retry:hover {{ background: #0f1729; border-color: #00d4ff; }}
+    }
+    .quiz-retry.show { display: block; }
+    .quiz-retry:hover { background: #0f1729; border-color: #00d4ff; }
 
     @media (max-width: 640px) {
       .container { padding: 24px 16px 60px; }
@@ -276,19 +276,19 @@
 </ol>
 <hr>
 <h2>Domande Frequenti</h2>
-<p><strong>I robot ci ruberanno il lavoro?</strong>
+<p><strong>I robot ci ruberanno il lavoro?</strong><br>
 Come in ogni rivoluzione tecnologica, i robot trasformeranno il lavoro piu che eliminarlo. Un robot in fabbrica fa i compiti pericolosi e ripetitivi, mentre l&rsquo;operaio diventa supervisore, programmatore o manutentore — spesso con uno stipendio piu alto e un rischio molto piu basso. Nasceranno anche professioni completamente nuove legate alla robotica.</p>
-<p><strong>Quanto costa un robot umanoide?</strong>
+<p><strong>Quanto costa un robot umanoide?</strong><br>
 Dipende molto dal modello. Figure 02 non e ancora in vendita al pubblico, ma si stima un costo di 50.000-100.000 dollari. Tesla punta a portare Optimus sotto i 20.000 dollari. Per fare un confronto: un lavoratore umano costa all&rsquo;azienda 40.000-60.000 euro all&rsquo;anno. Quando il robot costa meno di un anno di stipendio, l&rsquo;adozione accelera rapidamente.</p>
-<p><strong>Perche costruire robot umanoidi e non robot specializzati?</strong>
+<p><strong>Perche costruire robot umanoidi e non robot specializzati?</strong><br>
 Le due cose non si escludono: i bracci robotici industriali sono piu efficienti nel loro compito specifico. Ma il mondo intorno a noi e progettato per la forma umana — porte, scale, maniglie, strumenti, sedie. Un robot umanoide puo usare tutto cio che usiamo noi senza dover riprogettare gli ambienti. Un robot specializzato e il migliore nel suo ambito, ma non puo fare nient&rsquo;altro.</p>
-<p><strong>Cosa sono i &ldquo;cobot&rdquo;?</strong>
+<p><strong>Cosa sono i &ldquo;cobot&rdquo;?</strong><br>
 I cobot (robot collaborativi) sono robot progettati per lavorare fianco a fianco con le persone, non in aree recintate. Hanno sensori che rilevano la presenza umana e si fermano automaticamente se qualcuno si avvicina troppo. Sono piu lenti e meno potenti dei robot industriali tradizionali, ma molto piu sicuri e flessibili.</p>
-<p><strong>Cosa succede quando la simulazione non corrisponde alla realta?</strong>
+<p><strong>Cosa succede quando la simulazione non corrisponde alla realta?</strong><br>
 Questo e il famoso problema del &ldquo;sim-to-real gap&rdquo;, la sfida piu grande della robotica moderna. Un robot addestrato solo in simulazione spesso fallisce nel mondo reale perche i materiali, l&rsquo;illuminazione e l&rsquo;attrito non sono mai identici. Per affrontare questo problema si usa la &ldquo;domain randomization&rdquo;: si variano casualmente i parametri della simulazione (colori, peso degli oggetti, attrito) cosi il robot impara a gestire l&rsquo;imprevisto.</p>
-<p><strong>Le leggi di Asimov valgono per i robot di oggi?</strong>
+<p><strong>Le leggi di Asimov valgono per i robot di oggi?</strong><br>
 Le tre leggi della robotica inventate da Isaac Asimov nel 1942 (non nuocere agli umani, obbedire agli ordini, proteggere se stesso) sono un&rsquo;ottima base filosofica, ma nella pratica non funzionano come regole rigide. Come si definisce &ldquo;nuocere&rdquo;? Un robot chirurgico taglia il paziente per operarlo: sta facendo del bene o del male? La sicurezza nei robot autonomi reali e un problema aperto che viene affrontato con sistemi probabilistici e livelli multipli di protezione.</p>
-<p><strong>Che differenza c&rsquo;e tra un&rsquo;IA &ldquo;con corpo&rdquo; e un&rsquo;IA &ldquo;senza corpo&rdquo;?</strong>
+<p><strong>Che differenza c&rsquo;e tra un&rsquo;IA &ldquo;con corpo&rdquo; e un&rsquo;IA &ldquo;senza corpo&rdquo;?</strong><br>
 Un&rsquo;IA senza corpo (come ChatGPT) capisce il mondo leggendo testi e guardando immagini. Un&rsquo;IA con corpo (un robot) capisce il mondo interagendo fisicamente con esso. La teoria dell&rsquo;embodied cognition sostiene che l&rsquo;intelligenza vera emerge proprio dall&rsquo;interazione con l&rsquo;ambiente. Un robot che ha manipolato oggetti &ldquo;capisce&rdquo; la fisica in modo diverso e piu profondo rispetto a un modello linguistico che l&rsquo;ha solo letta nei libri.</p>
 <hr>
 <div class="quiz-container" id="quiz">
