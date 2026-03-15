@@ -124,10 +124,10 @@ const WORDS_2D = [
   { word: "cane", x: 0.68, y: 0.85, cluster: "animali" },
   { word: "topo", x: 0.78, y: 0.72, cluster: "animali" },
   { word: "pesce", x: 0.82, y: 0.82, cluster: "animali" },
-  // Royalty
-  { word: "re", x: 0.22, y: 0.25, cluster: "regalita" },
-  { word: "regina", x: 0.35, y: 0.18, cluster: "regalita" },
-  { word: "principe", x: 0.28, y: 0.12, cluster: "regalita" },
+  // Family
+  { word: "marito", x: 0.22, y: 0.25, cluster: "famiglia" },
+  { word: "moglie", x: 0.35, y: 0.18, cluster: "famiglia" },
+  { word: "figlio", x: 0.28, y: 0.12, cluster: "famiglia" },
   // Gender
   { word: "uomo", x: 0.18, y: 0.55, cluster: "persone" },
   { word: "donna", x: 0.32, y: 0.48, cluster: "persone" },
@@ -146,7 +146,7 @@ const WORDS_2D = [
 
 const CLUSTER_COLORS = {
   animali: COLORS.accent4,
-  regalita: COLORS.highlight,
+  famiglia: COLORS.highlight,
   persone: COLORS.accent,
   cibo: COLORS.accent2,
   luoghi: COLORS.accent3,
@@ -154,12 +154,12 @@ const CLUSTER_COLORS = {
 
 /* ─── Vector arithmetic data ─── */
 
-// Positions in a mini coordinate system for the vector arithmetic demo
+// Positions forming a parallelogram: uomo→marito ≈ donna→moglie
 const VEC = {
-  re:     { x: 120, y: 80 },
   uomo:   { x: 80, y: 200 },
-  donna:  { x: 220, y: 180 },
-  regina: { x: 260, y: 60 },
+  donna:  { x: 230, y: 185 },
+  marito: { x: 120, y: 70 },
+  moglie: { x: 270, y: 55 },
 };
 
 /* ─── Components ─── */
@@ -295,7 +295,7 @@ function EmbeddingSpace() {
         {/* Cluster ellipses (subtle background grouping) */}
         {[
           { cx: 0.75, cy: 0.79, rx: 0.12, ry: 0.10, cluster: "animali" },
-          { cx: 0.28, cy: 0.18, rx: 0.12, ry: 0.10, cluster: "regalita" },
+          { cx: 0.28, cy: 0.18, rx: 0.12, ry: 0.10, cluster: "famiglia" },
           { cx: 0.27, cy: 0.57, rx: 0.13, ry: 0.12, cluster: "persone" },
           { cx: 0.66, cy: 0.26, rx: 0.12, ry: 0.10, cluster: "cibo" },
           { cx: 0.47, cy: 0.52, rx: 0.10, ry: 0.10, cluster: "luoghi" },
@@ -370,41 +370,40 @@ function VectorArithmetic() {
     let current = 0;
     const interval = setInterval(() => {
       current++;
-      if (current > 4) {
+      if (current > 3) {
         clearInterval(interval);
         setPlaying(false);
         return;
       }
       setStep(current);
-    }, 900);
+    }, 1200);
   }
 
-  // Computed intermediate point: Re - Uomo + Donna
-  const result = {
-    x: VEC.re.x - VEC.uomo.x + VEC.donna.x,
-    y: VEC.re.y - VEC.uomo.y + VEC.donna.y,
+  // The relationship vector: from Uomo to Marito
+  const relVec = {
+    dx: VEC.marito.x - VEC.uomo.x,
+    dy: VEC.marito.y - VEC.uomo.y,
   };
 
-  const arrowStyle = (color) => ({
-    stroke: color,
-    strokeWidth: 2.5,
-    fill: "none",
-    markerEnd: `url(#arrow-${color.replace("#", "")})`,
-  });
+  // Result: applying same relationship from Donna
+  const result = {
+    x: VEC.donna.x + relVec.dx,
+    y: VEC.donna.y + relVec.dy,
+  };
 
   return (
     <div>
       <p style={{ color: COLORS.muted, fontSize: 14, marginTop: 0, lineHeight: 1.7 }}>
         Se le parole sono vettori, possiamo fare <strong style={{ color: COLORS.highlight }}>aritmetica con i significati</strong>.
-        L'esempio classico: la relazione tra "re" e "uomo" e la stessa tra "regina" e "donna".
+        La relazione tra "marito" e "uomo" e la stessa tra "moglie" e "donna".
       </p>
 
-      <Formula>vec(Re) - vec(Uomo) + vec(Donna) ≈ vec(Regina)</Formula>
+      <Formula>vec(Marito) - vec(Uomo) + vec(Donna) ≈ vec(Moglie)</Formula>
 
       <div style={{ display: "flex", gap: 24, alignItems: "center", flexWrap: "wrap" }}>
         <svg width={W} height={H} style={{ background: "#0a0e1a", borderRadius: 8, border: `1px solid ${COLORS.border}` }}>
           <defs>
-            {[COLORS.accent, COLORS.accent2, COLORS.accent3, COLORS.accent4, COLORS.highlight].map(c => (
+            {[COLORS.accent, COLORS.accent2, COLORS.accent4, COLORS.highlight].map(c => (
               <marker key={c} id={`arrow-${c.replace("#", "")}`} markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                 <path d="M0,0 L8,4 L0,8 Z" fill={c} />
               </marker>
@@ -425,10 +424,10 @@ function VectorArithmetic() {
 
           {/* Word labels (always visible) */}
           {[
-            { label: "Re", pos: VEC.re, color: COLORS.highlight },
             { label: "Uomo", pos: VEC.uomo, color: COLORS.accent },
             { label: "Donna", pos: VEC.donna, color: COLORS.accent2 },
-            { label: "Regina", pos: VEC.regina, color: COLORS.accent3 },
+            { label: "Marito", pos: VEC.marito, color: COLORS.highlight },
+            { label: "Moglie", pos: VEC.moglie, color: COLORS.accent4 },
           ].map((item, i) => (
             <g key={i}>
               <circle cx={item.pos.x} cy={item.pos.y} r={5} fill={item.color} />
@@ -439,41 +438,40 @@ function VectorArithmetic() {
             </g>
           ))}
 
-          {/* Step 1: Re vector (from origin) */}
+          {/* Step 1: Arrow from Uomo to Marito (the relationship vector) */}
           {step >= 1 && (
-            <line x1={40} y1={250} x2={VEC.re.x} y2={VEC.re.y} {...arrowStyle(COLORS.highlight)} opacity={step === 1 ? 1 : 0.4} />
+            <line x1={VEC.uomo.x} y1={VEC.uomo.y} x2={VEC.marito.x} y2={VEC.marito.y}
+              stroke={COLORS.highlight} strokeWidth={2.5} fill="none"
+              markerEnd={`url(#arrow-${COLORS.highlight.replace("#", "")})`}
+              opacity={step === 1 ? 1 : 0.4}
+            />
           )}
 
-          {/* Step 2: Subtract Uomo (Re -> Re-Uomo direction) */}
+          {/* Step 2: Same arrow from Donna (parallel - the analogy) */}
           {step >= 2 && (
-            <line x1={VEC.re.x} y1={VEC.re.y}
-              x2={VEC.re.x + (VEC.re.x - VEC.uomo.x) * 0.5}
-              y2={VEC.re.y + (VEC.re.y - VEC.uomo.y) * 0.5}
-              {...arrowStyle(COLORS.accent)} opacity={step === 2 ? 1 : 0.4}
-              strokeDasharray="6 3"
+            <line x1={VEC.donna.x} y1={VEC.donna.y} x2={result.x} y2={result.y}
+              stroke={COLORS.accent2} strokeWidth={2.5} fill="none"
+              markerEnd={`url(#arrow-${COLORS.accent2.replace("#", "")})`}
+              strokeDasharray="8 4"
+              opacity={step === 2 ? 1 : 0.6}
             />
           )}
 
-          {/* Step 3: Add Donna */}
+          {/* Step 3: Result near Moglie - pulsing circle */}
           {step >= 3 && (
-            <line
-              x1={VEC.re.x + (VEC.re.x - VEC.uomo.x) * 0.5}
-              y1={VEC.re.y + (VEC.re.y - VEC.uomo.y) * 0.5}
-              x2={result.x} y2={result.y}
-              {...arrowStyle(COLORS.accent2)} opacity={step === 3 ? 1 : 0.4}
-            />
-          )}
-
-          {/* Step 4: Result near Regina */}
-          {step >= 4 && (
             <g>
               <circle cx={result.x} cy={result.y} r={12} fill="none" stroke={COLORS.accent4} strokeWidth={2} strokeDasharray="4 4">
-                <animate attributeName="r" values="10;16;10" dur="1.5s" repeatCount="indefinite" />
+                <animate attributeName="r" values="10;18;10" dur="1.5s" repeatCount="indefinite" />
               </circle>
-              <text x={result.x} y={result.y + 28} fill={COLORS.accent4} fontSize={12}
+              <text x={result.x} y={result.y + 30} fill={COLORS.accent4} fontSize={12}
                 textAnchor="middle" fontFamily="monospace" fontWeight={600}>
-                ≈ Regina!
+                ≈ Moglie!
               </text>
+              {/* Parallelogram outline */}
+              <polygon
+                points={`${VEC.uomo.x},${VEC.uomo.y} ${VEC.marito.x},${VEC.marito.y} ${result.x},${result.y} ${VEC.donna.x},${VEC.donna.y}`}
+                fill="none" stroke={COLORS.muted} strokeWidth={0.8} strokeDasharray="4 4" opacity={0.4}
+              />
             </g>
           )}
         </svg>
@@ -482,10 +480,9 @@ function VectorArithmetic() {
           {/* Step indicator */}
           <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
             {[
-              { label: "vec(Re)", color: COLORS.highlight, desc: "Vettore di partenza" },
-              { label: "- vec(Uomo)", color: COLORS.accent, desc: "Togli il concetto di 'maschio'" },
-              { label: "+ vec(Donna)", color: COLORS.accent2, desc: "Aggiungi il concetto di 'femmina'" },
-              { label: "≈ vec(Regina)", color: COLORS.accent4, desc: "Il risultato e vicino a Regina!" },
+              { label: "Uomo → Marito", color: COLORS.highlight, desc: "La relazione 'coniugale'" },
+              { label: "Donna → ???", color: COLORS.accent2, desc: "Stessa direzione da Donna" },
+              { label: "≈ Moglie!", color: COLORS.accent4, desc: "Il vettore cattura la relazione" },
             ].map((s, i) => (
               <div key={i} style={{
                 display: "flex", alignItems: "center", gap: 10,

@@ -76,12 +76,11 @@ Questa e la parte che genera piu stupore. Preparala bene.
 
 Clicca il pulsante "Avvia animazione" e commenta ogni step:
 
-1. **vec(Re)**: "Partiamo dal vettore di 'Re' — la sua posizione nello spazio"
-2. **- vec(Uomo)**: "Togliamo il concetto di 'maschio' — cioe sottraiamo il vettore di 'uomo'"
-3. **+ vec(Donna)**: "Aggiungiamo il concetto di 'femmina' — il vettore di 'donna'"
-4. **≈ vec(Regina)**: "E il risultato... finisce vicinissimo a 'regina'!"
+1. **Uomo → Marito**: "Guardate questa freccia: va da 'Uomo' a 'Marito'. Rappresenta la relazione 'coniugale'"
+2. **Donna → ???**: "Ora applichiamo la stessa freccia, la stessa direzione, partendo da 'Donna'"
+3. **≈ Moglie!**: "E il risultato... finisce vicinissimo a 'Moglie'!"
 
-> "Re meno Uomo piu Donna uguale Regina. Non l'abbiamo programmato — il modello ha *scoperto da solo* che la relazione maschio/femmina e parallela alla relazione re/regina. Semplicemente leggendo testi."
+> "Marito meno Uomo piu Donna uguale Moglie. Non l'abbiamo programmato — il modello ha *scoperto da solo* che la relazione maschio/femmina e parallela alla relazione marito/moglie. Semplicemente leggendo testi."
 
 #### Rilancia
 
@@ -103,8 +102,8 @@ Il modello impara le posizioni durante il training, leggendo miliardi di frasi. 
 **"Perche proprio i vettori? Non bastava un dizionario?"**
 Un dizionario ti dice la definizione, ma non cattura le *relazioni*. Con i vettori, puoi misurare quanto due parole sono simili (distanza), trovare analogie (aritmetica), e fare tutto questo in modo che il computer possa calcolare. E la rappresentazione perfetta per le macchine.
 
-**"L'esempio Re/Regina funziona davvero?"**
-Si, e stato dimostrato nel paper originale di Word2Vec (Mikolov et al., 2013). Non funziona *sempre* perfettamente, ma funziona sorprendentemente bene per molte relazioni semantiche. Nei modelli moderni (GPT, Claude) gli embedding sono molto piu sofisticati e catturano relazioni ancora piu complesse.
+**"L'esempio Marito/Moglie funziona davvero?"**
+Si, questo tipo di aritmetica vettoriale e stato dimostrato nel paper originale di Word2Vec (Mikolov et al., 2013). Non funziona *sempre* perfettamente, ma funziona sorprendentemente bene per molte relazioni semantiche. Nei modelli moderni (GPT, Claude) gli embedding sono molto piu sofisticati e catturano relazioni ancora piu complesse.
 
 **"Quanti numeri servono per una parola?"**
 Nei modelli attuali, ogni parola e rappresentata da 4.096 a 12.288 numeri (dimensioni). Piu dimensioni = piu sfumature di significato. E come descrivere un colore: con 3 numeri (RGB) puoi distinguere milioni di colori, con 4.096 numeri puoi distinguere milioni di sfumature di significato.

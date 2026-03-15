@@ -245,9 +245,9 @@
 <h3>L&rsquo;aritmetica dei significati: il momento &ldquo;wow&rdquo;</h3>
 <p>Ma la cosa piu straordinaria deve ancora arrivare. Se le parole sono punti nello spazio, possiamo fare <strong>aritmetica con i significati</strong>. Si, hai letto bene: sommare e sottrarre concetti come se fossero numeri.</p>
 <p>L&rsquo;esempio piu famoso e questo:</p>
-<p><strong>Re - Uomo + Donna = ?</strong></p>
-<p>Tradotto: prendi il vettore della parola &ldquo;Re&rdquo;. Sottrai il vettore di &ldquo;Uomo&rdquo; (cioe togli il concetto di &ldquo;maschio&rdquo;). Aggiungi il vettore di &ldquo;Donna&rdquo; (cioe aggiungi il concetto di &ldquo;femmina&rdquo;). Il risultato? Un punto nello spazio vicinissimo a <strong>&ldquo;Regina&rdquo;</strong>.</p>
-<p>Fermati un attimo a pensarci. Nessuno ha <em>programmato</em> questa relazione. Il modello ha scoperto <em>da solo</em>, leggendo testi, che la relazione tra &ldquo;re&rdquo; e &ldquo;uomo&rdquo; e parallela alla relazione tra &ldquo;regina&rdquo; e &ldquo;donna&rdquo;. I significati hanno una geometria.</p>
+<p><strong>Marito - Uomo + Donna = ?</strong></p>
+<p>Tradotto: prendi il vettore della parola &ldquo;Marito&rdquo;. Sottrai il vettore di &ldquo;Uomo&rdquo; (cioe togli il concetto di &ldquo;maschio&rdquo;). Aggiungi il vettore di &ldquo;Donna&rdquo; (cioe aggiungi il concetto di &ldquo;femmina&rdquo;). Il risultato? Un punto nello spazio vicinissimo a <strong>&ldquo;Moglie&rdquo;</strong>.</p>
+<p>Fermati un attimo a pensarci. Nessuno ha <em>programmato</em> questa relazione. Il modello ha scoperto <em>da solo</em>, leggendo testi, che la relazione tra &ldquo;marito&rdquo; e &ldquo;uomo&rdquo; e parallela alla relazione tra &ldquo;moglie&rdquo; e &ldquo;donna&rdquo;. I significati hanno una geometria.</p>
 <p>E non finisce qui. Questo funziona con tantissime relazioni:
 - <strong>Italia - Roma + Parigi ≈ Francia</strong> (relazione capitale-nazione)
 - <strong>Buono - Migliore + Peggiore ≈ Cattivo</strong> (relazione tra gradi di aggettivi)</p>
@@ -261,7 +261,7 @@
 <li><strong>I token non sono sempre parole intere</strong>: le parole lunghe o rare vengono spezzate in sotto-parti (subword). Con circa 30.000-50.000 pezzi si puo rappresentare qualsiasi testo.</li>
 <li><strong>Ogni token diventa un vettore</strong>: una lista di migliaia di numeri (da 768 a oltre 12.000) che rappresenta il significato della parola come un punto nello spazio.</li>
 <li><strong>Parole simili, vettori vicini</strong>: il modello impara autonomamente a posizionare le parole in modo che quelle con significato simile siano vicine nello spazio, osservando i contesti in cui appaiono.</li>
-<li><strong>I significati hanno una geometria</strong>: si puo fare aritmetica con i vettori delle parole (Re - Uomo + Donna ≈ Regina), rivelando relazioni semantiche profonde.</li>
+<li><strong>I significati hanno una geometria</strong>: si puo fare aritmetica con i vettori delle parole (Marito - Uomo + Donna ≈ Moglie), rivelando relazioni semantiche profonde.</li>
 </ul>
 <hr>
 <h2>3 Cose da Fare</h2>
@@ -282,8 +282,8 @@
 Il modello impara le posizioni durante l&rsquo;addestramento, leggendo miliardi di frasi. Se in molti testi &ldquo;gatto&rdquo; e &ldquo;cane&rdquo; appaiono in contesti simili (&ldquo;il ___ dorme&rdquo;, &ldquo;ho portato il ___ dal veterinario&rdquo;), il modello scopre che devono stare vicini. E un apprendimento completamente automatico.</p>
 <p><strong>Perche usare vettori e non un semplice dizionario?</strong><br>
 Un dizionario ti dice la definizione, ma non cattura le <em>relazioni</em> tra parole in modo che un computer possa calcolarci sopra. Con i vettori puoi misurare quanto due parole sono simili (calcolando la distanza), trovare analogie (con l&rsquo;aritmetica), e fare tutto questo con semplici operazioni matematiche.</p>
-<p><strong>L&rsquo;esempio Re/Regina funziona davvero nella pratica?</strong><br>
-Si. E stato dimostrato nel 2013 dal team di Google che ha creato Word2Vec. Non funziona sempre alla perfezione, ma funziona sorprendentemente bene per moltissime relazioni semantiche. I modelli moderni (GPT, Claude, Llama) hanno embedding ancora piu sofisticati che catturano relazioni molto piu complesse.</p>
+<p><strong>L&rsquo;esempio Marito/Moglie funziona davvero nella pratica?</strong><br>
+Si. Questo tipo di aritmetica vettoriale e stato dimostrato nel 2013 dal team di Google che ha creato Word2Vec. Non funziona sempre alla perfezione, ma funziona sorprendentemente bene per moltissime relazioni semantiche. I modelli moderni (GPT, Claude, Llama) hanno embedding ancora piu sofisticati che catturano relazioni molto piu complesse.</p>
 <p><strong>Ma quanti numeri servono davvero per rappresentare una parola?</strong><br>
 Dipende dal modello. GPT-2 usava 768 numeri, Llama-3 ne usa 4.096, GPT-4 circa 12.288. Piu numeri significano piu sfumature di significato. Pensa ai colori: con 3 numeri (rosso, verde, blu) puoi descrivere milioni di colori. Con 4.096 numeri puoi distinguere milioni di sfumature di significato.</p>
 <p><strong>Il grafico 2D che si vede nelle presentazioni e realistico?</strong><br>
@@ -371,7 +371,7 @@ Nei primi modelli (come Word2Vec), la parola &ldquo;pesca&rdquo; aveva sempre lo
     <div class="quiz-feedback" id="fb-3"></div>
   </div>
   <div class="quiz-question" data-q="4">
-    <p class="quiz-q-text"><strong>4. Nell'esempio dell'aritmetica vettoriale, perche Re - Uomo + Donna da un risultato vicino a Regina?</strong></p>
+    <p class="quiz-q-text"><strong>4. Nell'esempio dell'aritmetica vettoriale, perche Marito - Uomo + Donna da un risultato vicino a Moglie?</strong></p>
     <label class="quiz-option" data-letter="a">
       <input type="radio" name="q4" value="a">
       <span class="quiz-letter">a)</span>
@@ -380,17 +380,17 @@ Nei primi modelli (come Word2Vec), la parola &ldquo;pesca&rdquo; aveva sempre lo
     <label class="quiz-option" data-letter="b">
       <input type="radio" name="q4" value="b">
       <span class="quiz-letter">b)</span>
-      <span class="quiz-opt-text">Perche il modello ha memorizzato tutte le famiglie reali della storia</span>
+      <span class="quiz-opt-text">Perche il modello ha memorizzato un elenco di coppie sposate</span>
     </label>
     <label class="quiz-option" data-letter="c">
       <input type="radio" name="q4" value="c">
       <span class="quiz-letter">c)</span>
-      <span class="quiz-opt-text">Perche il modello ha scoperto autonomamente che la relazione maschio/femmina e parallela alla relazione re/regina, leggendo molti testi</span>
+      <span class="quiz-opt-text">Perche il modello ha scoperto autonomamente che la relazione maschio/femmina e parallela alla relazione marito/moglie, leggendo molti testi</span>
     </label>
     <label class="quiz-option" data-letter="d">
       <input type="radio" name="q4" value="d">
       <span class="quiz-letter">d)</span>
-      <span class="quiz-opt-text">Perche &quot;regina&quot; e semplicemente la parola piu simile a &quot;re&quot; nel vocabolario</span>
+      <span class="quiz-opt-text">Perche &quot;moglie&quot; e semplicemente la parola piu simile a &quot;marito&quot; nel vocabolario</span>
     </label>
     <div class="quiz-feedback" id="fb-4"></div>
   </div>
@@ -423,7 +423,7 @@ Nei primi modelli (come Word2Vec), la parola &ldquo;pesca&rdquo; aveva sempre lo
   <button class="quiz-retry" id="quiz-retry" onclick="resetQuiz()">Riprova</button>
 </div>
 <script>
-var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Il tokenizer e il primo passo: trasforma il testo in una sequenza di numeri identificativi che il modello puo elaborare."}, "2": {"correct": "c", "explanation": "Con 30.000-50.000 sotto-parti si puo rappresentare qualsiasi testo, anche parole nuove o rare, senza un vocabolario enorme."}, "3": {"correct": "b", "explanation": "I vettori (liste di migliaia di numeri) di parole come \"gatto\" e \"cane\" sono vicini nello spazio multidimensionale, perche appaiono in contesti simili nei dati di addestramento."}, "4": {"correct": "c", "explanation": "Il modello ha appreso le relazioni semantiche dai dati: la \"direzione\" nello spazio vettoriale da \"uomo\" a \"donna\" e la stessa da \"re\" a \"regina\"."}, "5": {"correct": "c", "explanation": "E l'ipotesi distribuzionale: \"una parola e caratterizzata dalla compagnia che tiene\". Il modello impara le posizioni osservando i contesti d'uso nelle miliardi di frasi lette."}};
+var QUIZ_ANSWERS = {"1": {"correct": "b", "explanation": "Il tokenizer e il primo passo: trasforma il testo in una sequenza di numeri identificativi che il modello puo elaborare."}, "2": {"correct": "c", "explanation": "Con 30.000-50.000 sotto-parti si puo rappresentare qualsiasi testo, anche parole nuove o rare, senza un vocabolario enorme."}, "3": {"correct": "b", "explanation": "I vettori (liste di migliaia di numeri) di parole come \"gatto\" e \"cane\" sono vicini nello spazio multidimensionale, perche appaiono in contesti simili nei dati di addestramento."}, "4": {"correct": "c", "explanation": "Il modello ha appreso le relazioni semantiche dai dati: la \"direzione\" nello spazio vettoriale da \"uomo\" a \"donna\" e la stessa da \"marito\" a \"moglie\"."}, "5": {"correct": "c", "explanation": "E l'ipotesi distribuzionale: \"una parola e caratterizzata dalla compagnia che tiene\". Il modello impara le posizioni osservando i contesti d'uso nelle miliardi di frasi lette."}};
 
 function checkQuiz() {
   var total = Object.keys(QUIZ_ANSWERS).length;

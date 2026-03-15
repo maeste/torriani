@@ -36,7 +36,7 @@
     },
     {
       "correct": "c",
-      "explanation": "Il modello ha appreso le relazioni semantiche dai dati: la \"direzione\" nello spazio vettoriale da \"uomo\" a \"donna\" e la stessa da \"re\" a \"regina\"."
+      "explanation": "Il modello ha appreso le relazioni semantiche dai dati: la \"direzione\" nello spazio vettoriale da \"uomo\" a \"donna\" e la stessa da \"marito\" a \"moglie\"."
     },
     {
       "correct": "c",

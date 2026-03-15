@@ -36,11 +36,11 @@ Ma la cosa piu straordinaria deve ancora arrivare. Se le parole sono punti nello
 
 L'esempio piu famoso e questo:
 
-**Re - Uomo + Donna = ?**
+**Marito - Uomo + Donna = ?**
 
-Tradotto: prendi il vettore della parola "Re". Sottrai il vettore di "Uomo" (cioe togli il concetto di "maschio"). Aggiungi il vettore di "Donna" (cioe aggiungi il concetto di "femmina"). Il risultato? Un punto nello spazio vicinissimo a **"Regina"**.
+Tradotto: prendi il vettore della parola "Marito". Sottrai il vettore di "Uomo" (cioe togli il concetto di "maschio"). Aggiungi il vettore di "Donna" (cioe aggiungi il concetto di "femmina"). Il risultato? Un punto nello spazio vicinissimo a **"Moglie"**.
 
-Fermati un attimo a pensarci. Nessuno ha *programmato* questa relazione. Il modello ha scoperto *da solo*, leggendo testi, che la relazione tra "re" e "uomo" e parallela alla relazione tra "regina" e "donna". I significati hanno una geometria.
+Fermati un attimo a pensarci. Nessuno ha *programmato* questa relazione. Il modello ha scoperto *da solo*, leggendo testi, che la relazione tra "marito" e "uomo" e parallela alla relazione tra "moglie" e "donna". I significati hanno una geometria.
 
 E non finisce qui. Questo funziona con tantissime relazioni:
 - **Italia - Roma + Parigi ≈ Francia** (relazione capitale-nazione)
@@ -60,7 +60,7 @@ Abbiamo percorso tre tappe fondamentali. Prima, il testo viene spezzato in **tok
 - **I token non sono sempre parole intere**: le parole lunghe o rare vengono spezzate in sotto-parti (subword). Con circa 30.000-50.000 pezzi si puo rappresentare qualsiasi testo.
 - **Ogni token diventa un vettore**: una lista di migliaia di numeri (da 768 a oltre 12.000) che rappresenta il significato della parola come un punto nello spazio.
 - **Parole simili, vettori vicini**: il modello impara autonomamente a posizionare le parole in modo che quelle con significato simile siano vicine nello spazio, osservando i contesti in cui appaiono.
-- **I significati hanno una geometria**: si puo fare aritmetica con i vettori delle parole (Re - Uomo + Donna ≈ Regina), rivelando relazioni semantiche profonde.
+- **I significati hanno una geometria**: si puo fare aritmetica con i vettori delle parole (Marito - Uomo + Donna ≈ Moglie), rivelando relazioni semantiche profonde.
 
 ---
 
@@ -82,8 +82,8 @@ Il modello impara le posizioni durante l'addestramento, leggendo miliardi di fra
 **Perche usare vettori e non un semplice dizionario?**
 Un dizionario ti dice la definizione, ma non cattura le *relazioni* tra parole in modo che un computer possa calcolarci sopra. Con i vettori puoi misurare quanto due parole sono simili (calcolando la distanza), trovare analogie (con l'aritmetica), e fare tutto questo con semplici operazioni matematiche.
 
-**L'esempio Re/Regina funziona davvero nella pratica?**
-Si. E stato dimostrato nel 2013 dal team di Google che ha creato Word2Vec. Non funziona sempre alla perfezione, ma funziona sorprendentemente bene per moltissime relazioni semantiche. I modelli moderni (GPT, Claude, Llama) hanno embedding ancora piu sofisticati che catturano relazioni molto piu complesse.
+**L'esempio Marito/Moglie funziona davvero nella pratica?**
+Si. Questo tipo di aritmetica vettoriale e stato dimostrato nel 2013 dal team di Google che ha creato Word2Vec. Non funziona sempre alla perfezione, ma funziona sorprendentemente bene per moltissime relazioni semantiche. I modelli moderni (GPT, Claude, Llama) hanno embedding ancora piu sofisticati che catturano relazioni molto piu complesse.
 
 **Ma quanti numeri servono davvero per rappresentare una parola?**
 Dipende dal modello. GPT-2 usava 768 numeri, Llama-3 ne usa 4.096, GPT-4 circa 12.288. Piu numeri significano piu sfumature di significato. Pensa ai colori: con 3 numeri (rosso, verde, blu) puoi descrivere milioni di colori. Con 4.096 numeri puoi distinguere milioni di sfumature di significato.
@@ -122,11 +122,11 @@ Nei primi modelli (come Word2Vec), la parola "pesca" aveva sempre lo stesso vett
 - C) Che le parole simili vengono sempre spezzate nello stesso modo dal tokenizer
 - D) Che il modello ha un dizionario dei sinonimi incorporato
 
-**4. Nell'esempio dell'aritmetica vettoriale, perche Re - Uomo + Donna da un risultato vicino a Regina?**
+**4. Nell'esempio dell'aritmetica vettoriale, perche Marito - Uomo + Donna da un risultato vicino a Moglie?**
 - A) Perche qualcuno ha programmato manualmente questa relazione nel modello
-- B) Perche il modello ha memorizzato tutte le famiglie reali della storia
-- C) Perche il modello ha scoperto autonomamente che la relazione maschio/femmina e parallela alla relazione re/regina, leggendo molti testi
-- D) Perche "regina" e semplicemente la parola piu simile a "re" nel vocabolario
+- B) Perche il modello ha memorizzato un elenco di coppie sposate
+- C) Perche il modello ha scoperto autonomamente che la relazione maschio/femmina e parallela alla relazione marito/moglie, leggendo molti testi
+- D) Perche "moglie" e semplicemente la parola piu simile a "marito" nel vocabolario
 
 **5. Come fa il modello a imparare dove posizionare ogni parola nello spazio degli embedding?**
 - A) Un team di linguisti inserisce manualmente la posizione di ogni parola

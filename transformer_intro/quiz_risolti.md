@@ -82,14 +82,14 @@ d) Perche nessuno ha mai contato i neuroni del cervello umano
 
 > I vettori (liste di migliaia di numeri) di parole come "gatto" e "cane" sono vicini nello spazio multidimensionale, perche appaiono in contesti simili nei dati di addestramento.
 
-**4. Nell'esempio dell'aritmetica vettoriale, perche Re - Uomo + Donna da un risultato vicino a Regina?**
+**4. Nell'esempio dell'aritmetica vettoriale, perche Marito - Uomo + Donna da un risultato vicino a Moglie?**
 
 - A) Perche qualcuno ha programmato manualmente questa relazione nel modello
-- B) Perche il modello ha memorizzato tutte le famiglie reali della storia
-- **C) Perche il modello ha scoperto autonomamente che la relazione maschio/femmina e parallela alla relazione re/regina, leggendo molti testi** ✅
-- D) Perche "regina" e semplicemente la parola piu simile a "re" nel vocabolario
+- B) Perche il modello ha memorizzato un elenco di coppie sposate
+- **C) Perche il modello ha scoperto autonomamente che la relazione maschio/femmina e parallela alla relazione marito/moglie, leggendo molti testi** ✅
+- D) Perche "moglie" e semplicemente la parola piu simile a "marito" nel vocabolario
 
-> Il modello ha appreso le relazioni semantiche dai dati: la "direzione" nello spazio vettoriale da "uomo" a "donna" e la stessa da "re" a "regina".
+> Il modello ha appreso le relazioni semantiche dai dati: la "direzione" nello spazio vettoriale da "uomo" a "donna" e la stessa da "marito" a "moglie".
 
 **5. Come fa il modello a imparare dove posizionare ogni parola nello spazio degli embedding?**
 
