@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "transformer_intro/speaker_notes/01_dalle_parole_ai_numeri.md",
+                "file": "transformer_intro/02_come_impara_una_macchina.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_dalle_parole_ai_numeri"
+              "title": "02_come_impara_una_macchina"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "transformer_intro/speaker_notes/01_dalle_parole_ai_numeri.md",
+                "file": "transformer_intro/02_come_impara_una_macchina.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for 01_dalle_parole_ai_numeri"
+              "title": "Backlinks for 02_come_impara_una_macchina"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "transformer_intro/speaker_notes/01_dalle_parole_ai_numeri.md",
+                "file": "transformer_intro/02_come_impara_una_macchina.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from 01_dalle_parole_ai_numeri"
+              "title": "Outgoing links from 02_come_impara_una_macchina"
             }
           },
           {
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "transformer_intro/speaker_notes/01_dalle_parole_ai_numeri.md",
+                "file": "transformer_intro/02_come_impara_una_macchina.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of 01_dalle_parole_ai_numeri"
+              "title": "Outline of 02_come_impara_una_macchina"
             }
           }
         ]
@@ -185,6 +185,8 @@
   },
   "active": "086f816780b72be2",
   "lastOpenFiles": [
+    "transformer_intro/01_dalle_parole_ai_numeri.md",
+    "transformer_intro/speaker_notes/01_dalle_parole_ai_numeri.md",
     "transformer_intro/speaker_notes/01_dalle_parole_ai_numeri.md.tmp.2.1773615143026",
     "transformer_intro/speaker_notes/01_dalle_parole_ai_numeri.md.tmp.2.1773615123241",
     "transformer_intro/quiz_risolti.md.tmp.2.1773615099583",
@@ -195,7 +197,6 @@
     "transformer_intro/01_dalle_parole_ai_numeri.jsx.tmp.2.1773615044511",
     "transformer_intro/01_dalle_parole_ai_numeri.jsx.tmp.2.1773614994365",
     "transformer_intro/01_dalle_parole_ai_numeri.jsx.tmp.2.1773614987819",
-    "transformer_intro/01_dalle_parole_ai_numeri.jsx.tmp.2.1773614984312",
     "transformer_intro/speaker_notes/00_la_quinta_rivoluzione.md"
   ]
 }
