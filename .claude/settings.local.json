@@ -3,7 +3,9 @@
     "allow": [
       "mcp__backlog__milestone_add",
       "mcp__backlog__task_create",
-      "mcp__backlog__task_list"
+      "mcp__backlog__task_list",
+      "Bash(source .venv/bin/activate)",
+      "Bash(python3 build_docs.py)"
     ]
   }
 }

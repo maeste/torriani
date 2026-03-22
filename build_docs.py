@@ -45,7 +45,9 @@ SLIDES = [
     ("attention_matrix_deep", "Attention Matrix Deep Dive", "Deep Dive"),
 ]
 
-EXTRA_DOCS = []
+EXTRA_DOCS = [
+    ("Torriani_links_clean", "Link e Risorse"),
+]
 
 # ---------------------------------------------------------------------------
 # Quiz answer extraction from quiz_risolti.md
@@ -711,6 +713,13 @@ def build_index():
         for slide_name, title in items:
             sn = slide_nums[slide_name]
             sections_html += f'      <li><a href="{slide_name}.html"><span class="doc-num">{sn}</span> {title}</a></li>\n'
+        sections_html += "    </ul>\n"
+
+    if EXTRA_DOCS:
+        sections_html += '    <div class="session-title">🔗 Risorse</div>\n'
+        sections_html += '    <ul class="doc-list">\n'
+        for doc_name, title in EXTRA_DOCS:
+            sections_html += f'      <li><a href="{doc_name}.html"><span class="doc-num">++</span> {title}</a></li>\n'
         sections_html += "    </ul>\n"
 
     return INDEX_TEMPLATE.format(sections=sections_html)
